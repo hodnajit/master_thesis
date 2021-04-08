@@ -8,7 +8,7 @@ An inertial measurement unit (IMU) is a device that utilizes measurement systems
 
 The gyroscopes measure changes its angular velocities and accelerometers a specific forces, which can be easily transformed into linear accelerations\cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific force in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in the figure \ref[fig-imu-diag].
 \midinsert
-\picw=0.8\hsize \cinspic imgs/sensors/imu.pdf
+\picw=\hsize \cinspic imgs/sensors/imu.pdf
 \label[fig-imu-diag]
 \caption/f IMU block diagram \cite[handbook_robotics]
 \endinsert
@@ -24,12 +24,12 @@ IMU's are extremely sensitive to measurement errors given by properties of used 
 
 
 \secc Accelerometers
-Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces including gravity and fictitious forces\cite[handbook_robotics]. These forces needs to be compensated during transformation to local-level navigation frame which is not inertial.
+Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces\cite[handbook_robotics]. These forces need to be compensated during transformation to a local-level navigation frame that is not inertial.
 
-{\bf Mechanical accelerometers} have a mass spinning steadily with respect to a free movable axis, they are not used a lot anymore, but they can be found in very old submarines.
+{\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by, in reality, non-ideal spring and sensitivity to vibration.
 
 
-{\bf Microelectromechanical systems based accelerometers (MEMS)} TODO
+{\bf Microelectromechanical systems based accelerometers (MEMS)} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations\cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low\cite[mems_navigation].
 
 \secc Gyroscopes
 Gyroscopes are used for estimating a rotational motion of a body, each gyroscope measures angular rate $\omega$ (inertial angular rotation) relatively to a non-rotating inertial space in one axis. There are basically three main categories of gyroscopes\cite[handbook_robotics].
@@ -44,12 +44,35 @@ The performace and application of each technology is perfectly demonstrate in fi
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/gyr_usage.jpg
 \label[fig-gyro]
-\caption/f Gyroscopes technology plotted by size and performance.\cite[epson_gyro]
+\caption/f Gyroscopes technology plotted by size and performance\cite[epson_gyro].
 \endinsert
 
-\secc Allan variance analysis
-\secc Error characteristics of IMU
-\secc Grades of IMUs
+
+\secc The characteristics of IMU, Allan variance analysis
+	{\bf Allan variance(AVAR)} is widely used to characterize the performance of inertial sensors in time-domain. The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
+	$$	\sigma_A^2(\tau) = {1 \over 2(N-1)} \sum_{i=1}^{N-1}(\overline{y}_{\tau}(i+1)-\overline{y}_{\tau}(i))^2, \eqmark\cite[signal_processing]$$
+	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean value of certain cluster corresponding to $i$.
+	
+	The confidence of the deviation of current cluster is given by
+	$$	\delta_{\sigma}(\tau) = {1 \over \sqrt{2({M \over n}-1)}}\eqmark$$ and for getting more confidence, the ovelapping AVAR is used. That means, that the samples in the cluster overlapped.
+	
+	The process of measuring AVAR consist of collecting 24-48 hours long dataset of static table test when the inertial sensor is not moving, and it is in not vibrating environments (no trains, subways which caused vibration).
+	
+	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in figure \ref[avar_scheme]. It is typically plotted on a log/log scale. The plot can be divided into specific parts, where all error sources are separated by the slope. The most important implication for navigation purposes is the fact that until the bias instability (slope=0) is reached, the sensor model can contain only a white (gaussian) noise\cite[white_noise]. By that time, the external reset needs to be done.
+	
+	{\bf The error characteristic for IMU}
+	 
+
+\midinsert
+\picw=\hsize \cinspic imgs/sensors/avar_scheme.png
+\label[avar_scheme]
+\caption/f An example of Allan variance plot\cite[avar_scheme].
+\endinsert
+
+\secc Grades of IMUs according to their application
+
+
+\secc Navigation equations
 
 
 
