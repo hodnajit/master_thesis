@@ -4,16 +4,16 @@ In chapter \ref[chap-sensors] the overview of used sensors and their properties 
 
 \label[IMU]
 \sec Inertial measurement unit
-An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion\cite[handbook_robotics]. The sensor is typically integrated with an on-board computational unit and could contain more sensors as a magnetometer or thermometer.
+An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion \cite[handbook_robotics]. The sensor is typically integrated with an on-board computational unit and could contain more sensors as a magnetometer or thermometer.
 
-The gyroscopes measure changes its angular velocities and accelerometers a specific forces, which can be easily transformed into linear accelerations\cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific force in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in the figure \ref[fig-imu-diag].
+The gyroscopes measure changes its angular velocities and accelerometers a specific forces, which can be easily transformed into linear accelerations \cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific force in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in the figure \ref[fig-imu-diag].
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/imu.pdf
 \label[fig-imu-diag]
 \caption/f IMU block diagram \cite[handbook_robotics]
 \endinsert
 
-There are two basic inertial navigation systems (also called mechanization architectures)\cite[handbook_robotics]\cite[handbook_gnss_ins] how the IMU is mounted to a vehicle.
+There are two basic inertial navigation systems (also called mechanization architectures) \cite[handbook_robotics]\cite[handbook_gnss_ins] how the IMU is mounted to a vehicle.
 \begitems
 * In {\bf gimbaled systems}, the IMU is attached to a stabilized platform that maintains its inertial orientation as the vehicle manoeuvres.
 * In {\bf strap-down systems}, it is rigidly attached to the vehicle.
@@ -24,27 +24,27 @@ IMU's are extremely sensitive to measurement errors given by properties of used 
 
 
 \secc Accelerometers
-Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces\cite[handbook_robotics]. These forces need to be compensated during transformation to a local-level navigation frame that is not inertial.
+Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces \cite[handbook_robotics]. These forces need to be compensated during transformation to a local-level navigation frame that is not inertial.
 
 {\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by, in reality, non-ideal spring and sensitivity to vibration.
 
 
-{\bf Microelectromechanical systems based accelerometers (MEMS)} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations\cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low\cite[mems_navigation].
+{\bf Microelectromechanical systems based accelerometers (MEMS)} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
 
 \secc Gyroscopes
-Gyroscopes are used for estimating a rotational motion of a body, each gyroscope measures angular rate $\omega$ (inertial angular rotation) relatively to a non-rotating inertial space in one axis. There are basically three main categories of gyroscopes\cite[handbook_robotics].
+Gyroscopes are used for estimating a rotational motion of a body, each gyroscope measures angular rate $\omega$ (inertial angular rotation) relatively to a non-rotating inertial space in one axis. There are basically three main categories of gyroscopes \cite[handbook_robotics].
 
 {\bf Mechanical gyroscopes} have a mass spinning steadily with respect to a free movable axis, they are not used a lot anymore, but they can be found in very old submarines.
 
 {\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, the laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
 
-{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. Example can be MEMS sensors\cite[mems_navigation], these are typically the cheapest, and they can be found basically everywhere, for example, in every mobile device. As MEMS gyroscopes have no rotating parts, have low power consumptions requirements, and are small, they replaced others in robotics applications.
+{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. Example can be MEMS sensors \cite[mems_navigation], these are typically the cheapest, and they can be found basically everywhere, for example, in every mobile device. As MEMS gyroscopes have no rotating parts, have low power consumptions requirements, and are small, they replaced others in robotics applications.
 
 The performace and application of each technology is perfectly demonstrate in figure \ref[fig-gyro].
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/gyr_usage.jpg
 \label[fig-gyro]
-\caption/f Gyroscopes technology plotted by size and performance\cite[epson_gyro].
+\caption/f Gyroscopes technology plotted by size and performance \cite[epson_gyro].
 \endinsert
 
 
@@ -58,7 +58,8 @@ The performace and application of each technology is perfectly demonstrate in fi
 	
 	The process of measuring AVAR consist of collecting 24-48 hours long dataset of static table test when the inertial sensor is not moving, and it is in not vibrating environments (no trains, subways which caused vibration).
 	
-	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in figure \ref[avar_scheme]. It is typically plotted on a log/log scale. The plot can be divided into specific parts, where all error sources are separated by the slope. The most important implication for navigation purposes is the fact that until the bias instability (slope=0) is reached, the sensor model can contain only a white (gaussian) noise\cite[white_noise]. By that time, the external reset needs to be done.
+	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in figure \ref[avar_scheme]. It is typically plotted on a log/log scale. The plot can be divided into specific parts, where the slope separates all error sources. The most important implication for navigation purposes is the fact that until the bias instability (slope=0) is reached, the sensor model can contain only a white (gaussian) noise \cite[white_noise]. By that time, the external reset needs to be done.
+
 	
 	{\bf The error characteristic for IMU}
 	 
@@ -66,7 +67,7 @@ The performace and application of each technology is perfectly demonstrate in fi
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/avar_scheme.png
 \label[avar_scheme]
-\caption/f An example of Allan variance plot\cite[avar_scheme].
+\caption/f An example of Allan variance plot \cite[avar_scheme]
 \endinsert
 
 \secc Grades of IMUs according to their application
