@@ -50,8 +50,8 @@ The performace and application of each technology is perfectly demonstrate in fi
 
 \secc The characteristics of IMU, Allan variance analysis
 	{\bf Allan variance(AVAR)} is widely used to characterize the performance of inertial sensors in time-domain. The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
-	$$	\sigma_A^2(\tau) = {1 \over 2(N-1)} \sum_{i=1}^{N-1}(\overline{y}_{\tau}(i+1)-\overline{y}_{\tau}(i))^2, \eqmark\cite[signal_processing]$$
-	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean value of certain cluster corresponding to $i$.
+	$$	\sigma_A^2(\tau) = {1 \over 2(N-1)} \sum_{i=1}^{N-1}(\overline{y}_{\tau}(i+1)-\overline{y}_{\tau}(i))^2, \eqmark $$
+	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean value of certain cluster corresponding to $i$ \cite[signal_processing].
 	
 	The confidence of the deviation of current cluster is given by
 	$$	\delta_{\sigma}(\tau) = {1 \over \sqrt{2({M \over n}-1)}}\eqmark$$ and for getting more confidence, the ovelapping AVAR is used. That means, that the samples in the cluster overlapped.
