@@ -1,35 +1,49 @@
 \label[chap-sensors]
 \chap Sensors
-In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe an ultra-wideband technology(UWB), an inertial measurement unit (IMU) and an odometry.
+In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe an localization method based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) and an odometry.
+	The UWB TODO.
+	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit.
+\label[UWB]
+\sec A localization based on Ultra-wideband 
+
 
 \label[IMU]
 \sec Inertial measurement unit
-An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion \cite[handbook_robotics]. The sensor is typically integrated with an on-board computational unit and could contain more sensors as a magnetometer or thermometer.
+An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion \cite[handbook_robotics]. The unit is typically integrated with an on-board computational unit and may contain more sensors as a magnetometer or thermometer.
 
-The gyroscopes measure changes its angular velocities and accelerometers a specific forces, which can be easily transformed into linear accelerations \cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific force in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in the figure \ref[fig-imu-diag].
+The gyroscopes measure angular velocities and accelerometers specific forces, which can be easily transformed into linear accelerations \cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific forces in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in the figure \ref[fig-imu-diag].
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/imu.pdf
 \label[fig-imu-diag]
 \caption/f IMU block diagram \cite[handbook_robotics]
 \endinsert
 
-There are two basic inertial navigation systems (also called mechanization architectures) \cite[handbook_robotics]\cite[handbook_gnss_ins] how the IMU is mounted to a vehicle.
+There are two basic inertial ways how to mount the IMU to a vehicle, also called mechanization architectures  \cite[handbook_robotics, handbook_gnss_ins].
 \begitems
 * In {\bf gimbaled systems}, the IMU is attached to a stabilized platform that maintains its inertial orientation as the vehicle manoeuvres.
 * In {\bf strap-down systems}, it is rigidly attached to the vehicle.
 \enditems
-The mechanization determines which navigation equations are used during the estimation of linear accelerations and angular velocities of the vehicle.
+The mechanization determines the convertion to estimate of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is called navigation (mechanization) equations and they are briefly summarized in the section \ref[nav_eq].
 
-IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, over time, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU's provides a short-term stable solution because gyroscopes and accelerations have relatively low noise characteristics in a short period of time, and it has a high data rate (100 Hz - 200 Hz).
+IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU provides a short-term stable solution, which is not affected by external environment \cite[handbook_gnss_ins], and it has a high data rate (100 Hz - 200 Hz). That makes the IMU measurement complementary to the UWB localization measurement.
 
 \label[acc]
 \secc Accelerometers
 Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces \cite[handbook_robotics].
 
-{\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by, in reality, non-ideal spring and sensitivity to vibration.
+{\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by physical properies of real spring.
 
 
-{\bf Microelectromechanical systems based accelerometers (MEMS)} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
+{\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
+
+The current accelerometers used technology according to an application is sumarized in the figure \ref[fig-acc].
+
+
+\midinsert
+\picw=\hsize \cinspic imgs/sensors/acc_usage.png
+\label[fig-acc]
+\caption/f Accelerometers technology plotted by bias instability and scale factor stability \cite[acc_tech]
+\endinsert
 
 \label[gyr]
 \secc Gyroscopes
@@ -37,15 +51,17 @@ Gyroscopes are used for estimating a rotational motion of a body, each gyroscope
 
 {\bf Mechanical gyroscopes} have a mass spinning steadily with respect to a free movable axis, they are not used a lot anymore, but they can be found in very old submarines.
 
-{\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, the laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
+{\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
 
-{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. Example can be MEMS sensors \cite[mems_navigation], these are typically the cheapest, and they can be found basically everywhere, for example, in every mobile device. As MEMS gyroscopes have no rotating parts, have low power consumptions requirements, and are small, they replaced others in robotics applications.
+{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. 
 
-The performace and application of each technology is perfectly demonstrate in figure \ref[fig-gyro].
+MEMS gyroscopes \cite[mems_navigation] play significant role in robotics, because of their simplicity. They are small, cheap, have no rotating parts and furthermore have low power consumption.
+
+The performace and application of each technology is demonstrated in figure \ref[fig-gyro].
 \midinsert
-\picw=\hsize \cinspic imgs/sensors/gyr_usage.jpg
+\picw=\hsize \cinspic imgs/sensors/gyr_usage.png
 \label[fig-gyro]
-\caption/f Gyroscopes technology plotted by size and performance \cite[epson_gyro].
+\caption/f Gyroscopes technology plotted by bias instability and scale factor stability \cite[acc_tech]
 \endinsert
 	
 	\secc IMU's errors and Allan variance analysis
@@ -72,29 +88,39 @@ The performace and application of each technology is perfectly demonstrate in fi
 		
 	{\em Angle} or {\em velocity random walks} belong to stochastic errors. The measurement of gyroscopes and accelerometers are subject to white noises (the noise represented by Gaussian distribution). During the estimation of angles and velocities, integration needs to be done. Then the white noise starts to manifest itself by angle or velocity random walk, $^\circ /s/\sqrt{Hz}$ and $m^2/s/\sqrt{Hz}$ respectively.
 		
-	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
+	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The brief introduction and important outcomes of this the most common time domain measure of frequency stability is given \cite[avar].
+	
+	
+	The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
 	$$	\sigma_A^2(\tau) = {1 \over 2(N-1)} \sum_{i=1}^{N-1}(\overline{y}_{\tau}(i+1)-\overline{y}_{\tau}(i))^2, \eqmark $$
-	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean value of certain cluster corresponding to $i$ \cite[signal_processing].
+	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($\tau = m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean values of certain cluster of $i+1$-th and $i$-th cluster respectively. \cite[signal_processing].
 	
-	The confidence of the deviation of current cluster is given by
-	$$	\delta_{\sigma}(\tau) = {1 \over \sqrt{2({M \over n}-1)}}\eqmark$$ and for getting more confidence, the ovelapping AVAR is used. That means, that the samples in the cluster overlapped.
+	\midinsert
+    \picw=0.6\hsize \cinspic imgs/sensors/avar.png
+    \label[fig-avar]
+    \caption/f The difference between non-overlapping and overlapping sample 	\cite[avar]
+	\endinsert
 	
-	The process of measuring AVAR consist of collecting 24-48 hours long dataset of static table test when the inertial sensor is not moving, and it is in not vibrating environments (no trains, subways which caused vibration). The sampling values are angular rate or accelerations
+The samples in a cluster can be both non-overlapping and overlapping. The difference is illustrated in \ref[fig-avar]. The overlapping samples improve the confidence of the resulting estimate. That is the reason why this method is the most common for a measure of time-domain frequency stability in general \cite[avar].
 	
-	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in figure \ref[avar_scheme]. It is typically plotted on a log/log scale. A different slope of the graph describes each noise component by that the graph can be easily divided into specific parts. The most important implication for navigation purposes is the fact that until the bias instability (slope=0) is reached, the sensor model can contain only a white (Gaussian) noise \cite[white_noise]. By that time, the external reset needs to be done.
-	 
 
-\midinsert
-\picw=\hsize \cinspic imgs/sensors/avar_scheme.png
-\label[avar_scheme]
-\caption/f An example of Allan variance plot \cite[avar_scheme]
-\endinsert
+	The process of measuring AVAR consist of collecting 24-48 hours long dataset when the inertial sensor is not moving, and it is in not vibrating environments (no trains, subways that would cause vibration). The sampling values are angular rate or accelerations.
+	
+	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in figure \ref[fig-avar_scheme]. It is typically plotted on a log/log scale. A different slope of the graph describes each noise component by that the graph can be easily divided into specific parts.
+	
+	\midinsert
+	\picw=0.9\hsize \cinspic imgs/sensors/avar_scheme.png
+	\label[fig-avar_scheme]
+	\caption/f An example of Allan variance plot \cite[avar_scheme]
+	\endinsert
+	
+	The most significant outcome for navigation purposes is when the bias instability is reached (slope is zero). At this time, the sensor model contains only a white (Gaussian) noise \cite[white_noise]. After that period, the external reset needs to be done.	 
 
 \secc Performance of IMUs according to their application
 	IMUS can be used in various application, which differs by IMUs performance. The overview of each sensor's precision for a given application is nicely summarized in the figure \ref[imu_perform].
 	
 	\midinsert
-	\picw=0.9\hsize \cinspic imgs/sensors/imu_performance.png
+	\picw=0.8\hsize \cinspic imgs/sensors/imu_performance.png
 	\label[imu_perform]
 	\caption/f A performance of IMU per application \cite[imu_performance]
 	\endinsert
@@ -106,6 +132,9 @@ The performace and application of each technology is perfectly demonstrate in fi
 		Navigation equations implement the transforms between the body frame and the reference frame, either a local-level frame (as North-East-Down or East-North-Up), a reference to a specific point at planet Earth, or an Earth-fixed frame as ECEF \cite[mems_navigation].
 		
 		These equations are known and can be found in the book MEMS-based Integrated Navigation \cite[mems_navigation].
+		
+\label[odometry]
+\sec An odometry
 
 
 
