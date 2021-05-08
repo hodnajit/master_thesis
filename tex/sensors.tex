@@ -4,7 +4,7 @@ In chapter \ref[chap-sensors] the overview of used sensors and their properties 
 	The UWB TODO.
 	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit.
 \label[UWB]
-\sec A localization based on Ultra-wideband 
+\sec Localization based on Ultra-wideband 
 
 
 \label[IMU]
@@ -18,12 +18,12 @@ The gyroscopes measure angular velocities and accelerometers specific forces, wh
 \caption/f IMU block diagram \cite[handbook_robotics]
 \endinsert
 
-There are two basic inertial ways how to mount the IMU to a vehicle, also called mechanization architectures  \cite[handbook_robotics, handbook_gnss_ins].
+There are two basic ways how to mount the IMU to a vehicle, also called mechanization architectures  \cite[handbook_robotics, handbook_gnss_ins].
 \begitems
 * In {\bf gimbaled systems}, the IMU is attached to a stabilized platform that maintains its inertial orientation as the vehicle manoeuvres.
 * In {\bf strap-down systems}, it is rigidly attached to the vehicle.
 \enditems
-The mechanization determines the convertion to estimate of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is called navigation (mechanization) equations and they are briefly summarized in Section \ref[nav_eq].
+The mechanization determines the conversion between measurements of IMU and estimation of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is called navigation (mechanization) equations and they are briefly summarized in Section \ref[nav_eq].
 
 IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU provides a short-term stable solution, which is not affected by external environment \cite[handbook_gnss_ins], and it has a high data rate (100 Hz - 200 Hz). That makes the IMU measurement complementary to the UWB localization measurement.
 
@@ -82,13 +82,13 @@ The performace and application of each technology is demonstrated in Figure \ref
 		* bias instability (or also called in-run bias), which represents drift of the sensor during a time,
 		* and initial bias (or repeatability bias), which is a static offset, which can be different during each start-up of the device, but during a run, it is static.
 		\enditems
-		Biases are typically represented in $^\circ /hr$ or $^\circ /s$.
+		Biases are typically represented in $^\circ /hr$ or $^\circ /s$ for gyroscopes and $mg$ for accelerometers.
 		
 	{\em A scale factor} and {\em a misalignment error}, both systematic errors, could also be significant. The scale factor is connected to imperfection while converting the real measurement input value and output value. The nonorthogonality of all sensors gives the misalignment error in IMU and it is caused during the production.
 		
-	{\em Angle} or {\em velocity random walks} belong to stochastic errors. The measurement of gyroscopes and accelerometers are subject to white noises (the noise represented by Gaussian distribution). During the estimation of angles and velocities, integration needs to be done. Then the white noise starts to manifest itself by angle or velocity random walk, $^\circ /s/\sqrt{Hz}$ and $m^2/s/\sqrt{Hz}$ respectively.
+	{\em Angle} or {\em velocity random walks} belong to stochastic errors. The measurement of gyroscopes and accelerometers are subject to white noises (the noise represented by Gaussian distribution). During the estimation of angles and velocities, integration needs to be done. Then the white noise starts to manifest itself by angle or velocity random walk, $(^\circ /s/\sqrt{Hz})$ and $(m^2/s/\sqrt{Hz})$ respectively.
 		
-	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The brief introduction and important outcomes of this the most common time domain measure of frequency stability is given \cite[avar].
+	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The brief introduction and important outcomes from AVAR, the most common time domain measure of frequency stability, is given \cite[avar].
 	
 	
 	The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
