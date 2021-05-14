@@ -1,11 +1,30 @@
 \chap Localization system design
 Lorem ipsum sit amet
 
-\sec Architecture design
+\sec System architecture design
 A various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error-state extended Kalman filter(ES-EKF), where the error in the states is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
+The system consists of three crucial steps. The first one is the inertial navigation unit (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
+
+The second step is the ES-EKF itself, where the error of the state is calculated. Measurements from UWB localization and odometry correct the error. The UWB localization gives us the absolute position, which can reduce the drift from step one.
+
+The third part is injecting error into INS estimation and resetting the ES-EKF while the injection is done. Finally, the output of the whole system is given by the INS solution. The system requires that it needs to have the initial states with covariances for INS and ES-EKF set up first. The simplified architecture is illustrated in Figure \ref[fig-architecture] and described in the following section in detail\cite[quaternion_kinematics].
+
+\midinsert
+\picw=\hsize \cinspic imgs/rex_act_localization/architecture.pdf
+\label[fig-architecture]
+\caption/f The proposed architecture of the localization system
+\endinsert
+
+For navigation purposes, the regular rate is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the update rate determined by the IMU characteristics. Furthermore, it gives us the state estimation utterly independent of external factors as slippering wheels\cite[vehicle_state_estimation_farrel].
+
+As UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, they are used only in the correction step.
+
+In other words, the most dynamic part of the estimation is independent of Kalman filtering. Thus the computation of state is faster. The error state is estimated separately in ES-EKF and is injected into the state only if other measurements than IMU come in. Therefore, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. The only requirement is that the correction needs to be applied before non-gaussian noise in IMU measurement is significant. That correction reduces the drift of the dead-reckoning system.
+
+In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. And the state is corrected at a lower rate, but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
 
 
-
+\sec System kinematics in continues time
 
 
