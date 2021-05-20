@@ -2,7 +2,7 @@
 Lorem ipsum sit amet
 
 \sec System architecture design
-A various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error-state extended Kalman filter(ES-EKF), where the error in the states is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
+Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error-state extended Kalman filter(ES-EKF), where the error in the states is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
 The system consists of three crucial steps. The first one is the inertial navigation unit (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
 
@@ -22,9 +22,157 @@ As UWB localization and odometry measurements cannot give us a much higher rate 
 
 In other words, the most dynamic part of the estimation is independent of Kalman filtering. Thus the computation of state is faster. The error state is estimated separately in ES-EKF and is injected into the state only if other measurements than IMU come in. Therefore, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. The only requirement is that the correction needs to be applied before non-gaussian noise in IMU measurement is significant. That correction reduces the drift of the dead-reckoning system.
 
-In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. And the state is corrected at a lower rate, but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
+In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate, but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
 
+In the following sections, the output of the system is called the navigation state (i.e., position, velocity, and attitude).
 
-\sec System kinematics in continues time
+\sec System kinematics
+For a more detailed introduction to system architecture, the system kinematics equations need to be announced. But before I enter than itself, let me describe an important topic, which represents attitude and rotation in 3D space.
+\secc Representation of 3D attitude and rotation in space
+There are many ways how to represent 3D attitude and rotation in space. Most commonly used representations in a field of robotics are
+	\begitems
+		* rotation matrices,
+		* euler angles,
+		* axis-angle
+		* and quaternions\cite[handbook_robotics].
+	\enditems
+To not go into much detail, each representation has its pros and cons and applications, where it has its purpose. The quaternion representation was chosen for the described system architecture. There are several reasons why to pick this representation\cite[orientation_representation]. Firstly, quaternions do not suffer from singularities as Euler and fixed angles do\cite[orientation_representation]. Secondly, it gives us a compact representation which implies a higher numerical stability. And finally, it is the most recommended representation in ROS standard rep-103\cite[ros_rep103].
+
+\secc The kinematics equations in continues time
+The kinematics formulas in continuous time, that relates the inertial sensor measurements to the {\bf true navigation state}, is well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in [quaternion_kinematics] equation 235. The only difference is that orientation is in rotation matrix and not quaternion. Equations are
+$$	\eqalign{\dot{p_t} &= v_t \cr
+			 \dot{v_t} &= R_t(a_m-a_{bt}-a_n) + g_t \cr
+			 \dot{R_t} &= R_t(\Omega_t) \cr
+			 \dot{a_{bt}} &= a_w \cr
+			 \dot{\omega_{bt}} &= \omega_w \cr
+			 \dot{g_t} &= 0,
+			 } \eqmark $$
+where
+\begitems
+* $p_t$ is true position in 3D [$m$],
+* $v_t$ is true linear velocity in 3D [$m \cdot s^{-2}$],
+* $R_t$ is true rotation matrix of orientation,
+* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{bt}$ is true accelerometer bias [$m \cdot s^{-2}$],
+* $a_n$ is accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* $a_w$ is white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* $g_t$ is true gravity vector [$m \cdot s^{-2}$],
+* $\Omega_t=\left[ (\omega_m - \omega_{bt} - \omega_n)_{\times} \right] = \left[
+ \matrix{0 & -(\omega_{m_3} - \omega_{bt_3} - \omega_{n_3}) & \omega_{m_2} - \omega_{bt_2} - \omega_{n_2} \cr
+         \omega_{m_3} - \omega_{bt_3} - \omega_{n_3} & 0 & -(\omega_{m_1} - \omega_{bt_1} - \omega_{n_1}) \cr
+         -(\omega_{m_2} - \omega_{bt_2} - \omega_{n_2}) & \omega_{m_1} - \omega_{bt_1} - \omega_{n_1} & 0
+}  \right]$ is true skew-symetric matrix (a tensor of angular velocity) [$rad \cdot s^{-2}$],
+* $\omega_m$ is angular rate given by gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_{bt}$ is true bias of gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_n$ is gyroscopes white Gaussian noise [$rad \cdot s^{-2}$],
+* and $\omega_w$ is white Gaussian noise gyroscopes bias [$rad \cdot s^{-2}$].
+\enditems
+
+The state $x_t$, is governed by IMU noisy reading $u_m$ and perturbed by white Gaussian noise $w$, defined by
+$$ \eqalign{x_t &= \left[ p_t, v_t, R_t, a_{bt}, \omega_{bt}, g_t\right]^T \cr
+			u_t &= \left[ a_m-a_n\right]^T \cr
+			w_t &= \left[ a_w, w_w\right]^T.}\eqmark$$
+			
+
+The output of the localization system is {\bf navigation state} (also called nominal), which correspons to the system kinematics, but does not take into account the noise terms $w_t$ and other possible model imperfections (see equation 237 in \cite[quaternion_kinematics], hence it is simplified to
+	$$	\eqalign{
+		\dot{p} &= v \cr
+		\dot{v} &= R(a_m-a_{b}) + g \cr
+		\dot{R} &= R(\Omega) \cr
+		\dot{a_{b}} &= 0 \cr
+		\dot{\omega_{b}} &= 0,	\cr
+		\dot{g} &= 0,	 
+	}
+	\eqmark
+	$$
+where
+\begitems
+* $p$ is position in 3D [$m$],
+* $v$ is linear velocity in 3D [$m \cdot s^{-2}$],
+* $R$ is rotation matrix of orientation,
+* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{b}$ is accelerometer bias [$m \cdot s^{-2}$],
+* $g$ is gravity vector [$m \cdot s^{-2}$],
+* $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
+ \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
+         \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
+         -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
+}  \right]$ is skew-symetric matrix (a tensor of angular velocity) [$rad \cdot s^{-2}$],
+* $\omega_m$ is angular rate given by gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_{b}$ is bias of gyroscopes [$rad \cdot s^{-2}$].
+\enditems
+
+The linearized dynamics (see equation 238 in \cite[quaternion_kinematics]) of the {\bf error-state} are
+$$
+\eqalign{
+	\dot{\delta p} &= \delta v \cr
+	\dot{\delta v} &= -R[a_m-a_b]_{\times} \delta \Theta - R \delta a_b + \delta g - R a_n \cr
+	\dot{\delta \Theta} &= -[\omega_m - \omega_b]_{\times} \delta \Theta - \delta \omega_b - \omega_n \cr
+	\dot{\delta a_b} &= a_w \cr
+	\dot{\delta \omega_b} &= \omega_w \cr
+	\dot{\delta g} &= 0 
+,}
+\eqmark
+$$
+where
+\begitems
+* $\delta p$ is the position error in [$m$],
+* $\delta v$ is the linear velocity error in [$m \cdot s^{-2}$],
+* $\delta\Theta$ is the orientation error,
+* $\delta a_b$ is acceleration bias error [$m \cdot s^{-2}$],
+* $\delta \omega_b$ is gyroscope bias error [$rad \cdot s^{-2}$],
+* $\delta g$ is gravity vector error [$m \cdot s^{-2}$],
+* $R$ is rotation matrix given by nominal state,
+* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{b}$ is accelerometer bias [$m \cdot s^{-2}$],
+* $a_n$ is accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* $a_w$ is white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* $\omega_m$ is angular rate given by gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_{b}$ is bias of gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_n$ is gyroscopes white Gaussian noise [$rad \cdot s^{-2}$],
+* and $\omega_w$ is white Gaussian noise gyroscopes bias [$rad \cdot s^{-2}$].
+.
+\enditems
+Note that higher orders in linearization are neglected, since the error state is small in comparison to navigation state.
+
+During {\bf filter correction phase}, measurements from UWB localization and odometry comes into account. Usual, the sensor delivers measurements, that depends on the state, such as
+$$
+y = h(x_t) + \rho ,
+\eqmark
+$$
+where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and $\rho$ is a white Gaussian noise with covariance.  For UWB localization the function is simple as it is
+$$
+y = p_t + \rho_1,
+\eqmark
+$$
+with covariance $Q_1$. But for odometry it is a little bit complicated
+$$
+y = R_t^{-1}v_t + \rho_2
+\eqmark
+$$
+with covariance $Q_1$. This difference is important in computation of Jacobian for ES-EKF algorithm.
+
+\secc The kinematics equations in discrete time
+As the equations in continous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time are also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 26c is a bit different, since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
+$$
+R \leftarrow R(R\Omega\Delta t),
+\eqmark
+$$
+where
+\begitems
+* $R$ is rotation matrix of orientation,
+* $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
+ \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
+         \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
+         -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
+}  \right]$ is skew-symetric matrix (a tensor of angular velocity) [$rad \cdot s^{-2}$],
+* $\omega_m$ is angular rate given by gyroscopes [$rad \cdot s^{-2}$],
+* $\omega_{b}$ is bias of gyroscopes [$rad \cdot s^{-2}$].
+\enditems
+
+This integration is happening in the INS box in Figure \cite[fig-architecture].
+
+\sec Error state extended Kalman filter
+
 
 
