@@ -22,6 +22,19 @@
     URL  = "https://en.wikipedia.org/wiki/White_noise",
     ADDENDUM = "(accessed: 08. 04. 2021)"
 }
+@ONLINE{imu_performance,
+    AUTHOR = "© Thales group",
+    TITLE = "Performance of IMU per application",
+    URL  = "https://www.thalesgroup.com/sites/default/files/database/d7/assets/images/thales_topaxyz_imu_infographie_copyright_thales_light_0.png",
+    ADDENDUM = "(accessed: 15. 04. 2021)"
+}
+@ONLINE{ros_rep103,
+    AUTHOR = "ROS, Tully Foote, Mike Purvis",
+    TITLE = "Standard Units of Measure and Coordinate Conventions",
+    URL  = "https://www.ros.org/reps/rep-0103.html",
+    ADDENDUM = "(accessed: 14. 05. 2021)"
+}
+
 @book{mems_navigation,
   title={MEMS-based integrated navigation},
   author={Aggarwal, Priyanka},
@@ -38,9 +51,65 @@ volume = {17},
 journal = {Sensors},
 doi = {10.3390/s17030612}
 }
+@misc{avar,
+  author = {William Riley and David Howe},
+  title = {Handbook of Frequency Stability Analysis},
+  year = {2008},
+  month = {2008-07-01},
+  publisher = {Special Publication (NIST SP), National Institute of Standards and Technology, Gaithersburg, MD},
+  url = {https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=50505},
+  language = {en},
+}
 @book{signal_processing,
   title={Handbook of signal processing systems},
   author={Bhattacharyya, Shuvra S and Deprettere, Ed F and Leupers, Rainer and Takala, Jarmo},
   year={2018},
   publisher={Springer}
+}
+@ARTICLE{acc_tech,
+	author={N. {Barbour} and G. {Schmidt}},
+	journal={IEEE Sensors Journal},
+	title={Inertial sensor technology trends},
+	year={2001},
+	volume={1},
+	number={4},
+	pages={332-339},
+	doi={10.1109/7361.983473}
+}
+@ARTICLE{orientation_representation,
+	author={M. D. {Shuster}},
+	journal={Journal of the Astronautical Sciences},
+	title={Survey of attitude representations},
+	year={1993},
+	volume={41},
+	number={4},
+	pages={439-517}
+}
+@article{quaternion_kinematics,
+author = {Solà, Joan},
+year = {2015},
+month = {03},
+pages = {},
+title = {Quaternion kinematics for the error-state KF}
+}
+@article{vehicle_state_estimation_farrel,
+title = {Advanced Vehicle State Estimation: A Tutorial and Comparative Study},
+journal = {IFAC-PapersOnLine},
+volume = {50},
+number = {1},
+pages = {15971-15976},
+year = {2017},
+note = {20th IFAC World Congress},
+issn = {2405-8963},
+doi = {https://doi.org/10.1016/j.ifacol.2017.08.1751},
+url = {https://www.sciencedirect.com/science/article/pii/S2405896317323674},
+author = {Jay A. Farrell and Paul F. Roysdon},
+keywords = {Moving Horizon Estimation (MHE), Simultaneous Localization, Mapping (SLAM), Extended Kalman Filter (EKF)},
+abstract = {Autonomous vehicles require high bandwidth, high sample rate, precision vehicle and world relative state estimation, especially those such as automobiles that involve human safety with a mixed set of vehicles operating in a complex environment containing humans. An additional requirement is high reliability. Such systems will ultimately involve a multiplicity of sensor modalities. Sensor fusion is critical to achieving these application requirements. Several of the sensors (e.g., vision, radar, Lidar, ultrasound, Global Navigation Satellite Systems (GNSS)) have various spurious measurement types. Standard Extended Kalman Filter (EKF) approaches are not sufficiently reliable at removing the effects of such spurious measurements. The EKF approach must decide at the time each measurement arrives whether it is valid. If so, the measurement is used and discarded; otherwise it is not used and discarded. When that decision is wrong, either measurement information is lost or the state and covariance estimates are corrupted. Either situation can result in divergence of the EKF. An alternative is to maintain all recent measurement data within a moving time-horizon. This window of data can be processed within a Bayesian framework to extract the optimal state trajectory estimate over the time-horizon, under various fault scenario assumptions. Because the time window of data is maintained it is straightforward to change the assumptions as to which data are valid and reprocess the data. Therefore, in prior articles, this approach was referred to as a Contemplative Real-Time (CRT) estimator. It is closely related to Moving Horizon Estimation (MHE) and Simultaneous Localization and Mapping (SLAM). This paper has tutorial content explaining the interrelationships between the EKF, Iterated Extended Kalman Filter (IEKF), and CRT within the Bayesian framework; discussion of the fault detection procedures, and comparative experimental results.}
+}
+@book{farrell_aided,
+  title={Aided navigation: GPS with high rate sensors},
+  author={Farrell, Jay},
+  year={2008},
+  publisher={McGraw-Hill, Inc.}
 }
