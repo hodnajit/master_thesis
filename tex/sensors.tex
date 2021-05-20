@@ -63,8 +63,9 @@ The performace and application of each technology is demonstrated in Figure \ref
 \label[fig-gyro]
 \caption/f Gyroscopes technology plotted by bias instability and scale factor stability \cite[acc_tech]
 \endinsert
-	
-	\secc IMU's errors and Allan variance analysis
+
+\label[chap-sec-avar]	
+\secc IMU's errors and Allan variance analysis
 	{\bf IMU errors}
 	IMUs faces several error sources. In this thesis, the main focus is given to MEMS-based IMU as they are used in experiments. These sensors are typically small and low cost.
 	
@@ -87,7 +88,7 @@ The performace and application of each technology is demonstrated in Figure \ref
 	{\em A scale factor} and {\em a misalignment error}, both systematic errors, could also be significant. The scale factor is connected to imperfection while converting the real measurement input value and output value. The nonorthogonality of all sensors gives the misalignment error in IMU and it is caused during the production.
 		
 	{\em Angle} or {\em velocity random walks} belong to stochastic errors. The measurement of gyroscopes and accelerometers are subject to white noises (the noise represented by Gaussian distribution). During the estimation of angles and velocities, integration needs to be done. Then the white noise starts to manifest itself by angle or velocity random walk, $(^\circ /s/\sqrt{Hz})$ and $(m^2/s/\sqrt{Hz})$ respectively.
-		
+
 	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The brief introduction and important outcomes from AVAR, the most common time domain measure of frequency stability, is given \cite[avar].
 	
 	
