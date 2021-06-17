@@ -2,13 +2,13 @@
 Lorem ipsum sit amet
 
 \sec System architecture design
-Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF), where the error in the states is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
+Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF is the error in the states estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
-The system consists of three crucial steps. The first one is the inertial navigation unit (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
+The system consists of three crucial steps. The first is the inertial navigation unit (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
 
-The second step is the ES-EKF itself, where the error of the state is calculated. Measurements from UWB localization and odometry correct the error. The UWB localization gives us the absolute position, which can reduce the drift from step one.
+The second step is the ES-EKF itself. The error of the state is calculated and is then corrected using measurements from UWB localization and odometry. Measurements from UWB localization and odometry observe the error. The UWB localization gives us the absolute position, which can reduce the drift in step one.
 
-The third part is injecting error into INS estimation and resetting the ES-EKF while the injection is done. Finally, the output of the whole system is given by the INS solution. The system requires that it needs to have the initial states with covariances for INS and ES-EKF set up first. The simplified architecture is illustrated in Figure \ref[fig-architecture] and described in the following section in detail\cite[quaternion_kinematics].
+The third part is injecting error into INS estimation and resetting the ES-EKF while the injection is done. Finally, the output of the whole system is given by the INS solution. The system requires initial states with covariances for INS and ES-EKF set up first. The simplified architecture is illustrated in Figure \ref[fig-architecture] and described in the following section in detail\cite[quaternion_kinematics].
 
 \midinsert
 \picw=\hsize \cinspic imgs/rex_act_localization/architecture.pdf
@@ -16,30 +16,34 @@ The third part is injecting error into INS estimation and resetting the ES-EKF w
 \caption/f The proposed architecture of the localization system
 \endinsert
 
-For navigation purposes, the regular rate is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the update rate determined by the IMU characteristics. Furthermore, it gives us the state estimation utterly independent of external factors as slippering wheels\cite[vehicle_state_estimation_farrel].
+For navigation purposes, the regular rate of pose estimation is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the IMU update rate, which usually satisfies this requirement.
+Furthermore, it gives us the state estimation utterly independent of external factors, for example, slippering wheels\cite[vehicle_state_estimation_farrel].
 
 As UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, they are used only in the correction step.
 
-In other words, the most dynamic part of the estimation is independent of Kalman filtering. Thus the computation of state is faster. The error state is estimated separately in ES-EKF and is injected into the state only if other measurements than IMU come in. Therefore, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. The only requirement is that the correction needs to be applied before non-gaussian noise in IMU measurement is significant. That correction reduces the drift of the dead-reckoning system.
+In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is simple and fast. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement than IMU comes in. The only requirement is that the correction needs to be applied before non-gaussian noise in IMU measurement is significant. That correction reduces the drift of the dead-reckoning system.
 
-In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate, but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
+In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
 
-In the following sections, the output of the system is called the navigation state (i.e., position, velocity, and attitude).
+In the following sections, the output of the system is called the navigation state (i.e., position, linear velocity, and attitude).
 
 \sec System kinematics
-For a more detailed introduction to system architecture, the system kinematics equations need to be announced. But before I enter than itself, let me describe an important topic, which represents attitude and rotation in 3D space.
+For a more detailed introduction to system architecture, the system kinematics equations need to be announced. But before I enter that itself, let me describe an important topic, which represents attitude and rotation in 3D space.
 \secc Representation of 3D attitude and rotation in space
-There are many ways how to represent 3D attitude and rotation in space. Most commonly used representations in a field of robotics are
+There are many ways how to represent 3D attitude and rotation in space. The most commonly used representations in the field of robotics are
 	\begitems
 		* rotation matrices,
-		* euler angles,
+		* Euler angles,
 		* axis-angle
 		* and quaternions\cite[handbook_robotics].
 	\enditems
-To not go into much detail, each representation has its pros and cons and applications, where it has its purpose. The quaternion representation was chosen for the described system architecture. There are several reasons why to pick this representation\cite[orientation_representation]. Firstly, quaternions do not suffer from singularities as Euler and fixed angles do\cite[orientation_representation]. Secondly, it gives us a compact representation which implies a higher numerical stability. And finally, it is the most recommended representation in ROS standard rep-103\cite[ros_rep103].
+To not go into much detail, each representation has its pros and cons and applications, where it has its purpose. The rotation matrix is chosen as the internal representation of orientation and the quaternion as an output.
 
-\secc The kinematics equations in continues time
-The kinematics formulas in continuous time, that relates the inertial sensor measurements to the {\bf true navigation state}, is well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in [quaternion_kinematics] equation 235. The only difference is that orientation is in rotation matrix and not quaternion. Equations are
+There are several reasons why to pick this representation\cite[orientation_representation, ros_rep103].
+Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do\cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103\cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++\cite[eigenweb], geometry messages library\cite[ros_geometry_msgs] or the transform library tf2 in ROS\cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
+
+\secc The kinematics equations in continuous time
+The kinematics formulas in continuous time, that relates the inertial sensor measurements to the {\bf true navigation state}, is well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in [quaternion_kinematics] equation 235. The only difference is that orientation is in the rotation matrix and not quaternion. Equations are
 $$	\eqalign{\dot{p_t} &= v_t \cr
 			 \dot{v_t} &= R_t(a_m-a_{bt}-a_n) + g_t \cr
 			 \dot{R_t} &= R_t(\Omega_t) \cr
@@ -89,7 +93,7 @@ where
 \begitems
 * $p$ is position in 3D [$m$],
 * $v$ is linear velocity in 3D [$m \cdot s^{-2}$],
-* $R$ is rotation matrix of orientation,
+* $R$ is the rotation matrix of orientation,
 * $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
 * $a_{b}$ is accelerometer bias [$m \cdot s^{-2}$],
 * $g$ is gravity vector [$m \cdot s^{-2}$],
@@ -133,9 +137,9 @@ where
 * and $\omega_w$ is white Gaussian noise gyroscopes bias [$rad \over s$].
 .
 \enditems
-Note that higher orders in linearization are neglected, since the error state is small in comparison to navigation state.
+Note that higher orders in linearization are neglected since the error state is small compared to the navigation state.
 
-During {\bf filter correction phase}, measurements from UWB localization and odometry comes into account. Usual, the sensor delivers measurements, that depends on the state, such as
+During {\bf filter correction phase}, measurements from UWB localization and odometry comes into account. Usual, the sensor delivers measurements that depend on the state, such as
 $$
 y = h(x_t) + \rho ,
 \eqmark
@@ -151,18 +155,18 @@ $$
 y_2 = R_t^{-1}v_t + \rho_2
 \eqmark
 $$
-with covariance $R_1$. This difference is important in computation of Jacobian for ES-EKF algorithm.
+with covariance $R_1$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
 
 \label[chap-secc-kin-discr]
 \secc The kinematics equations in discrete time
-As the equations in continous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time are also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 260c is a bit different, since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
+As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
 $$
-R \leftarrow R(R\Omega\Delta t),
+R \leftarrow R(\Omega\Delta t),
 \eqmark
 $$
 where
 \begitems
-* $R$ is rotation matrix of orientation,
+* $R$ is the rotation matrix of orientation,
 * $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
@@ -184,7 +188,7 @@ $$
 $$
 where
 \begitems
-* $i$ is perturbation vector (usually modelled as white Gaussian noise).
+* $i$ is a perturbation vector (usually modelled as white Gaussian noise).
 \enditems
 
 The {\bf Es-EKF prediction part} is given by
@@ -197,7 +201,7 @@ $$
 $$
 where
 \begitems
-* $P$ is process covariance matrix,
+* $P$ is a process covariance matrix,
 * $F_x$ is transition matrix,
 * $F_i$ is Jacobian of error state system by impulses,
 * $Q$ is covariances of process noise,
@@ -212,7 +216,7 @@ F_x &=
 \matrix{
 I & I \Delta t & 0 & 0 & 0 & 0 \cr
 0 & I & -[R(a_m-a_b)]_{\times} \Delta t & -R \Delta t & 0 & I \Delta t \cr
-0 & 0 & I & 0 & -R \Delta t & 0 \cr
+0 & 0 & R_T\{\omega_m-\omega_b\} \Delta t & 0 & -I \Delta t & 0 \cr
 0 & 0 & 0 & I & 0 & 0 \cr
 0 & 0 & 0 & 0 & I & 0 \cr
 0 & 0 & 0 & 0 & 0 & I}
@@ -238,7 +242,7 @@ I & 0 & 0 & 0 \cr
 \eqmark
 $$
 
-The covariances matrix of is given by random impulses applied to the velocity, orientation and bias estimates, modeled by white Gaussian noise \cite[quaternion_kinematics]
+The covariances matrix is given by random impulses applied to the velocity, orientation and bias estimates, modelled by white Gaussian noise \cite[quaternion_kinematics]
 $$
 Q = \left[
 \matrix{
@@ -257,14 +261,14 @@ where
 * $\sigma_{a_w}$ is velocity random walk [$rad \over s \sqrt{s}$],
 * $\sigma_{\omega_w}$ is angular random walk [$rad \over s \sqrt{s}$].
 \enditems
-These information can be obtain from datasheet or AVAR (see Section \ref[chap-sec-avar]).
+This information can be obtained from the datasheet or AVAR (see Section \ref[chap-sec-avar]).
 
 The {\bf ES-EKF correction part} is given by
 $$
 \eqalign{
 K &\leftarrow P H^T (HPH^T + R)^{-1} \cr
 
-\delta x &\leftarrow \hat{ \delta x} + K(y-h(\hat{ \delta x})) \cr
+\delta x &\leftarrow K(y-h(\hat{ \delta x})) \cr
 
 P &\leftarrow (I-KH) \hat{P} (I-KH)^T + KRK^T
 },
@@ -278,7 +282,7 @@ where
 * $R$ is covariances of observation noise,
 * $P$ is process covariance,
 * $y$ is an observation,
-* $h(\hat{ \delta x})$ is an observation model,
+* $h(\hat{x})$ is an observation model,
 * $\delta x$ is a error state.
 \enditems
 
@@ -292,9 +296,7 @@ I & 0 & 0 & 0 & 0 & 0
 \right] \cr
 H_2 &=  \left[
 \matrix{
-0 & 0 & 0 & 0 & 0 & 0 \cr
-0 & -R_t^T [v_t]_{\times}J_r(\Theta) & 0 & 0 & 0 & 0 \cr
-0 & 0 & R_t^{-1} & 0 & 0 & 0 
+0 & R_t^{T} & -R_t^T [v_t]_{\times}J_r(\Theta) & 0 & 0 & 0 
 }
 \right],
 }
@@ -317,9 +319,26 @@ x \leftarrow x \bigoplus \delta x,
 $$
 where 
 \begitems
-$\bigotimes$ appropriate composition of sums or rotation product. 
+$\bigotimes$ appropriate composition of sums or rotation product.
 \enditems
 
-To be continued ...
+The equations are
+$$
+\eqalign{
+p &\leftarrow p + \delta p \cr
+v &\leftarrow v + \delta v \cr
+R &\leftarrow R * R\{\delta \Theta\}  \cr
+a_b &\leftarrow a_b + \delta a_b \cr
+\omega_b &\leftarrow \omega_b + \delta \omega_b \cr
+g &\leftarrow g + \delta g
+}
+\eqmark
+$$
+where 
+\begitems
+$R\{\delta \Theta\}$ orientation error in rotation matrix.
+\enditems
+
+The injection of the error state is essential, but the resetting of the error state must also be done.
 
 
