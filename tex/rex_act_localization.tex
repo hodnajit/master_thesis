@@ -1,5 +1,9 @@
-\chap Localization system design
-Lorem ipsum sit amet
+\chap Localization system design and implementation
+In this chapter, the design of the architecture is described along with the used tools for its solution.
+
+The first part is proposed the system architecture design, the system kinematics equations follow in the second part. In the third part, the equations for the Error state extended Kalman filter are introduced. The fourth part is dedicated to injecting the estimated error into the estimated state and resetting the injected error. In the fifth and final part, the implementation tools are discussed.
+
+To sum up, this chapter gives the reader a detail introduction to the proposed localization system with all equations and tools used in the final implementation.
 
 \sec System architecture design
 Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF is the error in the states estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
@@ -340,5 +344,14 @@ $R\{\delta \Theta\}$ orientation error in rotation matrix.
 \enditems
 
 The injection of the error state is essential, but the resetting of the error state must also be done.
+
+\sec Implementation tools
+This section briefly introduces tools used for implementation: the ROS2\cite[ros2] framework, C++ and Python languages.
+
+{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualisation, simulation, communications overall processes. All applications created in ROS2 are easy to share and used in the community. It supports all most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distributions, such as 20.04 or 18.04.
+
+The newest version of ROS is ROS2, introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localisation system and experiments are implemented using Foxy Fitzroy\footnote{1}{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\footnote{2}{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
+
+ROS2 has defined code style and languages version which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localisation needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualisation of experiments results and supporting scripts.
 
 
