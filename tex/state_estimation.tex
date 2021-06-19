@@ -2,8 +2,26 @@
 \chap State estimations algorithms for localization
 Localisation is the problem of estimating a robot’s coordinates in an external reference frame from sensor data. In particular, probabilistic approaches are typically more robust in the face of sensor limitations, sensor noise or environment dynamics\cite[probabilistic_robotics]. Moreover, they often scale much better to complex and unstructured environments, where the ability to handle uncertainty is of even greater importance\cite[probabilistic_robotics].
 
-For that reason, only probabilistic methods for state estimation are described in the next chapter.
+For that reason, only probabilistic methods for state estimation are described in the next chapter. The basis of each technique briefly described in this thesis is Bayes filters\cite[probabilistic_robotics].
+ The first section discusses the difference between Kalman and Particle filter for state estimation. The following section introduces advanced concepts derived from the Kalman filter algorithm as extended Kalman filter, unscented Kalman filter and Error state Kalman filter. The third and final section goes deeply into the Error state extended Kalman filter and introduces the benefits of using it.
+
+\sec Kalman and Particle filter
+As both Kalman and Particle filter are the very first implementations of Bayes filter in the continous time\cite[probabilistic_robotics] and they are also called Gaussian filters, as beliefs are represented by multivariate
+normal(Gaussian) distributions\cite[probabilistic_robotics].
+
+The state itself consist of a set of expected values and their covariance matrix, altogether it is the multivariate normal distribution\cite[probabilistic_robotics].
+
+Both algorithms work with a prediction and correction step, which works with system and sensor model, respectivelly. But the main difference is, that Kalman filter estimate only one state, the particle filter estimate a set of particles, which represents a set of possible states, from which the "best" candidate is computed\cite[probabilistic_robotics].
+
+Because of that, the system and sensor model for Kalman filter need to be linear with added Gaussian noise, and the initial state must have normal distribution\cite[probabilistic_robotics].
+
+The particle filter does not need linear system and sensor model. As the new particles are randomly generated, on the one hand with a low number of new particles, the filter does not convert to the right state, on the other hand with higher number of particles grows a computation complexity\cite[probabilistic_robotics].
+
+As the localization system is going to be used for navigation of the vehicles, and the suggested system and motion models can be easily linearized, I decided to use an algorithm based on the Kalman filter.
+
+\sec Algorithms based on Kalman filter
+There are a lot of modifications and extensions
 
 
-\sec Section 1
-Lorem ipsum sit amet
+
+
