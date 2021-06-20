@@ -20,7 +20,60 @@ Second, the state transition and measurements are approximately linear.
 And third, these algorithms are typically used in the fusion of IMU and GNSS, as I already mentioned in the chapter \ref[chap-introduction].
 
 \sec Algorithms based on Kalman filter
-There have been a lot of modifications and extensions of standard Kalman filter since 1950s when the filter was invented, because the assumptions of linear system and sensor model with added Gaussian noise are rarely fulfilled in practice\cite[probabilistic_robotics].
+There have been many modifications and extensions of the standard Kalman filter since the 1950s when the filter was invented because the assumptions of the linear system and sensor model with added Gaussian noise are rarely fulfilled in practice\cite[probabilistic_robotics]. In that case, the state transition or sensor model are described by nonlinear functions.
+
+There exist many techniques for linearizing nonlinear functions. The most popular tool, called Extended Kalman filter, use (first-order) Taylor expansion\cite[probabilistic_robotics]. This approximation has its limitations, which correspond to a degree of nonlinearity of the functions and a degree of uncertainty. The higher these degrees are, the further the approximation deviates from true belief. In general, the Extended Kalman filter has its benefits in simplicity, optimality and robustness\cite[probabilistic_robotics], but in practice, it is reliable for the system, which is almost linear in one-time step\cite[ukf].
+
+The Unscented Kalman filter is a tool that appears superior to the EKF linearization\cite[probabilistic_robotics, ukf]. The linearization there is given by carefully selected sample points from nonlinear functions. Also, this approach does not assume that the distribution of noise source is Gaussian\cite[ukf].
+
+The degree of nonlinearity of the system is critical for the state estimation by algorithms based on the Kalman filter. Thus, the relatively recent but promising tool Error state Extended Kalman filter was introduced. In this concept, the error of the state is estimated, as it is more likely correctly modelled by a linear function\cite[error_state_kalman, quaternion_kinematics, farrell_aided]. 
+
+\sec Error state Extended Kalman filter
+Error state Extended Kalman filter belongs to a group of Indirect Kalman filters, because it does not estimate the state itself, but the error of the state\cite[error_state_kalman].
+
+The main idea behind is that the true state, which should be the output of the system, is computed as a suitable composition of nominal state and the error state
+$$
+	x_t = x_n \bigoplus \delta x
+	\eqmark
+$$
+where
+\begitems
+* $\bigoplus$ is a suitable composition as linear sum or matrix product,
+* $x_t$ is the true state,
+* $x_n$ is the nominal state
+* and $\delta x$ is the error state.
+\enditems
+
+The nominal state is consider as large signal, which can be integrated in its nonlinear form and the error state as small signal, that is nearly linear function, ideal for Extended Kalman filtering\cite[quaternion_kinematics].
+
+The algorithm can be illustrated in following set of equations in prediction, correction and injection steps.
+In {\bf the prediction step} the nominal state and its covariance is estimated by following equation\cite[error_state_kalman, quaternion_kinematics]
+$$
+\eqalign{
+	x_{n_{k}} &= f(x_{t_{k-1}}, u_k) \cr
+	P_{n_{k}} &= F P_{t_{k-1}} F^T + B Q B^T \cr
+}
+	\eqmark
+$$
+where
+\begitems
+* $f(x_{t_{k-1}}$ is the nonlinear function described the current nominal state of the system based on previous state and current inputs,
+* $x_{n_{k}}$ is the nominal state in time step $k$,
+* $x_{t_{k-1}}$ is the true state in time step $k-1$,
+* $u$ is the inputs of the system,
+* $P_{n_{k}}$ is the nominal state covariance matrix (also called process noise covariance),
+* $F$ 
+* $B$ 
+* and $Q$ 
+\enditems
+
+TODO: promysli si, jak tyhle rovnice rozumne zapsat... Otazka je, zda se muze udelat jednoducha demonstrace jako v clanku https://notanymike.github.io/Error-State-Extended-Kalman-Filter/ a nebo nee :(
+
+
+
+
+
+
 
 
 
