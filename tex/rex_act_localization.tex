@@ -1,3 +1,4 @@
+\label[chap-rloc]
 \chap Localization system design and implementation
 In this chapter, the design of the architecture is described along with the used tools for its solution.
 
@@ -183,7 +184,7 @@ where
 
 This integration is happening in the INS box in Figure \cite[fig-architecture].
 
-\sec Error state extended Kalman filter
+\sec Error state extended Kalman filter implementation
 Algorithm and equations for general extended Kalman filter are briefly described in Chapter \ref[chap-state-est]. In this section, these equations are concretized.
 
 The { \bf error state system} is now
@@ -220,8 +221,8 @@ F_x &=
 \left[
 \matrix{
 I & I \Delta t & 0 & 0 & 0 & 0 \cr
-0 & I & -[R(a_m-a_b)]_{\times} \Delta t & -R \Delta t & 0 & I \Delta t \cr
-0 & 0 & R_T\{\omega_m-\omega_b\} \Delta t & 0 & -I \Delta t & 0 \cr
+0 & I & -R[a_m-a_b]_{\times} \Delta t & -R \Delta t & 0 & I \Delta t \cr
+0 & 0 & R\{\omega_m-\omega_b\}^T \Delta t & 0 & -I \Delta t & 0 \cr
 0 & 0 & 0 & I & 0 & 0 \cr
 0 & 0 & 0 & 0 & I & 0 \cr
 0 & 0 & 0 & 0 & 0 & I}

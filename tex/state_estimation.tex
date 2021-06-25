@@ -1,37 +1,35 @@
 \label[chap-state-est]
 \chap State estimations algorithms for localization
-Localisation is the problem of estimating a robot’s coordinates in an external reference frame from sensor data. In particular, probabilistic approaches are typically more robust in the face of sensor limitations, sensor noise or environment dynamics\cite[probabilistic_robotics]. Moreover, they often scale much better to complex and unstructured environments, where the ability to handle uncertainty is of even greater importance\cite[probabilistic_robotics].
+The localisation is the problem of estimating a robot’s coordinates in an external reference frame from sensor data. In particular, probabilistic approaches are typically more robust in the face of sensor limitations, sensor noise or environment dynamics\cite[probabilistic_robotics]. Moreover, they often scale much better to complex and unstructured environments, where the ability to handle uncertainty is of even greater importance\cite[probabilistic_robotics].
 
-For that reason, only probabilistic methods for state estimation are described in the next chapter. The basis of each technique briefly described in this thesis is Bayes filters\cite[probabilistic_robotics].
- The first section discusses the difference between Kalman and Particle filter for state estimation. The following section introduces advanced concepts derived from the Kalman filter algorithm as extended Kalman filter and unscented Kalman filter. The third and final section goes deeply into the Error state extended Kalman filter and introduces the benefits of using it.
+For that reason, only probabilistic methods for state estimation are described in the next chapter. The basis of each technique briefly described in this thesis is Bayes filter\cite[probabilistic_robotics].
+ The first section discusses the difference between Kalman and Particle filter for state estimation. The following section introduces advanced concepts derived from the Kalman filter algorithm as extended Kalman filter and unscented Kalman filter. The third and fourth sections go deeply into the Error state extended Kalman filter and introduces the benefits of using it, as it is the core of the localization system of this thesis.
 
 \sec Kalman and particle filter
-Both Kalman and particle filter are the first implementations of Bayes filter in the continuous time\cite[probabilistic_robotics], and in both filters, the state is represented by belief, which corresponds to a distribution. It is a multivariate normal distribution for the Kalman filter, but for particle filter, the distribution is represented by all particles\cite[probabilistic_robotics, kalman_vs_particle].
+Both Kalman and particle filter are the first implementations of Bayes filter in the continuous time\cite[probabilistic_robotics], and in both filters, the state is represented by belief, which corresponds to a distribution. For the Kalman filter it is a multivariate normal distribution , but for particle filter, the distribution is represented by all particles\cite[probabilistic_robotics, kalman_vs_particle].
 
 Both algorithms work with a prediction and correction step, which works with the system and sensor model, respectively. Firstly, it predicts the state based on the internal system model, and secondly, it corrects itself by external measurements and sensor model. Kalman and particle filter algorithms for localization are well described in a referenced Probabilistic robotics\cite[probabilistic_robotics].
 
-There are a few limitations for both algorithms. For the Kalman filter, the state transitions and measurements need to be linear with added Gaussian noise, and the initial state must have normal distribution\cite[probabilistic_robotics].
-
-There is no such requirement for linearity for the particle filter, and it works fine with nonlinear or multi-modal systems too\cite[probabilistic_robotics]. But the algorithm can be more computation demanding as a high number of particles needs to be generated in each sample time for a good estimation\cite[probabilistic_robotics].
+There are a few limitations for both algorithms. For the Kalman filter, the state transitions and measurements need to be linear with added Gaussian noise, and the initial state must have normal distribution\cite[probabilistic_robotics]. There is no such requirement for linearity for the particle filter, and it works fine with nonlinear or multi-modal systems too\cite[probabilistic_robotics]. But the algorithm can be more computation demanding as a high number of particles needs to be generated in each sample time for a robust estimation\cite[probabilistic_robotics].
 
 I decided to use an algorithm based on the Kalman filter for several reasons.
 First, the localization system will be used for the navigation of vehicles. For these kinds of tasks, the update rate has to be relatively high.
 Second, the state transition and measurements are approximately linear.
-And third, these algorithms are typically used in the fusion of IMU and GNSS, as I already mentioned in the chapter \ref[chap-introduction].
+And third, these algorithms are typically used in the fusion of IMU and GNSS, as I already mentioned in Chapter \ref[chap-introduction].
 
 \sec Algorithms based on Kalman filter
-There have been many modifications and extensions of the standard Kalman filter since the 1950s when the filter was invented because the assumptions of the linear system and sensor model with added Gaussian noise are rarely fulfilled in practice\cite[probabilistic_robotics]. In that case, the state transition or sensor model are described by nonlinear functions.
+There have been many modifications and extensions of the standard Kalman filter since the 1950s when the filter was invented, because the assumptions of the linear system and sensor model with added Gaussian noise are rarely fulfilled in practice\cite[probabilistic_robotics]. In these cases, the state transition or sensor model are described by nonlinear functions.
 
 There exist many techniques for linearizing nonlinear functions. The most popular tool, called Extended Kalman filter, use (first-order) Taylor expansion\cite[probabilistic_robotics]. This approximation has its limitations, which correspond to a degree of nonlinearity of the functions and a degree of uncertainty. The higher these degrees are, the further the approximation deviates from true belief. In general, the Extended Kalman filter has its benefits in simplicity, optimality and robustness\cite[probabilistic_robotics], but in practice, it is reliable for the system, which is almost linear in one-time step\cite[ukf].
 
-The Unscented Kalman filter is a tool that appears superior to the EKF linearization\cite[probabilistic_robotics, ukf]. The linearization there is given by carefully selected sample points from nonlinear functions. Also, this approach does not assume that the distribution of noise source is Gaussian\cite[ukf].
+The Unscented Kalman filter is a tool that appears superior to the EKF linearization\cite[probabilistic_robotics, ukf]. The linearization is given by carefully selected sample points from nonlinear functions. Also, this approach does not assume that the distribution of noise source is Gaussian\cite[ukf].
 
-The degree of nonlinearity of the system is critical for the state estimation by algorithms based on the Kalman filter. Thus, the relatively recent but promising tool Error state Extended Kalman filter was introduced. In this concept, the error of the state is estimated, as it is more likely correctly modelled by a linear function\cite[error_state_kalman, quaternion_kinematics, farrell_aided]. 
+In conclusion, the degree of nonlinearity of the system is critical for the state estimation by algorithms based on the Kalman filter. Thus, the relatively recent but promising tool Error state Extended Kalman filter was introduced. In this concept, the error of the state is estimated, as it is more likely correctly modelled by a linear function\cite[error_state_kalman, quaternion_kinematics, farrell_aided]. 
 
 \sec Error state Extended Kalman filter
-Error state Extended Kalman filter belongs to a group of Indirect Kalman filters, because it does not estimate the state itself, but the error of the state\cite[error_state_kalman].
+Error state Extended Kalman filter belongs to a group of Indirect Kalman filters because it does not estimate the state itself, but the error of the state\cite[error_state_kalman].
 
-The main idea behind is that the true state, which should be the output of the system, is computed as a suitable composition of nominal state and the error state
+The main idea is that the true state, which should be the output of the system, is computed as a suitable composition of nominal state and the error state
 $$
 	x_t = x_n \bigoplus \delta x
 	\eqmark
@@ -44,30 +42,89 @@ where
 * and $\delta x$ is the error state.
 \enditems
 
-The nominal state is consider as large signal, which can be integrated in its nonlinear form and the error state as small signal, that is nearly linear function, ideal for Extended Kalman filtering\cite[quaternion_kinematics].
+The nominal state is considered a large signal, which can be integrated in its nonlinear form and the error state as a small signal, which is a nearly linear function, ideal for Extended Kalman filtering\cite[quaternion_kinematics].
 
-The algorithm can be illustrated in following set of equations in prediction, correction and injection steps.
+The algorithm can be illustrated in the following equations in prediction, correction, injection and resetting steps.
 In {\bf the prediction step} the nominal state and its covariance is estimated by following equation\cite[error_state_kalman, quaternion_kinematics]
 $$
 \eqalign{
-	x_{n_{k}} &= f(x_{t_{k-1}}, u_k) \cr
-	P_{n_{k}} &= F P_{t_{k-1}} F^T + B Q B^T \cr
+	x_{t} &= f(x_{t-1}, u_t) \cr
+	P_{t} &= F P_{t-1} F^T + B Q B^T \cr
 }
 	\eqmark
 $$
 where
 \begitems
-* $f(x_{t_{k-1}}$ is the nonlinear function described the current nominal state of the system based on previous state and current inputs,
-* $x_{n_{k}}$ is the nominal state in time step $k$,
-* $x_{t_{k-1}}$ is the true state in time step $k-1$,
-* $u$ is the inputs of the system,
-* $P_{n_{k}}$ is the nominal state covariance matrix (also called process noise covariance),
-* $F$ 
-* $B$ 
-* and $Q$ 
+* $f(x_{t-1}, u_t)$ is the nonlinear function described the current state of the system based on previous state and current input,
+* $x_{t}$ is the nominal state in time $t$,
+* $x_{t-1}$ is the true state in time $t-1$,
+* $u_t$ is the input of the system,
+* $P_{t}$ is the state covariance matrix (also called system covariance),
+* $F$ is the state transition matrix given by $F = {\delta f(x_{t-1}, u_t) \over \delta x_{t-1}}$,
+* $B$ is the input matrix,
+* and $Q$ is the input noise covariance matrix.
 \enditems
 
-TODO: promysli si, jak tyhle rovnice rozumne zapsat... Otazka je, zda se muze udelat jednoducha demonstrace jako v clanku https://notanymike.github.io/Error-State-Extended-Kalman-Filter/ a nebo nee :(
+In {\bf the correction step} the state is corrected based on measurement according to equations\cite[error_state_kalman, quaternion_kinematics]
+$$
+\eqalign{
+	K &= P_{t-1}H^T(HPH^T + R)^{-1} \cr
+	e_t &= K(y_{t}-h(x_{t-1})) \cr
+	P_{t} &= (I-KH)P_{t-1}(I-KH)^T + KRK^T
+}
+	\eqmark
+$$
+where
+\begitems
+* $K$ is Kalman gain,
+* $H$ is the measurement transition matrix given by $H = {\delta h(x_{t}) \over \delta x_{t}}$,
+* $R$ is the covariance of the measurement,
+* $e_t$ current estimated error of the state,
+* $y_{t}$ is the measurement in time $t$,
+* and $h(x_{t-1}$ is the measurement model based on previous state $x_{t-1}$.
+\enditems
+
+In {\bf the injection and resetting step} the state is compensated by error, and the error state and state covariance matrix need to be reseted\cite[error_state_kalman, quaternion_kinematics]. The injection of error is given by
+$$
+\eqalign{
+	x_t &= x_{t-1} + e_t
+}
+	\eqmark
+$$
+and the resetting can be illustrated
+$$
+\eqalign{
+	e_t &= g(e_t) \cr
+	P_t &= G P_t G^T
+}
+	\eqmark
+$$
+where
+\begitems
+* $g(e_t)$ is reseting function of error state
+* and $G$ is the Jacobian matrix defined as $G = {\delta g(e_{t}) \over \delta e_{t}}$.
+\enditems
+
+\sec Chosen approach for state estimation
+This thesis aims to design a prototype of the localization system of vehicles based on the fusion of the UWB positioning system and onboard dead-reckoning sensors. As I already mentioned in Chapter \ref[chap-introduction], the system should be used for the localization of indoor vehicles in an industrial environment. However, each such vehicle (and terrain, where it is moving) can differ in its dynamics. Because of that, I decided to use an approach, which can replace these dynamics.
+The INS meets these requirements and gives us the state independent of a specific vehicle and specific terrain where it is moving. The estimation is accurate for a short time (see Section \ref[IMU]). Thus it needs to be corrected via other measurements as the UWB positioning system and odometry.
+I decided to estimate the error of the INS in the Error state Extended Kalman filter for the following reasons.
+\begitems
+* The correction of INS can be done at a lower rate than the state estimation for localization purposes itself\cite[error_state_kalman, quaternion_kinematics],
+* The model for estimation of the error is linear, as the error is
+	\begitems
+		* close to the origin,
+		* and small, so higher orders can be neglected\cite[error_state_kalman, quaternion_kinematics].
+	\enditems 
+* numerical stability of the solution\cite[error_state_kalman],
+* even if the error estimation has a temporary computer failure, the INS is not affected, and some emergency procedures can come into account\cite[error_state_kalman].
+\enditems
+
+To sum up, the state estimation is given by INS, and the ES-EKF estimates the errors in the state using the difference between the INS and external sources of data, which are odometry and the UWB positioning system. The INS can estimate high-frequency motions of the vehicle accurately, so these dynamics are not in the filter explicitly modelled. The ES-EKF use a model of error propagation in INS, which are at low frequency and very well modelable by linear functions\cite[error_state_kalman, ekf_vs_es_ekf, farrell_aided]. This approach is also known as Aided navigation systems and is briefly described in Aided navigation: GPS with high rate sensors\cite[farrell_aided]. The following Chapter \ref[chap-rloc] introduce the localization system design and implementation in detail.
+
+
+
+
 
 
 
