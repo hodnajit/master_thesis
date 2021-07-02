@@ -9,7 +9,7 @@ To sum up, this chapter gives the reader a detail introduction to the proposed l
 \sec System architecture design
 Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF is the error in the states estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
-The system consists of three crucial steps. The first is the inertial navigation unit (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
+The system consists of three crucial steps. The first is the inertial navigation system (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
 
 The second step is the ES-EKF itself. The error of the state is calculated and is then corrected using measurements from UWB localization and odometry. Measurements from UWB localization and odometry observe the error. The UWB localization gives us the absolute position, which can reduce the drift in step one.
 

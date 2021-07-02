@@ -35,7 +35,7 @@ Accelerometers can measure external forces acting on the vehicle. They measure a
 {\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by physical properies of real spring.
 
 
-{\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. The piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
+{\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. Unlike the others, the piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
 
 The current accelerometers used technology according to an application is sumarized in Figure \ref[fig-acc].
 
@@ -54,9 +54,7 @@ Gyroscopes are used for estimating a rotational motion of a body, each gyroscope
 
 {\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
 
-{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. 
-
-MEMS gyroscopes \cite[mems_navigation] play significant role in robotics, because of their simplicity. They are small, cheap, have no rotating parts and furthermore have low power consumption.
+{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. TYpically, vibrating gyroscopes are based on MEMS technology\cite[mems_navigation] and  they play significant role in robotics, because of their simplicity. They are small, cheap, have no rotating parts and furthermore have low power consumption.
 
 The performace and application of each technology is demonstrated in Figure \ref[fig-gyro].
 \midinsert
@@ -68,21 +66,21 @@ The performace and application of each technology is demonstrated in Figure \ref
 \label[chap-sec-avar]	
 \secc IMU's errors and Allan variance analysis
 	{\bf IMU errors}
-	IMUs faces several error sources. In this thesis, the main focus is given to MEMS-based IMU as they are used in experiments. These sensors are typically small and low cost.
+IMUs faces several error sources, which are always related to the specific sample unit and its technology. In this thesis, the main focus is given to MEMS-based IMUs as they are used in experiments. These sensors are typically small and low cost. In this section, the most significant errors for MEMS sensors and analysis of these errors with Allan variance are summarized. This analysis is applied to a specific IMU, which is used during experiments.
 	
 	
-	These errors can be divided into two categories \cite[mems_navigation]
+	Errors can be divided into two categories \cite[mems_navigation]
 	\begitems
 		* stochastical errors, which can be described as random processes,
-		* and deterministic errors, also called systematic errors, are basically caused by manufacturing imperfections or not ideal handling with IMU. These errors can be corrected by proper calibration.
+		* and systematic errors are basically caused by manufacturing imperfections or not ideal handling with IMU. These errors can be corrected by proper calibration.
 	\enditems
-	Nevertheless, errors need to be analysed and reduced according to application requirements. The following errors are the most significant according to the topic of this thesis.
+	Nevertheless, errors need to be analysed and reduced according to application requirements, next following subset of errors are the most significant according to the topic of this thesis.
 	
 	{\em Biases} of accelerometers and gyroscopes used in IMU are examples of systematic errors and can be divided into
 	
 		\begitems
-		* bias instability (or also called in-run bias), which represents drift of the sensor during a time,
-		* and initial bias (or repeatability bias), which is a static offset, which can be different during each start-up of the device, but during a run, it is static.
+		* bias instability\footnote{1}{also called in-run bias}, which represents drift of the sensor during a time,
+		* and initial bias\footnote{2}{repeatability bias} is a static offset, which can vary during each start-up of the device, but during a run, it is static.
 		\enditems
 		Biases are typically represented in $^\circ /hr$ or $^\circ /s$ for gyroscopes and $mg$ for accelerometers.
 		
@@ -119,7 +117,7 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 	The most significant outcome for navigation purposes is when the bias instability is reached (slope is zero). At this time, the sensor model contains only a white (Gaussian) noise \cite[white_noise]. After that period, the external reset needs to be done.	 
 
 \secc Performance of IMUs according to their application
-	IMUS can be used in various application, which differs by IMUs performance. The overview of each sensor's precision for a given application is nicely summarized in Figure \ref[imu_perform].
+	IMUS can be used in various application, which differs by IMUs performance. The overview of each sensor's precision for a given application is summarized in Figure \ref[imu_perform].
 	
 	\midinsert
 	\picw=0.8\hsize \cinspic imgs/sensors/imu_performance.png

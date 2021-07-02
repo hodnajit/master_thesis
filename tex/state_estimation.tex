@@ -15,7 +15,7 @@ There are a few limitations for both algorithms. For the Kalman filter, the stat
 I decided to use an algorithm based on the Kalman filter for several reasons.
 First, the localization system will be used for the navigation of vehicles. For these kinds of tasks, the update rate has to be relatively high.
 Second, the state transition and measurements are approximately linear.
-And third, these algorithms are typically used in the fusion of IMU and GNSS, as I already mentioned in Chapter \ref[chap-introduction].
+And third, these algorithms are typically used in the fusion of IMU and GNSS, as I already mentioned in Chapter TODO.
 
 \sec Algorithms based on Kalman filter
 There have been many modifications and extensions of the standard Kalman filter since the 1950s when the filter was invented, because the assumptions of the linear system and sensor model with added Gaussian noise are rarely fulfilled in practice\cite[probabilistic_robotics]. In these cases, the state transition or sensor model are described by nonlinear functions.
@@ -105,9 +105,9 @@ where
 * and $G$ is the Jacobian matrix defined as $G = {\delta g(e_{t}) \over \delta e_{t}}$.
 \enditems
 
-\sec Chosen approach for state estimation
+\sec Chosen approach for the state estimation
 This thesis aims to design a prototype of the localization system of vehicles based on the fusion of the UWB positioning system and onboard dead-reckoning sensors. As I already mentioned in Chapter \ref[chap-introduction], the system should be used for the localization of indoor vehicles in an industrial environment. However, each such vehicle (and terrain, where it is moving) can differ in its dynamics. Because of that, I decided to use an approach, which can replace these dynamics.
-The INS meets these requirements and gives us the state independent of a specific vehicle and specific terrain where it is moving. The estimation is accurate for a short time (see Section \ref[IMU]). Thus it needs to be corrected via other measurements as the UWB positioning system and odometry.
+The Inertial navigation system(INS) meets these requirements and gives us the state independent of a specific vehicle and specific terrain where it is moving. The estimation is accurate for a short time (see Section \ref[IMU]). Thus it needs to be corrected via other measurements as the UWB positioning system and odometry.
 I decided to estimate the error of the INS in the Error state Extended Kalman filter for the following reasons.
 \begitems
 * The correction of INS can be done at a lower rate than the state estimation for localization purposes itself\cite[error_state_kalman, quaternion_kinematics],
