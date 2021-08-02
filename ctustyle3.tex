@@ -4,7 +4,7 @@
 
 \useOpTeX % Use OpTeX format
 
-\_def\ctustyleversion{Feb.2021 beta(g)}
+\_def\ctustyleversion{Jul.2021 beta(l)}
 
 \_message{CTUstyle3: Thesis at Czech Technical University in Prague, 
           <\ctustyleversion>}
@@ -161,9 +161,9 @@
 
 \_let\bf=\_undefined \_let\bi=\_undefined % newly defined variant selectors
 \_famvardef \bf {\.Technikascaled\_bf}
-                \_addto\bf {\_inmath{\_bsansvariables \_sansgreek \_bsansdigits}}
+                \_addto\bf {\_inmath{\_bsansvariables \_bsansgreek \_bsansdigits}}
 \_famvardef \bi {\.Technikascaled\_bi} 
-                \_addto\bi {\_inmath{\_bisansvariables \_isansgreek \_bsansdigits}}
+                \_addto\bi {\_inmath{\_bisansvariables \_bisansgreek \_bsansdigits}}
 \_famvardef \ssr {\.Technikascaled\.book\_rm}
 \_famvardef \ssi {\.Technikascaled\.book\_it}
 \_famvardef \sc  {\.caps\_rm}
@@ -186,7 +186,11 @@
    \_let\_normalmath=\_boldmath
    \.bf 
    \_let \.Technikascaled =\.Technika
+   \_let\LaTeX = \.bLaTeX
 }
+\_protected\_def\.bLaTeX{\_tmpdim=.42ex L\_kern-.18em \_kern \_slantcorr
+  \_raise \_tmpdim \_hbox{\_thefontscale[710]A}%
+  \_kern-.06em \_kern-\_slantcorr \_TeX}
 
 \_def\.chapfont{\_scalemain\_typoscale[\_magstep3/\_magstep3]\.boldify}
 \_def\.secfont{\_scalemain\_typoscale[\_magstep2/\_magstep2]\.boldify}
@@ -421,7 +425,8 @@
 \_newbox\.tocbox
 
 \_everytocline={\_advance\_rightskip by0pt plus1em}
-\_sdef{_tocl:1}#1#2#3{\_nofirst\_smallskip \.bf\_llaptoclink{#1}{#2}\_hfill\_pgn{#3}\_tocpar}
+\_sdef{_tocl:1}#1#2#3{\_nofirst\_smallskip
+   \.bf\_llaptoclink{#1}{#2}\_nobreak\_hfill\_pgn{#3}\_tocpar}
 
 \_def\.tocpages{   
    \_setbox\.tocbox=\_vbox{\.sethsizefront \_parskip=0pt \_iindent=7mm \_maketoc\_vfil}
@@ -507,7 +512,7 @@
 
 %%% Chapter, section
 
-\_def\_printchap#1{\_vfil\_supereject \_vglue1cm
+\_def\_printchap#1{\_vfil\_supereject \.myvakat \_vglue1cm
   \_headline={\_hfil\.nextheadline}
   \_xdef\.headchap{\_ifnonum\_else\_thechapnum.\ \_fi#1}
   \_mark{}\_nobreak
@@ -591,7 +596,7 @@
 \_def\.nochap#1\par{\_message{CTUstyle WARNING: \_noexpand\chap inside
                            Appendices is ignored.}}
 
-\_def\.printapp#1{\_vfil\_supereject \_vglue1cm
+\_def\.printapp#1{\_vfil\_supereject \.myvakat \_vglue1cm
   \_headline={\_hfil\.nextheadline}
   \_xdef\.headchap{\.appletter\ #1}
   \_mark{}\_nobreak
@@ -774,7 +779,6 @@
 }
 \_addto\_bibskip{\_ifnum\_bibnum>0 \_vskip-\_parskip \_fi}
 
-
 %%% Slides:
 
 \_def\slides{\_par
@@ -809,6 +813,16 @@
   \_fontdef\_smallbf{\_setfontsize{at10pt}\_bf}
 
   \_doloadmath \_loadmath {[FiraMath-Regular]}
+     \_addto\_normalmath{\_loadumathfamily 5 {xitsmath-regular}{} }
+     \_addto\_boldmath  {\_loadumathfamily 5 {xitsmath-bold}{} }
+     \_addto\frak{\_fam5 }\_addto\cal{\_fam5 }
+     \_normalmath
+     \_let\_bsansvariables=\_bfvariables
+     \_let\_bsansGreek=\_bfGreek
+     \_let\_bsansgreek=\_bfgreek
+     \_let\_bsansdigits=\_bfdigits
+     \_let\_bisansvariables=\_bivariables
+     \_let\_bisansgreek=\_bigreek
 
   \_def\_printtit ##1{\_vglue 2\_titskip
      \_xdef\.titpage{\_the\_pageno}%
@@ -900,8 +914,10 @@
 \_def\abbrv[#1]{\_par \_noindent\_llap{#1\_quad}\_ignorespaces}
 
 \_def\urlnote#1{\_fnote{\_url{#1}}}
-\_def\nextoddpage{\_vfil\_supereject
-   \_ifodd\_pageno \_else \_shipout\_null \_advancepageno \_fi}
+\_def\nextoddpage{\_vfil\_supereject \.tryvakat}
+\_def\.tryvakat{\_ifodd\_pageno \_else \_shipout\_null \_advancepageno \_fi}
+\_let\.myvakat=\_relax  % by default, chapters 2, 3, ... can start at left pages
+\_def\oddchapters{\_let\.myvakat=\.tryvakat} % all chapters start at right pages
 
 \_let\urllink=\_ulink
 
@@ -921,3 +937,8 @@ beta(d) Jan.2021  \.normalitem in \.printglos, typo corrected
 beta(e) Jan.2021  \.clabeltext unexpanded (moe robust)
 beta(f) Feb.2021  \_thechapnum in appendixes, bug fix.
 beta(g) Feb.2021  \.pdfinfodata re-implemented
+beta(h) Apr.2021  \.bLaTeX logo added
+beta(i) Apr.2021  \slides: FiraMath corrections added
+beta(j) May 2021  \bf, \bi in math mode corrected
+beta(k) Jun.2021  \oddchapters added
+beta(l) Jul.2021  \_tocl:1 bug fixed (\_nobreak added)
