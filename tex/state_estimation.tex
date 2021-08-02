@@ -106,11 +106,12 @@ where
 \enditems
 
 \sec Chosen approach for the state estimation
-This thesis aims to design a prototype of the localization system of vehicles based on the fusion of the UWB positioning system and onboard dead-reckoning sensors. As I already mentioned in Chapter \ref[chap-introduction], the system should be used for the localization of indoor vehicles in an industrial environment. However, each such vehicle (and terrain, where it is moving) can differ in its dynamics. Because of that, I decided to use an approach, which can replace these dynamics.
+This thesis aims to design a prototype of the localization system of vehicles based on the fusion of the UWB positioning system and onboard dead-reckoning sensors. As I already mentioned in Chapter TODO, the system should be used for the localization of indoor vehicles in an industrial environment. However, each such vehicle (and terrain, where it is moving) can differ in its dynamics. Because of that, I decided to use an approach, which can replace these dynamics.
 The Inertial navigation system(INS) meets these requirements and gives us the state independent of a specific vehicle and specific terrain where it is moving. The estimation is accurate for a short time (see Section \ref[IMU]). Thus it needs to be corrected via other measurements as the UWB positioning system and odometry.
 I decided to estimate the error of the INS in the Error state Extended Kalman filter for the following reasons.
 \begitems
 * The correction of INS can be done at a lower rate than the state estimation for localization purposes itself\cite[error_state_kalman, quaternion_kinematics],
+*The unscented Kalman filter or Particle filter algorithms have high computational load, that usually prevents them to be used in real time system\cite[imu_uwb_vision_localization].
 * The model for estimation of the error is linear, as the error is
 	\begitems
 		* close to the origin,

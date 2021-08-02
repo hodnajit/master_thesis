@@ -1,5 +1,49 @@
 \chap Experiments
-Lorem ipsum sit amet
+\sec Used hardware description
+\secc Sensors specification
+{\bf Inertial measurement unit} used during experiments is Epson M-G365PDF1 (loaner sample). Epson M-G365 is used in a number of various applications ranging from stabilization systems (as camera gimbal) or navigation systems.
 
-\sec Section 1
-Lorem ipsum sit amet
+\midinsert
+    \picw=0.3\hsize \cinspic imgs/experiments/g365.jpg
+    \label[fig-epson-g365]
+    \caption/f IMU used in experiments Epson M-G365PDF1\cite[epson_g365]
+\endinsert
+
+The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \footnote{1}{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
+
+\midinsert \clabel[spec_epson]{Technical specifications of Epson M-G365PDF1}
+\ctable{lr}{
+\hfil
+Specification & Value \crl \tskip4pt
+Triple gyroscopes & $\pm$ 450 °/sec \cr
+Gyroscopes bias instability & 1.2 °/hr \cr
+Gyroscopes initial bias error & 0.1 °/s \cr
+Angular random walk & 0.08 °/√hr \cr
+Tri-axis accelerometers & $\pm$ 10 G \cr
+Accelerometers bias instability & 16 $\mu$ G \cr
+Accelerometers initial bias error & 3 mG \cr
+Velocity random walk & 0.033 (m/s)/√hr \cr
+}
+\caption/t Technical specifications of Epson M-G365PDF1\cite[epson_g365].
+\endinsert
+
+As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specification. Experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponge and fixed with cartboard. The static data were recorded for 48 hours at frequency of 30.0 Hz.
+\midinsert
+    \picw=0.3\hsize \cinspic imgs/experiments/avar_epson_setup.png
+    \label[fig-epson-avar]
+    \caption/f Experimental setup for static data acquisition of Epson M-G365PDF1.
+\endinsert
+
+For AVAR computation I used a python library named AllanTools, for purposes of this thesis the overlapping Allan deviation function is used. The result can be seen in Figures TODO!
+
+
+\secc CART2 platform and sensors mounting
+\sec Experimenty v BU04 mistnosti
+\secc Popsani experimentalniho setupu v BU04
+\secc Popsani provedeni experimentu (jake, jak se udelaly)
+\secc Zhodnoceni experimentu v BU04 (	
+\sec Experimenty v CIIRC s VICONem
+\secc Popsani experimentalniho setupu v CIIRC
+\secc Popsani provedeni experimentu
+\secc Zhodnoceni experimentu v BU04
+

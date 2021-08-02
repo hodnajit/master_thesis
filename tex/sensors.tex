@@ -96,9 +96,9 @@ IMUs faces several error sources, which are always related to the specific sampl
 	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($\tau = m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean values of certain cluster of $i+1$-th and $i$-th cluster respectively. \cite[signal_processing].
 	
 	\midinsert
-    \picw=0.6\hsize \cinspic imgs/sensors/avar.png
+    \picw=0.4\hsize \cinspic imgs/sensors/avar.png
     \label[fig-avar]
-    \caption/f The difference between non-overlapping and overlapping sample 	\cite[avar]
+    \caption/f The difference between non-overlapping and overlapping sample 	\cite[epson_g365]
 	\endinsert
 	
 The samples in a cluster can be both non-overlapping and overlapping. The difference is illustrated in \ref[fig-avar]. The overlapping samples improve the confidence of the resulting estimate. That is the reason why this method is the most common for a measure of time-domain frequency stability in general \cite[avar].
@@ -132,6 +132,10 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 		Navigation equations implement the transforms between the body frame and the reference frame, either a local-level frame (as North-East-Down or East-North-Up), a reference to a specific point at planet Earth, or an Earth-fixed frame as ECEF \cite[mems_navigation].
 		
 		These equations are known and can be found in the book MEMS-based Integrated Navigation \cite[mems_navigation].
+	
+\label[INS]
+\sec Inertial navigation system
+	
 		
 \label[odometry]
 \sec Odometry

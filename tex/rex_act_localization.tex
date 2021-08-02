@@ -167,7 +167,7 @@ with covariance $R_1$. This difference is important in the computation of Jacobi
 \secc The kinematics equations in discrete time
 As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
 $$
-R \leftarrow R(\Omega\Delta t),
+R \leftarrow R + (R \Omega) \Delta t),
 \eqmark
 $$
 where
@@ -182,7 +182,7 @@ where
 * $\omega_{b}$ is bias of gyroscopes [$rad \over s$].
 \enditems
 
-This integration is happening in the INS box in Figure \cite[fig-architecture].
+This integration is happening in the INS box in Figure \ref[fig-architecture].
 
 \sec Error state extended Kalman filter implementation
 Algorithm and equations for general extended Kalman filter are briefly described in Chapter \ref[chap-state-est]. In this section, these equations are concretized.
