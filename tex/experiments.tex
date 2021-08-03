@@ -5,11 +5,11 @@
 
 \midinsert
     \picw=0.3\hsize \cinspic imgs/experiments/g365.jpg
-    \label[fig-epson-g365]
+    \clabel[fig-epson-g365]{IMU used in experiments}
     \caption/f IMU used in experiments Epson M-G365PDF1\cite[epson_g365]
 \endinsert
 
-The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \footnote{1}{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
+The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \fnote{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
 
 \midinsert \clabel[spec_epson]{Technical specifications of Epson M-G365PDF1}
 \ctable{lr}{
@@ -20,21 +20,37 @@ Gyroscopes bias instability & 1.2 °/hr \cr
 Gyroscopes initial bias error & 0.1 °/s \cr
 Angular random walk & 0.08 °/√hr \cr
 Tri-axis accelerometers & $\pm$ 10 G \cr
-Accelerometers bias instability & 16 $\mu$ G \cr
+Accelerometers bias instability & 16 $\mu$G \cr
 Accelerometers initial bias error & 3 mG \cr
 Velocity random walk & 0.033 (m/s)/√hr \cr
 }
 \caption/t Technical specifications of Epson M-G365PDF1\cite[epson_g365].
 \endinsert
 
-As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specification. Experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponge and fixed with cartboard. The static data were recorded for 48 hours at frequency of 30.0 Hz.
+As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specification. Experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponge and fixed with cartboard. The static data were recorded for 48 hours at frequency of 30.0 Hz. The experiment took place at a village without any subway, trams or trains to reduce external vibrations on measurement (to reduce potential outliers) and at standard room temperature (about 23 °C).
 \midinsert
     \picw=0.3\hsize \cinspic imgs/experiments/avar_epson_setup.png
-    \label[fig-epson-avar]
+    \clabel[fig-epson-avar]{Experimental setup for static data acquisition of Epson M-G365PDF1.}
     \caption/f Experimental setup for static data acquisition of Epson M-G365PDF1.
 \endinsert
 
-For AVAR computation I used a python library named AllanTools, for purposes of this thesis the overlapping Allan deviation function is used. The result can be seen in Figures TODO!
+For AVAR computation I used a python library named AllanTools, for purposes of this thesis the overlapping Allan deviation function is used.
+
+\picw=.6\hsize
+\centerline {\inspic imgs/experiments/epson_accelerometers.pdf \hfil \inspic imgs/experiments/epson_gyroscopes.pdf }\nobreak
+\centerline {a)\hfil b)}\nobreak\medskip
+\clabel[fig-epson-avar2]{Overlapping Allan variance plot for Epson M-G365PDF1.}
+\caption/f Overlapping Allan variance plot for Epson M-G365PDF1.
+
+As you can see in the Figure \ref[fig-epson-avar2], the external reset of integration of IMU measurement must be performed at 0.01 Hz at the latest. After that period, non gaussian noise of accelerometers comes into account. The UWB localization system works at 10 Hz, that should be enough for the reseting.
+
+For the final experiments, the IMU is setup to publish delta angle and delta velocity at 100 Hz with moving average filter with tap 64. Because of that, higher frequencies than 10 Hz are filtered as can be seen in Figure \ref[fig-epson-filter].
+
+\midinsert
+    \picw=0.9\hsize \cinspic imgs/experiments/epson_filter.png
+    \clabel[fig-epson-filter]{Moving average filter characteristics for Epson M-G365PDF1.}
+    \caption/f Moving average filter characteristics for Epson M-G365PDF1\cite[epson_g365].
+\endinsert
 
 
 \secc CART2 platform and sensors mounting
