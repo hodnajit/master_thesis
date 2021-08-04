@@ -196,7 +196,20 @@ Secondly, the camera need to be mounted and measured its position according to t
  \enditems
  For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
  
- Trajectories of these tests as well as the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj].
+ Trajectories of these tests as well as the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj]. CART2 platform was controlled via keyboard and joystick during experiments. The controlling via keyboard has a benefit of control velocity in each direction easily, thus I used it for constant velocity during simple moving in single axis and simple rotation around single axis. With that I controlled all tests, except infinity test, where the movement is more complicated. During rectangle test, CART2 drove forward (moving in single axis) then stopped and turned at one place above 90 degrees (rotating above single axis). In infinity movement I drove the CART2 platform with joystick and tried to move similar velocities as in constant movements. The summary of velocities during experiments is given in Table \ref[bu04_traj_vel].
+ 
+\midinsert \clabel[bu04_traj_vel]{Velocities during experiments in Datavision s. r. o.}
+\ctable{lrrr}{
+\hfil Test & Description & Speed [m/s] & Turn [rad/s] \crl \tskip4pt
+stationary & Constant velocities & 0.0 & 0.0 \cr
+rotation & Constant velocities & 0.0 & 0.1094 \cr
+x & Constant velocities & 0.0750 & 0.0 \cr
+y & Constant velocities & 0.0750 & 0.0 \cr
+rectangle & Constant velocities & 0.0750 or 0.0 & 0.0 or 0.1094 \cr
+infinity test & non constant (control via joystick) & approx. 0.0750 & approx. 0.1094 \cr
+}
+\caption/t Velocities during experiments in Datavision s. r. o..
+\endinsert
   
 \secc Evaluation of experiments at Datavision s. r. o.	
 \sec Experiment at CTU CIIRC
