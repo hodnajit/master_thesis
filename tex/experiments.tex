@@ -1,12 +1,26 @@
 \chap Experiments
 \sec Used hardware description
 \secc Sensors specification
+The onboard sensors of interest are Inertial Measurement Unit, ultra-wideband localization tag, april tag and encoders on motors.
+
 {\bf Inertial measurement unit} used during experiments is Epson M-G365PDF1 (loaner sample). Epson M-G365 is used in a number of various applications ranging from stabilization systems (as camera gimbal) or navigation systems.
 
+%\midinsert
+%    \picw=0.3\hsize \cinspic imgs/experiments/g365.jpg
+%    \clabel[fig-epson-g365]{IMU used in experiments Epson M-G365PDF1}
+%    \caption/f IMU used in experiments Epson M-G365PDF1\cite[epson_g365]
+%\endinsert
+
 \midinsert
-    \picw=0.3\hsize \cinspic imgs/experiments/g365.jpg
-    \clabel[fig-epson-g365]{IMU used in experiments}
-    \caption/f IMU used in experiments Epson M-G365PDF1\cite[epson_g365]
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-epson-g365]{IMU used in experiments Epson M-G365PDF1}
+      \picw=0.5\hsize \cinspic imgs/experiments/g365.jpg
+      \caption/f IMU used in experiments Epson M-G365PDF1.
+   \par}\vtop{%
+      \clabel[fig-epson-avar]{Experimental setup for static data acquisition of Epson M-G365PDF1}
+      \picw=\hsize \cinspic imgs/experiments/avar_epson_setup.png
+      \caption/f Experimental setup for static data acquisition of Epson M-G365PDF1.
+   \par}}
 \endinsert
 
 The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \fnote{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
@@ -28,11 +42,6 @@ Velocity random walk & 0.033 (m/s)/√hr \cr
 \endinsert
 
 As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specification. Experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponge and fixed with cartboard. The static data were recorded for 48 hours at frequency of 30.0 Hz. The experiment took place at a village without any subway, trams or trains to reduce external vibrations on measurement (to reduce potential outliers) and at standard room temperature (about 23 °C).
-\midinsert
-    \picw=0.3\hsize \cinspic imgs/experiments/avar_epson_setup.png
-    \clabel[fig-epson-avar]{Experimental setup for static data acquisition of Epson M-G365PDF1.}
-    \caption/f Experimental setup for static data acquisition of Epson M-G365PDF1.
-\endinsert
 
 For AVAR computation I used a python library named AllanTools, for purposes of this thesis the overlapping Allan deviation function is used.
 
@@ -52,8 +61,77 @@ For the final experiments, the IMU is setup to publish delta angle and delta vel
     \caption/f Moving average filter characteristics for Epson M-G365PDF1\cite[epson_g365].
 \endinsert
 
+{\bf UWB localization system} is povided by Qorvo's MDEK1001 ultra-wideband development kit. This kit includes 12 DWM1001-DEV development boards in plastic enclosures (see Figure \ref[fig-uwb-dwm]).
 
-\secc CART2 platform and sensors mounting
+\midinsert
+    \picw=0.4\hsize \cinspic imgs/experiments/mdek1001.jpg
+    \clabel[fig-uwb-dwm]{DWM1001-DEV development boards.}
+    \caption/f DWM1001-DEV development boards\cite[mdek_1001].
+\endinsert
+
+Each can be configured as an anchor, tag or bridge node. The system is installed with 6 anchors fixedly mounted and one tag which can be moved. The anchors are higher than tag. According to the initiator anchor, the tag’s position gives the coordinates frame’s origin. The set up of the system can be seen in Figure \ref[fig-uwb-anchors_tags].
+
+\midinsert
+    \picw=0.8\hsize \cinspic imgs/experiments/uwb_anchors_tags.png
+    \clabel[fig-uwb-anchors_tags]{Positioning of anchors and tags.}
+    \caption/f Positioning of anchors and tags\cite[mdek_1001].
+\endinsert
+
+The anchors should be mounted at the same hight and higher than the operating area of the moving tag. They also should not be mounted close to any metal to get the best accuracy. The configuration of the whole network is done via their mobile application and positions of the anchors are estimated manually.
+
+Technical specification of MDEK1001 and DWM1001-DEV can be found in documents \cite[mdek_1001], the summary is listed in Table \ref[spec_mdek1001].
+
+\midinsert \clabel[spec_mdek1001]{System performance of MDEK1001}
+\ctable{lr}{
+\hfil
+Specification & Value \crl \tskip4pt
+Maximum tag location rate & 10 Hz \cr
+X-Y location accuracy & < 10 cm \cr
+Point to point range & up to 60 m in line of sight conditions \cr
+Scheme range & 25 - 30 m between anchors\cr
+}
+\caption/t System performance of MDEK1001\cite[mdek_1001].
+\endinsert
+
+{\bf TODO The odometry} is computed according to measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
+
+{\bf AprilTag} serves as a global reference of pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera\cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits) and it can be detected more robustly.
+
+{\bf Camera} used for detection of AprilTag is Niceboy Stream Pro with Full HD (1920 x 1080) resolution, 30 FPS, 90 ° field of vision and f/1.8 lens aperture\cite[camera_niceboy].
+
+\midinsert
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-apriltag]{AprilTag used for detection of CART2 position}
+      \picw=4cm \cinspic imgs/experiments/apriltag.png
+      \caption/f AprilTag used for detection of CART2 position.
+   \par}\vtop{%
+      \clabel[fig-camera]{Camera used for AprilTag detection Niceboy Stream Pro}
+      \picw=4cm \cinspic imgs/experiments/camera.jpg
+      \caption/f Camera used for AprilTag detection Niceboy Stream Pro\cite[camera_niceboy].
+   \par}}
+\endinsert
+
+\secc CART2 platform description and sensors placements
+An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_close]. The coordinate frame of CART2 called "baselink"  is illustrated in all Figures \ref[fig-cart2_close] and \ref[fig-cart2_sensors]. The CART2 used for a various robotic competitions is a differential drive and is equipped with the ADlink MXE-210 computer.
+
+\midinsert
+\centerline {\picw=4cm \inspic imgs/experiments/cart2_up.pdf \hfil\hfil \picw=7cm \inspic imgs/experiments/cart2_side.pdf }\nobreak
+\centerline {a) Top view \hfil\hfil b) Side view}\nobreak\medskip
+\clabel[fig-cart2_close]{A photo of the utilized CART2 platform}
+\caption/f A photo of the utilized CART2 platform.
+\endinsert
+
+The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]. The vehicle uses Maxon brushless DC motor, which is controlled by Maxon EPOS4 control units.
+
+\midinsert
+    \picw=0.7\hsize \cinspic imgs/experiments/cart2_whole.pdf
+    \clabel[fig-cart2_sensors]{A photo of sensors mounting on CART2}
+    \caption/f A photo of sensors mounting on CART2.
+\endinsert
+
+The UWB tag is mounted on a wooden stick aproximately one meter upon the CART2 platform to reduce reflections of UWB wave from surfaces and negative influence of any metal part. The AprilTag is mounted bellow the UWB tag to not become a barrier in UWB wave. When the AprilTag was mounted on top of the CART2 platform, the wooden stick obstructs the camera detection of AprilTag in some position of CART2 in a room, thus I decided to mount it as high as possible to reduce these situations. 
+
+	
 \sec Experimenty v BU04 mistnosti
 \secc Popsani experimentalniho setupu v BU04
 \secc Popsani provedeni experimentu (jake, jak se udelaly)
