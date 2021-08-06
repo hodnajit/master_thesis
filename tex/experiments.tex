@@ -1,15 +1,25 @@
 \chap Experiments
+This chapter is dedicated to the experimental evaluation of the proposed localization system.
+
+TODO dopsat pouzite metriky v experimentech a co nas vlastne zajima.
+- co nas zajima pro evaluaci lokalizace ve 2D prostoru
+- jake metriky budou pouzite
+(inspirace u Halodove)
+
+
+Localization system was implemented on a robotic platform CART2, where inertial measurement unit and ultra-wideband localization tag were mounted. Specific hardware and the robotic platform are introduced in first section.
+
+Next two sections are dedicated to experiments at two different experimental environments. First experiments, described in second section, were realized in a lab at Datavision s. r. o. company with an external localization system based on an AprilTag detection with camera. The external localization system was developed in this thesis for evaluation of the proposed localization system.
+
+Additional experiments took place in a Intelligent and mobile robotics lab at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics, where Vicon reference system is used for evaluation. These experiments are summarized in third section of this chapter.
+
+
 \sec Used hardware description
+In this section, overview of used sensors for the proposed localization is given as well as a description of CART2 robotic platform used during experiments.
 \secc Sensors specification
 The onboard sensors of interest are Inertial Measurement Unit, ultra-wideband localization tag, april tag and encoders on motors.
 
 {\bf Inertial measurement unit} used during experiments is Epson M-G365PDF1 (loaner sample). Epson M-G365 is used in a number of various applications ranging from stabilization systems (as camera gimbal) or navigation systems.
-
-%\midinsert
-%    \picw=0.3\hsize \cinspic imgs/experiments/g365.jpg
-%    \clabel[fig-epson-g365]{IMU used in experiments Epson M-G365PDF1}
-%    \caption/f IMU used in experiments Epson M-G365PDF1\cite[epson_g365]
-%\endinsert
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -150,8 +160,8 @@ imu to baselink & [0.0, 0.0, 0.05] & [0.0, 0.0, -0.7071068, 0.7071068] \cr
 \endinsert
 
 \label[sec-experiments_bu04]
-\sec Experiments in experimental room at Datavision s. r. o.
-\secc Experimental room at Datavision s. r. o. description
+\sec Experiments in the lab at Datavision s. r. o.
+\secc Experimental lab description
 	For first experiments I created an experimental setup at Datavision s. r. o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m] and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
 	
 \midinsert
@@ -174,7 +184,7 @@ world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 Secondly, the camera need to be mounted and measured its position according to the world coordinate system. The transform between world and camera is not trivial, because of that I decided to use transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and camera image plane. The camera homography is then applied to the AprilTag detection pose and this pose is considered as global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
-	The area for experiments is not big, but I decided that these experiments serve as a proof of concept, that the proposed localization works.
+	The area for experiments is not big, but I decided that these experiments serve as a proof of concept of the localization idea.
 	
 \midinsert
 \centerline {\picw=4.75cm \inspic imgs/experiments/trajectories/stat_and_rot_move.pdf \hfil\hfil \picw=5cm \inspic imgs/experiments/trajectories/xy_move.pdf }\nobreak
@@ -211,12 +221,12 @@ infinity test & non constant (control via joystick) & approx. 0.0750 & approx. 0
 \caption/t Velocities during experiments in Datavision s. r. o..
 \endinsert
   
-\secc Evaluation of experiments at Datavision s. r. o.
+\secc Evaluation of experiments
 TODO
 
-\sec Experiment at CTU CIIRC
-\secc Experimental room at CIIRC description
-Next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the lab Intelligent and mobile robotics. Here, the localization system was evaluated using the the VICON external camera localization system \cite[vicon]. The setup with dimension and uwb localization networks can be seen in Figure \ref[fig-ciirc].
+\sec Experiments at CIIRC
+\secc Experiments at CIIRC description
+Next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the lab Intelligent and mobile robotics. Here, the localization system was evaluated using the the VICON external camera localization system \cite[vicon]. The world frame is defined by the VICON. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc].
 
 \midinsert
 \centerline {\picw=\hsize \inspic imgs/experiments/ciirc1.pdf }\nobreak
@@ -224,7 +234,7 @@ Next experimental environment was placed at Czech Technical University in Prague
 \centerline {\picw=\hsize \inspic imgs/experiments/ciirc2.pdf }\nobreak
 \centerline {b) View from camera 2}\nobreak\medskip
 \clabel[fig-ciirc]{Experimental setup at Intelligent and mobile robotics lab (CIIRC)}
-\caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC)
+\caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC).
 \endinsert
 
 Experiments can be divided based on 3 simple trajectories of CART2 into
@@ -235,7 +245,5 @@ Experiments can be divided based on 3 simple trajectories of CART2 into
  \enditems
  For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
 
-
-\secc Description of experiments
 \secc Evaluation of experiments at CIIRC
 
