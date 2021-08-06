@@ -93,7 +93,7 @@ Scheme range & 25 - 30 m between anchors\cr
 \caption/t System performance of MDEK1001\cite[mdek_1001].
 \endinsert
 
-{\bf TODO The odometry} is computed according to measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
+{\bf The odometry} is computed according to measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
 
 {\bf AprilTag} serves as a global reference of pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera\cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits) and it can be detected more robustly.
 
@@ -103,7 +103,7 @@ Scheme range & 25 - 30 m between anchors\cr
 \line{\hsize=.5\hsize \vtop{%
       \clabel[fig-apriltag]{AprilTag used for detection of CART2 position}
       \picw=4cm \cinspic imgs/experiments/apriltag.png
-      \caption/f AprilTag used for detection of CART2 position.
+      \caption/f AprilTag used for detection of CART2 position at Datavision s. r. o.
    \par}\vtop{%
       \clabel[fig-camera]{Camera used for AprilTag detection Niceboy Stream Pro}
       \picw=4cm \cinspic imgs/experiments/camera.jpg
@@ -121,7 +121,7 @@ An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_clo
 \caption/f A photo of the utilized CART2 platform.
 \endinsert
 
-The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]. The vehicle uses Maxon brushless DC motor, which is controlled by Maxon EPOS4 control units.
+The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]. The vehicle uses Maxon brushless DC motor (Maxon EC-imotor), which is controlled by Maxon EPOS4 control units.
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -137,19 +137,19 @@ The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]
 
 The UWB tag is mounted on a wooden stick aproximately one meter upon the CART2 platform to reduce reflections of UWB wave from surfaces and negative influence of any metal part. The AprilTag is mounted bellow the UWB tag to not become a barrier in UWB wave. When the AprilTag was mounted on top of the CART2 platform, the wooden stick obstructs the camera detection of AprilTag in some position of CART2 in a room, thus I decided to mount it as high as possible to reduce these situations.
 
-{\bf Coordinate systems of CART2 and sensors placements} are illustrated in Figure \ref[fig-cart2_coordinates] and described in Table \ref[cart2_frames].
+{\bf Coordinate systems of CART2 and sensors placements} are illustrated in Figure \ref[fig-cart2_coordinates] and described in Table \ref[cart2_frames]. Note, that world, camera and uwb_base frames are fixed with environment and explained in Section \ref[sec-experiments_bu04].
 
 \midinsert \clabel[cart2_frames]{Summary of transforms for experiments with CART2}
 \ctable{lrr}{
 \hfil Transform & Translation [x, y, z] in [m] & Rotation in quaternion [x, y, z, w] \crl \tskip4pt
-world to uwb_base & [0.0, 0.0, 2.58] & [0.0, 0.0, 0.0, 1.0] \cr
-uwb_base to baselink & [0.0, 0.0, 1.32] & [0.0, 0.0, 0.0, 1.0] \cr
-april_tag to baselink & [0.0, -0.171, 1.12] & [0.707107, -0.707107, 0.0, 0.0] \cr
+uwb_tag to baselink & [0.0, 0.0, 1.192] & [0.0, 0.0, 0.0, 1.0] \cr
+april_tag to baselink & [0.0, -0.171, 1.071] & [0.707107, -0.707107, 0.0, 0.0] \cr
 imu to baselink & [0.0, 0.0, 0.05] & [0.0, 0.0, -0.7071068, 0.7071068] \cr
 }
 \caption/t Summary of transforms for experiments with CART2.
 \endinsert
-	
+
+\label[sec-experiments_bu04]
 \sec Experiments in experimental room at Datavision s. r. o.
 \secc Experimental room at Datavision s. r. o. description
 	For first experiments I created an experimental setup at Datavision s. r. o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m] and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
@@ -171,7 +171,7 @@ world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 \caption/t Summary of transforms for experiments setup at Datavision s. r. o..
 \endinsert
 
-Secondly, the camera need to be mounted and measured its position according to the world coordinate system. The transform between world and camera is not trivial, because of that I decided to use transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and camera image plane. The camera homography is then applied to the AprilTag detection pose and this pose is considered as global reference.
+Secondly, the camera need to be mounted and measured its position according to the world coordinate system. The transform between world and camera is not trivial, because of that I decided to use transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and camera image plane. The camera homography is then applied to the AprilTag detection pose and this pose is considered as global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
 	The area for experiments is not big, but I decided that these experiments serve as a proof of concept, that the proposed localization works.
@@ -185,13 +185,13 @@ Secondly, the camera need to be mounted and measured its position according to t
 \caption/f Trajectories for experiments at Datavision s. r. o..
 \endinsert
 	
-	I picked six simple trajectories for experiments and tests can be divided according to these trajectories as
+Experiments can be divided based on six simple trajectories of CART2 into
  \begitems
  	* stationary test (stationary test),
  	* rotation above 360 degrees in one direction at one place test (rotation test),
- 	* moving in x direction test (x test),
- 	* moving in y direction test (y test),
- 	* moving in rectangle shape test (rectangle test),
+ 	* moving in x direction (x test),
+ 	* moving in y direction (y test),
+ 	* moving in rectangle shape (rectangle test)
  	* and moving in infinity shape (infinity test).
  \enditems
  For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
@@ -211,9 +211,31 @@ infinity test & non constant (control via joystick) & approx. 0.0750 & approx. 0
 \caption/t Velocities during experiments in Datavision s. r. o..
 \endinsert
   
-\secc Evaluation of experiments at Datavision s. r. o.	
+\secc Evaluation of experiments at Datavision s. r. o.
+TODO
+
 \sec Experiment at CTU CIIRC
 \secc Experimental room at CIIRC description
+Next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the lab Intelligent and mobile robotics. Here, the localization system was evaluated using the the VICON external camera localization system \cite[vicon]. The setup with dimension and uwb localization networks can be seen in Figure \ref[fig-ciirc].
+
+\midinsert
+\centerline {\picw=\hsize \inspic imgs/experiments/ciirc1.pdf }\nobreak
+\centerline {a) View from camera 1}\nobreak\medskip
+\centerline {\picw=\hsize \inspic imgs/experiments/ciirc2.pdf }\nobreak
+\centerline {b) View from camera 2}\nobreak\medskip
+\clabel[fig-ciirc]{Experimental setup at Intelligent and mobile robotics lab (CIIRC)}
+\caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC)
+\endinsert
+
+Experiments can be divided based on 3 simple trajectories of CART2 into
+ \begitems
+ 	* moving in rectangle shape (rectangle test),
+ 	* moving in infinity shape (infinity test)
+ 	* and moving in bean shape (bean test).
+ \enditems
+ For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
+
+
 \secc Description of experiments
 \secc Evaluation of experiments at CIIRC
 
