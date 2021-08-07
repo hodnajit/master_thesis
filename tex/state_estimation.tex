@@ -1,11 +1,11 @@
 \label[chap-state-est]
-\chap State estimations algorithms for localization
-The localisation is the problem of estimating a robot’s coordinates in an external reference frame from sensor data, it is called state. In the state estimation algorithms more states from different sensors are fused together to counter sensors negative characteristics and support the positive ones.
+\chap Data fusion principles in pose estimation
+The localisation is the task of estimating a robot’s coordinates in an external reference frame from sensor data, it is called state. In the state estimation algorithms more states from different sensors are fused together to counter sensors negative characteristics and support the positive ones.
 
-In particular, probabilistic approaches are typically more robust in the face of sensor limitations, sensor noise or environment dynamics\cite[probabilistic_robotics]. Moreover, they often scale much better to complex and unstructured environments, where the ability to handle uncertainty is of even greater importance\cite[probabilistic_robotics].
+There are a lot of approaches for data fusion. In particular, probabilistic approaches are typically more robust in the face of sensor limitations, sensor noise or environment dynamics\cite[probabilistic_robotics]. Moreover, they often scale much better to complex and unstructured environments, where the ability to handle uncertainty is of even greater importance\cite[probabilistic_robotics]. Thus, this Chapter is dedicated to probabilistic methods for state estimation, which are based on the Bayes filter\cite[probabilistic_robotics].
 
-For that reason, only probabilistic methods for state estimation are described in the next chapter. The basis of each technique briefly described in this thesis is Bayes filter\cite[probabilistic_robotics].
- The first section discusses the difference between Kalman and Particle filter for state estimation. The following section introduces advanced concepts derived from the Kalman filter algorithm as extended Kalman filter and unscented Kalman filter. The third and fourth sections go deeply into the Error state extended Kalman filter and introduces the benefits of using it, as it is the core of the localization system of this thesis.
+
+ The first section discusses the difference between Kalman and Particle filter for state estimation. The following section introduces advanced concepts derived from the Kalman filter algorithm as extended Kalman filter and unscented Kalman filter. The third and fourth sections go deeply into the Error state Extended Kalman filter and introduces the benefits of using it, as it is the core of the localization system of this thesis.
 
 \sec Kalman and particle filter
 Both Kalman and particle filter are the first implementations of Bayes filter in the continuous time\cite[probabilistic_robotics], and in both filters, the state is represented by belief, which corresponds to a distribution. For the Kalman filter it is a multivariate normal distribution , but for particle filter, the distribution is represented by all particles\cite[probabilistic_robotics, kalman_vs_particle].
@@ -114,16 +114,16 @@ I decided to estimate the error of the INS in the Error state Extended Kalman fi
 \begitems
 * The correction of INS can be done at a lower rate than the state estimation for localization purposes itself\cite[error_state_kalman, quaternion_kinematics],
 *The unscented Kalman filter or Particle filter algorithms have high computational load, that usually prevents them to be used in real time system\cite[imu_uwb_vision_localization].
-* The model for estimation of the error is linear, as the error is
+* The model for estimation of the error is near linear, as the error is
 	\begitems
 		* close to the origin,
-		* and small, so higher orders can be neglected\cite[error_state_kalman, quaternion_kinematics].
+		* and small, so higher orders can be neglected\cite[error_state_kalman, quaternion_kinematics],
 	\enditems 
 * numerical stability of the solution\cite[error_state_kalman],
 * even if the error estimation has a temporary computer failure, the INS is not affected, and some emergency procedures can come into account\cite[error_state_kalman].
 \enditems
 
-To sum up, the state estimation is given by INS, and the ES-EKF estimates the errors in the state using the difference between the INS and external sources of data, which are odometry and the UWB positioning system. The INS can estimate high-frequency motions of the vehicle accurately, so these dynamics are not in the filter explicitly modelled. The ES-EKF use a model of error propagation in INS, which are at low frequency and very well modelable by linear functions\cite[error_state_kalman, ekf_vs_es_ekf, farrell_aided]. This approach is also known as Aided navigation systems and is briefly described in Aided navigation: GPS with high rate sensors\cite[farrell_aided]. The following Chapter \ref[chap-rloc] introduce the localization system design and implementation in detail.
+To sum up, the state estimation is given by INS, and the ES-EKF estimates the errors in the state using the difference between the INS and external sources of data, which are odometry and the UWB positioning system. The INS can estimate high-frequency motions of the vehicle accurately, so these dynamics are not in the filter explicitly modelled. The ES-EKF use a model of error propagation in INS, which are at low frequency and very well modelable by linear functions\cite[error_state_kalman, ekf_vs_es_ekf, farrell_aided]. This approach is also known as Aided navigation systems and is briefly described in Aided navigation: GPS with high rate sensors\cite[farrell_aided]. The following Chapter \ref[chap-rloc] introduces the localization system design and its implementation in detail.
 
 
 

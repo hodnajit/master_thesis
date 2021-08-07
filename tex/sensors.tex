@@ -188,11 +188,11 @@ Navigation equations implement the transforms between the sensor frame and the n
 		
 \label[odometry]
 \sec Odometry
-The odometry of a device contains its pose and velocity based on its motion, it can be obtained from various sources as IMU, lidars, cameras or wheel encoders\cite[handbook_robotics], and it is an example of a dead reckoning system.
+Odometry is an example of dead reckoning system. It estimates pose and velocity of a device based on internal relative measurements of its motion. It can be obtained from various sources as IMU, lidars, cameras or wheel encoders\cite[handbook_robotics].
 
-Both IMU and wheel encoders are used in the suggested localisation system since they can counter each other's negative characteristics because wheel encoders drift over travelled distance and IMU drift over time\cite[handbook_robotics].
+Both IMU and wheel encoders are used in the suggested localisation system since they can counter each other's negative characteristics because wheel encoders drift over travelled distance and IMU drift over time\cite[handbook_robotics]. In this thesis, the term odometry is used as the odometry based on measurements from wheel encoders unless stated otherwise.
 
-The details of odometry information varies with vehicle design and during experiments the differential type is used (illustrated in Figure \ref[diff_drive].
+The details of odometry information varies with vehicle design and during experiments the differential type is used (illustrated in Figure \ref[diff_drive]).
 
 	\midinsert
 	\picw=0.5\hsize \cinspic imgs/sensors/differential_drive.png
