@@ -2,11 +2,11 @@
 \chap Sensors
 In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe localization methods based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) followed with inertial navigation systems (INS), and an odometry.
 	The section dedicated to UWB localization briefly introduces the UWB signals follows with three most used localization techniques as Two-Way Ranging, Time Difference of Arrival and Reverse Time Difference of Arrival.
-	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit.
+	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit. This section is closely related with the INS section, where principles of INS are explained and strapdown implementation example is given.
 	The last section includes basic information about odometry and its benefits and which odometry is used during experimental verification of the proposed localization system.
 \label[UWB]
 \sec Localization based on Ultra-wideband 
-Ultra-wideband is an emerging wireless personal area network (PAN) radio technology with wide possibilities of use. The most promising usage in a field of robotics is accurate indoor localization, because its benefits include
+{\bf Ultra-wideband} is an emerging wireless personal area network (PAN) radio technology with wide possibilities of use. The most promising usage in a field of robotics is accurate indoor localization, because its benefits include
 \begitems
 * high data rates,
 * high time resolution,
@@ -58,7 +58,7 @@ There are two basic ways how to mount the IMU to a vehicle, also called mechaniz
 * In {\bf gimbaled systems}, the IMU is attached to a stabilized platform that maintains its inertial orientation as the vehicle manoeuvres.
 * In {\bf strap-down systems}, it is rigidly attached to the vehicle.
 \enditems
-The mechanization determines the conversion between measurements of IMU and estimation of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is called navigation (mechanization) equations and they are briefly summarized in Section \ref[nav_eq].
+The mechanization determines the conversion between measurements of IMU and estimation of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is closely related with inertial navigation systems described in Section \ref[INS].
 
 IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU provides a short-term stable solution, which is not affected by external environment \cite[handbook_gnss_ins], and it has a high data rate (100 Hz - 200 Hz). That makes the IMU measurement complementary to the UWB localization measurement.
 
@@ -71,7 +71,6 @@ Accelerometers can measure external forces acting on the vehicle. They measure a
 {\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. Unlike the others, the piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
 
 The current accelerometers used technology according to an application is sumarized in Figure \ref[fig-acc].
-
 
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/acc_usage.png
@@ -157,17 +156,34 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 	\clabel[imu_perform]{A performance of IMU per application.}
 	\caption/f A performance of IMU per application\cite[imu_performance].
 	\endinsert
-
-\label[nav_eq]
-\secc Navigation (mechanization) equations
-		Both gyroscopes (see section \ref[gyr]) and accelerometers (see section \ref[acc]) measure in IMU inertial frame , typically called body frame. That means they need to be converted to a reference frame. In that frame, the state (positions, orientations, velocities, ...) is estimated and it is the output of the localization method.
-		
-		Navigation equations implement the transforms between the body frame and the reference frame, either a local-level frame (as North-East-Down or East-North-Up), a reference to a specific point at planet Earth, or an Earth-fixed frame as ECEF \cite[mems_navigation].
-		
-		These equations are known and can be found in the book MEMS-based Integrated Navigation \cite[mems_navigation].
 	
 \label[INS]
-\sec Inertial navigation system
+\sec Inertial navigation systems
+The fundamental idea behind Inertial navigation systems (INS) is integration of a linear acceleration into a position. Because of that, this topic is closely connected with the IMU, as it measures current linear acceleration. The integration of IMU measurement is given by {\bf navigation equations}.
+
+As INS is typically used for navigation of aircraft, the principle of INS is introduced on that example. The aircraft is moving in a navigation coordinate frame. This frame can be specified either as a local-level frame (as North-East-Down or East-North-Up),or as a reference to a specific point at planet Earth, or an Earth-fixed frame as ECEF \cite[mems_navigation] and these frames can be seen in Figure \ref[fig-navigate-frames].
+
+\midinsert
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-navigate-frames]{Example of coordinate frames used in INS}
+      \picw=\hsize \cinspic imgs/sensors/coordinate_systems.pdf
+      \caption/f Example of coordinate frames used in INS\fnote{The picture is taken from Lecture 11 of Aircraft Avionics course taught at CTU FEE in Prague.}.
+   \par}\vtop{%
+      \clabel[fig-body_sensor]{Example of body and sensor frame}
+      \picw=\hsize \cinspic imgs/sensors/body_frame.pdf
+      \caption/f Example of body and sensor frame.
+   \par}}
+\endinsert
+
+IMU sensor is mounted on an aircraft and its gyroscopes and accelerometers measure in its sensor frame. The aircraft's frame is called body frame, so the measurement needs to be transform into body frame (see Figure \ref[fig-body_sensor]). The measurement from body frame is then transform into navigation frame, where the output of the INS is given.
+		
+Navigation equations implement the transforms between the sensor frame and the navigation frame as well as the integration of IMU measurements. For example navigation signal processing for strapdown INS can be seen in Figure \ref[strapdown].
+
+\midinsert
+	\picw=0.7\hsize \cinspic imgs/sensors/strapdown.png
+	\clabel[strapdown]{Schema of strapdown INS.}
+	\caption/f Schema of strapdown INS.\cite[gnss_ins_integration].
+\endinsert
 	
 		
 \label[odometry]
@@ -180,7 +196,6 @@ The details of odometry information varies with vehicle design and during experi
 
 	\midinsert
 	\picw=0.5\hsize \cinspic imgs/sensors/differential_drive.png
-	\label[diff_drive]
 	\clabel[diff_drive]{A differential drive kinematics scheme.}
 	\caption/f A differential drive kinematics scheme\cite[handbook_robotics].
 	\endinsert
