@@ -1,10 +1,34 @@
 \label[chap-introduction]
 \chap Introduction
-- problem indoor lokalizace a proc je treba to resit
-- cim je prace motivovana -> TACR
-- co my od lokalizace chceme za features, jakou cestou pujdeme
-- jake sekce nas cekaji, co se v nich dozvime a k cemu jsou dulezite
+\sec Indoor localization
+	Indoor real-time localization was always a key problem in autonomous mobile robotics and nowadays, when industry experiences the fourth industrial revolution, the hunger for precise localization for these vehicles grows. The Global Navigation Satellite System (GNSS) is widely used in outdoor environments for localization of vehicles, but it cannot be used indoors, as the signal is blocked by building. Thus, the indoor localization needs to be based on different technology.
 
-\sec Motivace - projekt TACR
-\sec Key features of localization for TACR
-\sec Overview of chapters in thesis
+	Most autonomous ground vehicles (AGV) used in industry nowadays follow continous magnetic tapes physically mounted on the ground. This system serves both as localization and navigation. This solution is simple, the tape can not be easily modified and can be damaged by moving AGV or people.
+	
+
+	Another popular option is placement of physical tags in environment as QR codes, RFID tags or reflective elements with known absolute position. When the AGV detects the tag, is improves its absolute position. This system assumes, that AGV can drive between these tags and also, that the position of tags is not dynamically changed, removed or damaged.
+	
+	
+	The localizations based on SLAM algorithms work with a features in the environment and again, the presition of the localization is defined by not dynamically changed environment.
+	
+	
+	The use of external beacons seems to be a good solutions, because it has similar properties as GNSS. These beacons can be based for example on ultrasound or radio waves as Ultra wide-band or Wi-Fi.
+	
+\sec The aim, motivation and key requirements of this thesis
+	This thesis is assigned by the Czech company Datavision s. r. o. and is a part of a project called {\it Guidance and Localization upgrade creating Autonomous Mobile Robots}. The shortcut {\bf REX} is used internally in the company and in this thesis.
+	
+	
+	This project aims to create a fleet management of autonomous mobile robots including their localization, control, navigation and planning. The project is co-financed by the Technology Agency of the Czech Republic (TACR) under the TREND Programm FW03010020.
+	
+	
+	The aim of this thesis is proposed indoor real-time localization system, which includes both position and orientation of AGV. This aim is closely connected with specification of localization in REX system, but is simplified into 2D problem. Even that the thesis works in 2D, the fundamental parts need to usable even in 3D with a few modification.
+	
+	
+	Next key feature of REX system is great generality and modularity of the system, that means, that individual parts of system can be used on various robotic platforms. Thus, the design of localization system in this thesis should not be closely connected with a specific robotic platform.
+	
+	
+	The last of the important requirements is to design localization system based on ultra wide-band technology and on-board dead reckoning sensors, which should improve the UWB localization itself.
+	
+\sec Structure of the thesis
+This thesis is organized in six major parts. The following Chapter \ref[chap-sensors] describes the fundamentals of used sensors and concept of inertial navigation systems. Chapter \ref[chap-state-est] discusses existing data fusion algorithms for pose estimation algoritms and their pros and cons. The proposed localization and its implementation is described in Chapter \ref[chap-rloc]. In Chapter \ref[chap-experiments], the proposed localization is experimentally evaluated in two environments. The thesis is concluded in Chapter \ref[chap-conclusion], where the usage of this system in industrial environment is given, followed with a summary of the thesis output and a few proposals for improving and extending the work.
+

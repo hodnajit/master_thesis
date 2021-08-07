@@ -274,7 +274,7 @@ $$
 \eqalign{
 K &\leftarrow P H^T (HPH^T + R)^{-1} \cr
 
-\delta x &\leftarrow K(y-h(\hat{ \delta x})) \cr
+\delta x &\leftarrow K(y-h(\hat{x})) \cr
 
 P &\leftarrow (I-KH) \hat{P} (I-KH)^T + KRK^T
 },
@@ -345,7 +345,25 @@ where
 $R\{\delta \Theta\}$ orientation error in rotation matrix.
 \enditems
 
-The injection of the error state is essential, but the resetting of the error state must also be done.
+The injection of the error state is essential, but the resetting of the error state must also be done. The ES-EKF error reset operation is thus
+$$
+\eqalign{
+\delta x &\leftarrow 0 \cr
+P &\leftarrow G P G^T 
+}
+\eqmark
+$$
+where $G$ is the Jacobian matrix defined as
+$$
+G = \left[
+\matrix{
+I_6 & 0 & 0 \cr
+0 & I - [{ 1 \over 2 } \delta \Theta]_x & 0 \cr
+0 & 0 & I_9
+}
+\right].
+\eqmark
+$$
 
 \sec Implementation tools
 This section briefly introduces tools used for implementation: the ROS2\cite[ros2] framework, C++ and Python languages.
