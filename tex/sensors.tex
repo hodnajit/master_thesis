@@ -1,12 +1,46 @@
 \label[chap-sensors]
 \chap Sensors
-In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe an localization method based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) and an odometry.
-	The UWB TODO.
+In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe localization methods based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) followed with inertial navigation systems (INS), and an odometry.
+	The section dedicated to UWB localization briefly introduces the UWB signals follows with three most used localization techniques as Two-Way Ranging, Time Difference of Arrival and Reverse Time Difference of Arrival.
 	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit.
-	The odometry TODO.
+	The last section includes basic information about odometry and its benefits and which odometry is used during experimental verification of the proposed localization system.
 \label[UWB]
 \sec Localization based on Ultra-wideband 
+Ultra-wideband is an emerging wireless personal area network (PAN) radio technology with wide possibilities of use. The most promising usage in a field of robotics is accurate indoor localization, because its benefits include
+\begitems
+* high data rates,
+* high time resolution,
+* low power consumption,
+* multipath immunity,
+* low costs,
+* small size
+* and simultaneous ranging communication\cite[uwb_history].
+\enditems
+The UWB signal is defined as a signal with an absolute bandwidth ($B$) of at least 500 MHz defined as
 
+$$	B = f_H -f_L, \eqmark$$
+where $f_H$ is the upper frequency and $f_L$ is the lower frequency,
+or with a fractional bandwidth of larger than 20 \% given by
+$$	B_{frac} = {B \over f_c} = {B \over {f_H + f_L \over 2}}\cite[uwb_positioning_system_book]. \eqmark $$
+As the bandwidth of the signal is wide, the power spectral density is low. It means, that even that UWB signals share a spectrum with some narrowband signals such as WiFi, it basically behave as environmental noise and does not effect any other narrowband signals much\cite[uwb_positioning_system_book].
+Also, as the lenght of each pulse is small, the possibility of overlapping the original pulse is reduced, thus it should be robust against multipath problem\cite[uwb_positioning_system_book].
+
+For a precise communication, the direct line of sight should be established between transmitter and receiver, however, as UWB signal consists of many frequencies, some of them can reflect well from some object, while others can penetrate through them\cite[uwb_positioning_system_book].
+
+There exists a few {\bf localization techniques based on UWB} signals, which are exchanged between tag and a number of reference anchors with known position\cite[uwb_positioning_system_book]. The more accurate results in line of sight environments are based on the measuring the signal’s time of flight from several devices, namely Two-Way Ranging (TWR), Time Difference of Arrival (TDoA) and Reverse Time Difference of Arrival (RTDoA). The overview of these technologies follows.
+
+{\bf Two-Way ranging} (TWR) is simple method, where the tag and anchors exchanges message in both ways. As the message needs to be delivered in both ways, the updated rate of the tag is limited and even decreases with higher number of tags asking for their position. Also, on of the anchors needs to be decalre as initiator, which helps with synchronization of the messages. The communication between the tag and an anchors is illustrated in Figure \ref[fig-twr]. This method is the most used nowadays, as it is the simplest\cite[uwb_positioning_system_book].
+\midinsert
+\picw=0.5\hsize \cinspic imgs/sensors/twr.jpg
+\clabel[fig-twr]{Two way ranging communication}
+\caption/f Two way ranging communication\cite[twr].
+\endinsert
+
+In {\bf Time Difference of Arrival} (TDoA) technology the tag only transmits and anchors only receive data. The tag sends a message into all available anchors, the time difference of these messages is calculated and according to that, the position of the tag is estimated. With this technology, higher update rate can be achieved even with higher number of tags compared to TWR\cite[uwb_positioning_system_book].
+
+In {\bf Reverse Time Difference of Arrival} (RTDoA) the tag listens and anchors transmit into environment. The position is directly computed in the tag. This technology has no upper limit for tags and also promised highest update rates, thus it is well suited for flying drones or similar applications, where this high update rate and low latency are in need\cite[uwb_positioning_system_book]. Unfortunatelly, this technology is not yet commonly available on the market.
+
+Despite of all mentioned benefits, in practise the UWB localization faces errors caused by surrounding factors, which leads to coordinate jitter or outliers\cite[performance_enhancement].
 
 \label[IMU]
 \sec Inertial measurement unit
@@ -33,7 +67,6 @@ IMU's are extremely sensitive to measurement errors given by properties of used 
 Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces \cite[handbook_robotics].
 
 {\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by physical properies of real spring.
-
 
 {\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. Unlike the others, the piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
 
