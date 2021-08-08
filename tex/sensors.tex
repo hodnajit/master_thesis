@@ -1,12 +1,12 @@
 \label[chap-sensors]
 \chap Sensors
-In chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe localization methods based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) followed with inertial navigation systems (INS), and an odometry.
-	The section dedicated to UWB localization briefly introduces the UWB signals follows with three most used localization techniques as Two-Way Ranging, Time Difference of Arrival and Reverse Time Difference of Arrival.
-	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit. This section is closely related with the INS section, where principles of INS are explained and strapdown implementation example is given.
+In Chapter \ref[chap-sensors] the overview of used sensors and their properties is given. The main aim is to describe localization methods based on ultra-wideband technology(UWB), an inertial measurement unit (IMU) followed by inertial navigation systems (INS), and odometry.
+	The section dedicated to UWB localization briefly introduces the UWB signals follows with three most used localization techniques: Two-Way Ranging, Time Difference of Arrival, and Reverse Time Difference of Arrival.
+	The IMU section mainly focuses on the unit overview, a short description of gyroscopes and accelerometers used in it, the errors of these sensors, its analysis and outcomes for the localization unit. This section is closely related to the INS section, where principles of INS are explained, and a strap-down implementation example is given.
 	The last section includes basic information about odometry and its benefits and which odometry is used during experimental verification of the proposed localization system.
 \label[UWB]
 \sec Localization based on Ultra-wideband 
-{\bf Ultra-wideband} is an emerging wireless personal area network (PAN) radio technology with wide possibilities of use. The most promising usage in a field of robotics is accurate indoor localization, because its benefits include
+{\bf Ultra-wideband} is an emerging wireless personal area network (PAN) radio technology with wide possibilities of use. The most promising usage in the field of robotics is accurate indoor localization because its benefits include
 \begitems
 * high data rates,
 * high time resolution,
@@ -16,35 +16,35 @@ In chapter \ref[chap-sensors] the overview of used sensors and their properties 
 * small size
 * and simultaneous ranging communication\cite[uwb_history].
 \enditems
-The UWB signal is defined as a signal with an absolute bandwidth ($B$) of at least 500 MHz defined as
+The UWB signal is defined as a signal with an absolute bandwidth ($B$) of at least 500 MHz, defined as
 
 $$	B = f_H -f_L, \eqmark$$
 where $f_H$ is the upper frequency and $f_L$ is the lower frequency,
 or with a fractional bandwidth of larger than 20 \% given by
 $$	B_{frac} = {B \over f_c} = {B \over {f_H + f_L \over 2}}\cite[uwb_positioning_system_book]. \eqmark $$
 As the bandwidth of the signal is wide, the power spectral density is low. It means, that even that UWB signals share a spectrum with some narrowband signals such as WiFi, it basically behave as environmental noise and does not effect any other narrowband signals much\cite[uwb_positioning_system_book].
-Also, as the lenght of each pulse is small, the possibility of overlapping the original pulse is reduced, thus it should be robust against multipath problem\cite[uwb_positioning_system_book].
+Also, as the length of each pulse is small, the possibility of overlapping the original pulse is reduced. Thus it should be robust against multipath problem\cite[uwb_positioning_system_book].
 
-For a precise communication, the direct line of sight should be established between transmitter and receiver, however, as UWB signal consists of many frequencies, some of them can reflect well from some object, while others can penetrate through them\cite[uwb_positioning_system_book].
+For precise communication, a direct line of sight should be established between the transmitter and receiver. However, as UWB signal consists of many frequencies, some of them can reflect well from some object, while others can penetrate through them\cite[uwb_positioning_system_book].
 
-There exists a few {\bf localization techniques based on UWB} signals, which are exchanged between tag and a number of reference anchors with known position\cite[uwb_positioning_system_book]. The more accurate results in line of sight environments are based on the measuring the signal’s time of flight from several devices, namely Two-Way Ranging (TWR), Time Difference of Arrival (TDoA) and Reverse Time Difference of Arrival (RTDoA). The overview of these technologies follows.
+There exists a few {\bf localization techniques based on UWB} signals, which are exchanged between tag and several reference anchors with known position\cite[uwb_positioning_system_book]. The more accurate results in the line of sight environments are based on measuring the signal's time of flight from several devices, namely Two-Way Ranging (TWR), Time Difference of Arrival (TDoA) and Reverse Time Difference of Arrival (RTDoA). The overview of these technologies follows.
 
-{\bf Two-Way ranging} (TWR) is simple method, where the tag and anchors exchanges message in both ways. As the message needs to be delivered in both ways, the updated rate of the tag is limited and even decreases with higher number of tags asking for their position. Also, on of the anchors needs to be decalre as initiator, which helps with synchronization of the messages. The communication between the tag and an anchors is illustrated in Figure \ref[fig-twr]. This method is the most used nowadays, as it is the simplest\cite[uwb_positioning_system_book].
+{\bf Two-Way ranging} (TWR) is a simple method, where the tag and anchors exchanges message in both ways. Thus the updated rate of the tag position is limited and decreased with a higher number of tags asking for their positions. The synchronization of the messages is provided with one anchor declared as an initiator of the network. The communication between the tag and anchors is illustrated in Figure \ref[fig-twr]. This method is the most used nowadays, as it is the simplest\cite[uwb_positioning_system_book].
 \midinsert
 \picw=0.5\hsize \cinspic imgs/sensors/twr.jpg
 \clabel[fig-twr]{Two way ranging communication}
 \caption/f Two way ranging communication\cite[twr].
 \endinsert
 
-In {\bf Time Difference of Arrival} (TDoA) technology the tag only transmits and anchors only receive data. The tag sends a message into all available anchors, the time difference of these messages is calculated and according to that, the position of the tag is estimated. With this technology, higher update rate can be achieved even with higher number of tags compared to TWR\cite[uwb_positioning_system_book].
+In {\bf Time Difference of Arrival} (TDoA) technology, the tag only transmits and anchors only receive data. The tag sends a message to all available anchors. They estimate the time difference of delivered messages, and the tag's position is calculated according to that. With this technology, a higher update rate can be achieved even with more tags than TWR\cite[uwb_positioning_system_book].
 
-In {\bf Reverse Time Difference of Arrival} (RTDoA) the tag listens and anchors transmit into environment. The position is directly computed in the tag. This technology has no upper limit for tags and also promised highest update rates, thus it is well suited for flying drones or similar applications, where this high update rate and low latency are in need\cite[uwb_positioning_system_book]. Unfortunatelly, this technology is not yet commonly available on the market.
+In {\bf Reverse Time Difference of Arrival} (RTDoA), the tag listens and anchors transmit into the environment. The position is directly computed in the tag. This technology has no upper limit for tags and also promised the highest update rates. Thus it is well suited for flying drones or similar applications, where this high update rate and low latency are in need\cite[uwb_positioning_system_book]. Unfortunately, this technology is not yet commonly available on the market.
 
-Despite of all mentioned benefits, in practise the UWB localization faces errors caused by surrounding factors, which leads to coordinate jitter or outliers\cite[performance_enhancement].
+Despite all mentioned benefits, in practice, the UWB localization faces errors caused by surrounding factors, leading to coordinate jitter or outliers\cite[performance_enhancement].
 
 \label[IMU]
 \sec Inertial measurement unit
-An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion\cite[handbook_robotics]. The unit is typically integrated with an on-board computational unit and may contain more sensors as a magnetometer or thermometer.
+An inertial measurement unit (IMU) is a device that utilizes measurement systems such as gyroscopes and accelerometers to estimate the relative position, velocity and acceleration of a vehicle in motion\cite[handbook_robotics]. The unit is typically integrated with an onboard computational system and may contain more sensors as a magnetometer or thermometer.
 
 The gyroscopes measure angular velocities and accelerometers specific forces, which can be easily transformed into linear accelerations \cite[handbook_robotics]. The IMU typically contains three orthogonal accelerometers and three orthogonal gyroscopes. Because of that, it can measure angular velocities and specific forces in each axis to maintain a 6-DOF estimate of the pose of the vehicle (position ($x$, $y$, $z$) and orientation ($roll$, $pitch$, $yaw$). The process of the computation can be seen in Figure \ref[fig-imu-diag].
 \midinsert
@@ -53,24 +53,24 @@ The gyroscopes measure angular velocities and accelerometers specific forces, wh
 \caption/f IMU block diagram\cite[handbook_robotics].
 \endinsert
 
-There are two basic ways how to mount the IMU to a vehicle, also called mechanization architectures  \cite[handbook_robotics, handbook_gnss_ins].
+There are two basic ways to mount the IMU to a vehicle, also called mechanization architectures  \cite[handbook_robotics, handbook_gnss_ins].
 \begitems
 * In {\bf gimbaled systems}, the IMU is attached to a stabilized platform that maintains its inertial orientation as the vehicle manoeuvres.
 * In {\bf strap-down systems}, it is rigidly attached to the vehicle.
 \enditems
-The mechanization determines the conversion between measurements of IMU and estimation of linear accelerations and angular velocities of the vehicle. It means the transformations IMU body frame to local frame. The conversion is closely related with inertial navigation systems described in Section \ref[INS].
+The mechanization determines the conversion between measurements of IMU and estimation of linear accelerations and angular velocities of the vehicle. It means the transformation of the IMU body frame to the local frame. The conversion is closely related to inertial navigation systems described in Section \ref[INS].
 
-IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU provides a short-term stable solution, which is not affected by external environment \cite[handbook_gnss_ins], and it has a high data rate (100 Hz - 200 Hz). That makes the IMU measurement complementary to the UWB localization measurement.
+IMU's are extremely sensitive to measurement errors given by properties of used gyroscopes, accelerometers and their mounting. As the data are once or twice integrated, any error in measurement causes a linear or quadratic error in the pose estimation. Even with a small measurement error, the IMU's drift becomes significant, and it needs to be externally compensated. The IMU provides a short-term stable solution, which is not affected by the external environment \cite[handbook_gnss_ins], and it has a high data rate (100 Hz - 200 Hz). That makes the IMU measurement complementary to the UWB localization measurement.
 
 \label[acc]
 \secc Accelerometers
 Accelerometers can measure external forces acting on the vehicle. They measure a specific force relatively to a non-rotating inertial space in a specific direction. They are sensitive to all forces, including gravity and fictitious forces \cite[handbook_robotics].
 
-{\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by physical properies of real spring.
+{\bf Mechanical accelerometers} use a spring-mass-damper system. The force acts on the mass, and it causes displacement of the spring. The system is limited by the physical properties of real spring.
 
-{\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by the type of converting the mechanical displacement of the proof mass to an electrical signal. In most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. Unlike the others, the piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
+{\bf Microelectromechanical systems (MEMS) based accelerometers} are made of at least three components, namely a proof mass, a suspension to hold the mass and a pickoff, which relates an output signal to the induced accelerations \cite[mems_navigation]. MEMS accelerometers are then classified by converting the mechanical displacement of the proof mass to an electrical signal. The most common principles belong to piezoresistive, capacitive sensing, piezoelectric, optical sensing and tunnelling current sensing. Unlike the others, the piezoelectric MEMS sensors can not be used for navigation because their output rate is too low \cite[mems_navigation].
 
-The current accelerometers used technology according to an application is sumarized in Figure \ref[fig-acc].
+The current accelerometers used technology according to an application is summarized in Figure \ref[fig-acc].
 
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/acc_usage.png
@@ -80,15 +80,15 @@ The current accelerometers used technology according to an application is sumari
 
 \label[gyr]
 \secc Gyroscopes
-Gyroscopes are used for estimating a rotational motion of a body, each gyroscope measures angular rate $\omega$ (inertial angular rotation) relatively to a non-rotating inertial space in one axis. There are basically three main categories of gyroscopes \cite[handbook_robotics].
+Gyroscopes are used for estimating a rotational motion of a body. Each gyroscope measures angular rate $\omega$ (inertial angular rotation) relatively to a non-rotating inertial space in one axis. There are three main categories of gyroscopes \cite[handbook_robotics].
 
 {\bf Mechanical gyroscopes} have a mass spinning steadily with respect to a free movable axis, they are not used a lot anymore, but they can be found in very old submarines.
 
-{\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
+{\bf Optical gyroscopes} are based on the Sagnac effect, which states that frequency/phase shift between two waves counter-propagating in a rotating ring interferometer is proportional to the loop angular velocity. As a light source, a laser is typically used. Currently, this technology gives the best performance. Examples can be ring laser gyroscopes (RLG) or fibre optic gyroscopes (FOG).
 
-{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. TYpically, vibrating gyroscopes are based on MEMS technology\cite[mems_navigation] and  they play significant role in robotics, because of their simplicity. They are small, cheap, have no rotating parts and furthermore have low power consumption.
+{\bf Vibrating gyroscopes} are based on the Coriolis effect that induces a coupling between two resonant modes of a mechanical resonator. Typically, vibrating gyroscopes are based on MEMS technology\cite[mems_navigation], and they play a significant role in robotics because of their simplicity. They are small, cheap, have no rotating parts and have low power consumption.
 
-The performace and application of each technology is demonstrated in Figure \ref[fig-gyro].
+The performance and application of each technology are demonstrated in Figure \ref[fig-gyro].
 \midinsert
 \picw=\hsize \cinspic imgs/sensors/gyr_usage.png
 \clabel[fig-gyro]{Gyroscopes technology plotted by bias instability and scale factor stability.}
@@ -98,15 +98,15 @@ The performace and application of each technology is demonstrated in Figure \ref
 \label[chap-sec-avar]	
 \secc IMU's errors and Allan variance analysis
 	{\bf IMU errors}
-IMUs faces several error sources, which are always related to the specific sample unit and its technology. In this thesis, the main focus is given to MEMS-based IMUs as they are used in experiments. These sensors are typically small and low cost. In this section, the most significant errors for MEMS sensors and analysis of these errors with Allan variance are summarized. This analysis is applied to a specific IMU, which is used during experiments.
+IMUs faces several error sources, which are always related to the specific sample unit and its technology. In this thesis, the main focus is given to MEMS-based IMUs as they are used in experiments. These sensors are typically small and low cost. This section summarises the most significant errors for MEMS sensors and analysis these errors with Allan variance. This analysis is applied to a specific IMU, which is used during experiments.
 	
 	
 	Errors can be divided into two categories \cite[mems_navigation]
 	\begitems
 		* stochastical errors, which can be described as random processes,
-		* and systematic errors are basically caused by manufacturing imperfections or not ideal handling with IMU. These errors can be corrected by proper calibration.
+		* and systematic errors are caused by manufacturing imperfections or not ideal handling with IMU. These errors can be corrected by proper calibration.
 	\enditems
-	Nevertheless, errors need to be analysed and reduced according to application requirements, next following subset of errors are the most significant according to the topic of this thesis.
+	Nevertheless, errors need to be analyzed and reduced according to application requirements. Next following subset of errors is the most significant according to the topic of this thesis.
 	
 	{\em Biases} of accelerometers and gyroscopes used in IMU are examples of systematic errors and can be divided into
 	
@@ -116,11 +116,11 @@ IMUs faces several error sources, which are always related to the specific sampl
 		\enditems
 		Biases are typically represented in $^\circ /hr$ or $^\circ /s$ for gyroscopes and $mg$ for accelerometers.
 		
-	{\em A scale factor} and {\em a misalignment error}, both systematic errors, could also be significant. The scale factor is connected to imperfection while converting the real measurement input value and output value. The nonorthogonality of all sensors gives the misalignment error in IMU and it is caused during the production.
+	{\em A scale factor} and {\em a misalignment error}, both systematic errors, could also be significant. The scale factor is connected to imperfection while converting the real measurement input value and output value. The nonorthogonality of all sensors gives the misalignment error in IMU, and it is caused during the production.
 		
 	{\em Angle} or {\em velocity random walks} belong to stochastic errors. The measurement of gyroscopes and accelerometers are subject to white noises (the noise represented by Gaussian distribution). During the estimation of angles and velocities, integration needs to be done. Then the white noise starts to manifest itself by angle or velocity random walk, $(^\circ /s/\sqrt{Hz})$ and $(m^2/s/\sqrt{Hz})$ respectively.
 
-	{\bf Allan variance(AVAR)} is widely used to analyse a random error of inertial sensors in time-domain. The brief introduction and important outcomes from AVAR, the most common time domain measure of frequency stability, is given \cite[avar].
+	{\bf Allan variance(AVAR)} is widely used to analyze a random error of inertial sensors in the time domain and is the most common time-domain measure of frequency stability. AVAR's brief introduction and important outcomes are given in \cite[avar].
 	
 	
 	The AVAR $\sigma_A^2(\tau)$ is a function of the averaging time $\tau$, computed as
@@ -128,17 +128,17 @@ IMUs faces several error sources, which are always related to the specific sampl
 	where $N$ represents the number of clusters in the dataset ($N=floor(M/n)$), $n$ is the number of samples in the cluster, $M$ is the total number of samples in dataset, $\tau$ is the time length of the cluster ($\tau = m \times T_s$), $T_s$ is the sampling period, $\overline{y}_{\tau}(i+1)$ and $\overline{y}_{\tau}(i))$ are mean values of certain cluster of $i+1$-th and $i$-th cluster respectively. \cite[signal_processing].
 	
 	\midinsert
-    \picw=0.4\hsize \cinspic imgs/sensors/avar.png
+    \picw=0.6\hsize \cinspic imgs/sensors/avar.png
     \clabel[fig-avar]{The difference between non-overlapping and overlapping sample.}
     \caption/f The difference between non-overlapping and overlapping sample \cite[epson_g365].
 	\endinsert
 	
-The samples in a cluster can be both non-overlapping and overlapping. The difference is illustrated in \ref[fig-avar]. The overlapping samples improve the confidence of the resulting estimate. That is the reason why this method is the most common for a measure of time-domain frequency stability in general \cite[avar].
+The samples in a cluster can be both non-overlapping and overlapping. The difference is illustrated in \ref[fig-avar]. The overlapping samples improve the confidence of the resulting estimate. That is why this method is the most common for measuring time-domain frequency stability in general \cite[avar].
 	
 
-	The process of measuring AVAR consist of collecting 24-48 hours long dataset when the inertial sensor is not moving, and it is in not vibrating environments (no trains, subways that would cause vibration). The sampling values are angular rate or accelerations.
+	The process of measuring AVAR consist of collecting 24-48 hours long dataset when the inertial sensor is not moving and it is in not vibrating environments (no trains, subways that would cause vibration). The sampling values are angular rates or accelerations.
 	
-	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in Figure \ref[fig-avar_scheme]. It is typically plotted on a log/log scale. A different slope of the graph describes each noise component by that the graph can be easily divided into specific parts.
+	If the dataset is valid and the AVAR is correctly computed, the plot copies the example plot seen in Figure \ref[fig-avar_scheme]. It is typically plotted on a log/log scale. A different slope of the graph describes each noise component by that the chart can be easily divided into specific parts.
 	
 	\midinsert
 	\picw=0.9\hsize \cinspic imgs/sensors/avar_scheme.png
@@ -146,10 +146,10 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 	\caption/f An example of Allan variance plot\cite[avar_scheme].
 	\endinsert
 	
-	The most significant outcome for navigation purposes is when the bias instability is reached (slope is zero). At this time, the sensor model contains only a white (Gaussian) noise \cite[white_noise]. After that period, the external reset needs to be done.	 
+	The most significant outcome for navigation is when the bias instability is reached (slope is zero). At this time, the sensor model contains only a white (Gaussian) noise \cite[white_noise]. After that period, the external reset needs to be done.	 
 
 \secc Performance of IMUs according to their application
-	IMUS can be used in various application, which differs by IMUs performance. The overview of each sensor's precision for a given application is summarized in Figure \ref[imu_perform].
+	IMUS can be used in various applications, which differs by IMUs performance. Figure \ref[imu_perform] summarises the overview of each sensor's precision for a given application is summarized in Figure \ref[imu_perform].
 	
 	\midinsert
 	\picw=0.8\hsize \cinspic imgs/sensors/imu_performance.png
@@ -159,9 +159,14 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 	
 \label[INS]
 \sec Inertial navigation systems
-The fundamental idea behind Inertial navigation systems (INS) is integration of a linear acceleration into a position. Because of that, this topic is closely connected with the IMU, as it measures current linear acceleration. The integration of IMU measurement is given by {\bf navigation equations}.
+The fundamental idea behind Inertial navigation systems (INS) is integrating a linear acceleration into a position. Because of that, this topic is closely connected with the IMU, as it measures current linear acceleration. The integration of IMU measurement is given by {\bf navigation equations}.
 
-As INS is typically used for navigation of aircraft, the principle of INS is introduced on that example. The aircraft is moving in a navigation coordinate frame. This frame can be specified either as a local-level frame (as North-East-Down or East-North-Up),or as a reference to a specific point at planet Earth, or an Earth-fixed frame as ECEF \cite[mems_navigation] and these frames can be seen in Figure \ref[fig-navigate-frames].
+As INS is typically used for navigation of aircraft, the principle of INS is introduced in that example. The plane is moving in a navigation coordinate frame. This frame can be specified as
+\begitems
+*a local-level frame (as North-East-Down or East-North-Up),
+* as a reference to a specific point at planet Earth
+* or an Earth-fixed frame as ECEF \cite[mems_navigation],
+and these frames are demonstrated in Figure \ref[fig-navigate-frames].
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -175,9 +180,9 @@ As INS is typically used for navigation of aircraft, the principle of INS is int
    \par}}
 \endinsert
 
-IMU sensor is mounted on an aircraft and its gyroscopes and accelerometers measure in its sensor frame. The aircraft's frame is called body frame, so the measurement needs to be transform into body frame (see Figure \ref[fig-body_sensor]). The measurement from body frame is then transform into navigation frame, where the output of the INS is given.
+IMU sensor is mounted on an aircraft, and its gyroscopes and accelerometers measure in its sensor frame. The aircraft's frame is called body frame, so the measurement needs to be transformed into the body frame (see Figure \ref[fig-body_sensor]). The output of the INS is given in the navigation frame. Thus the last transformation is from the body frame into a navigation frame.
 		
-Navigation equations implement the transforms between the sensor frame and the navigation frame as well as the integration of IMU measurements. For example navigation signal processing for strapdown INS can be seen in Figure \ref[strapdown].
+Navigation equations implement the transforms between the sensor frame, the navigation frame and the integration of IMU measurements. For example, navigation signal processing in strap-down INS can be seen in Figure \ref[strapdown].
 
 \midinsert
 	\picw=0.7\hsize \cinspic imgs/sensors/strapdown.png
@@ -188,17 +193,19 @@ Navigation equations implement the transforms between the sensor frame and the n
 		
 \label[odometry]
 \sec Odometry
-Odometry is an example of dead reckoning system. It estimates pose and velocity of a device based on internal relative measurements of its motion. It can be obtained from various sources as IMU, lidars, cameras or wheel encoders\cite[handbook_robotics].
+Odometry is an example of a dead reckoning system. It estimates the pose and velocity of a device based on internal relative measurements of its motion. It can be obtained from various sources as IMU, lidars, cameras or wheel encoders\cite[handbook_robotics].
 
-Both IMU and wheel encoders are used in the suggested localisation system since they can counter each other's negative characteristics because wheel encoders drift over travelled distance and IMU drift over time\cite[handbook_robotics]. In this thesis, the term odometry is used as the odometry based on measurements from wheel encoders unless stated otherwise.
+Both IMU and wheel encoders are used in the suggested localization system since they can counter each other's negative characteristics because wheel encoders drift over travelled distance and IMU drift over time\cite[handbook_robotics]. In this thesis, the term odometry is used as the odometry based on measurements from wheel encoders unless stated otherwise.
 
-The details of odometry information varies with vehicle design and during experiments the differential type is used (illustrated in Figure \ref[diff_drive]).
+The details of odometry information vary with vehicle design, and during experiments, the differential type is used (illustrated in Figure \ref[diff_drive]).
 
 	\midinsert
 	\picw=0.5\hsize \cinspic imgs/sensors/differential_drive.png
 	\clabel[diff_drive]{A differential drive kinematics scheme.}
 	\caption/f A differential drive kinematics scheme\cite[handbook_robotics].
 	\endinsert
+
+
 
 
 
