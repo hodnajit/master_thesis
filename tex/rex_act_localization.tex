@@ -4,10 +4,10 @@ In this chapter, the design of the architecture is described along with the used
 
 The first part proposes the system architecture design, the system kinematics equations follow in the second part. In the third part, the equations for the Error state extended Kalman filter are introduced. The fourth part is dedicated to injecting the estimated error into the estimated state and resetting the injected error. In the fifth and final part, the implementation tools are discussed.
 
-To sum up, this chapter gives the reader a detail introduction to the proposed localization system with all equations and tools used in the final implementation.
+To sum up, this chapter gives the reader a detailed introduction to the proposed localization system with all equations and tools used in the final implementation.
 
 \sec System architecture design
-Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF is the error in the states estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
+Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF, the states' error is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
 The system consists of three crucial steps. The first is the inertial navigation system (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
 
@@ -22,18 +22,18 @@ The third part is injecting error into INS estimation and resetting the ES-EKF w
 \endinsert
 
 For navigation purposes, the usual rate of pose estimation is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the IMU update rate, which usually satisfies this requirement.
-Furthermore, it gives us the state estimation utterly independent of external factors, for example, slippering wheels\cite[vehicle_state_estimation_farrel].
+Furthermore, it gives us the state estimation independent of external factors, such as slippering wheels\cite[vehicle_state_estimation_farrel].
 
-As UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, they are used only in the correction step.
+UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, and they are used only in the correction step.
 
-In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is simple and fast. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement than IMU comes in. The only requirement is that the correction needs to be applied before non-gaussian noise in IMU measurement is significant. That correction compensates the drift of the dead-reckoning system.
+In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is fast and straightforward. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement than IMU comes in. The only requirement is that the correction must be applied before non-gaussian noise in IMU measurement is significant. That correction compensates the drift of the dead-reckoning system.
 
 In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
 
 In the following sections, the output of the system is called the navigation state (i.e., position, linear velocity, and attitude).
 
 \sec System kinematics
-For a more detailed introduction to system architecture, the system kinematics equations need to be announced. Equations are taken from \cite[quaternion_kinematics], but instead of using GNSS it uses UWB localization and linear velocity from odometry.
+For a more detailed introduction to system architecture, the system kinematics equations need to be announced. Equations are taken from \cite[quaternion_kinematics], but instead of using GNSS, it uses UWB localization and linear velocity from odometry.
 
 But before I enter that itself, let me describe an important topic, which represents attitude and rotation in 3D space.
 \secc Representation of 3D attitude and rotation in space
@@ -271,7 +271,7 @@ where
 * $\sigma_{a_w}$ is velocity random walk [$rad \over s \sqrt{s}$],
 * $\sigma_{\omega_w}$ is angular random walk [$rad \over s \sqrt{s}$].
 \enditems
-These information can be obtained from the datasheet or AVAR (see Section \ref[chap-sec-avar]).
+This information can be obtained from the datasheet or AVAR (see Section \ref[chap-sec-avar]).
 
 The {\bf ES-EKF correction part} is given by
 $$
@@ -349,7 +349,7 @@ where
 $R\{\delta \Theta\}$ orientation error in rotation matrix.
 \enditems
 
-The injection of the error state is essential, but the resetting of the error state must also be done. The ES-EKF error reset operation is thus
+The injection of the error state is essential, but the resetting of the error state must also be done. The ES-EKF error reset operation is
 $$
 \eqalign{
 \delta x &\leftarrow 0 \cr
@@ -372,10 +372,11 @@ $$
 \sec Implementation tools
 This section briefly introduces tools used for implementation: the ROS2\cite[ros2] framework, C++ and Python languages.
 
-{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualisation, simulation, communications overall processes. All applications created in ROS2 are easy to share and used in the community. It supports all most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distributions, such as 20.04 or 18.04.
+{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualization, simulation, communications overall processes. All applications created in ROS2 are easy to share and used in the community. It supports all most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distribution, such as 20.04 or 18.04.
 
-The newest version of ROS is ROS2, introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localisation system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
+The newest version of ROS is ROS2, introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localization system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
 
-ROS2 has defined code style and languages version which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localisation needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualisation of experiments results and supporting scripts.
+ROS2 has defined code style and languages version which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localization needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualization of experiments results and supporting scripts.
+
 
 

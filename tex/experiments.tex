@@ -8,19 +8,19 @@ TODO dopsat pouzite metriky v experimentech a co nas vlastne zajima.
 (inspirace u Halodove)
 
 
-Localization system was implemented on a robotic platform CART2, where inertial measurement unit and ultra-wideband localization tag were mounted. Specific hardware and the robotic platform are introduced in first section.
+The localization system was implemented on a robotic platform CART2, where an inertial measurement unit and ultra-wideband localization tag were mounted. Specific hardware and the robotic platform are introduced in the first section.
 
-Next two sections are dedicated to experiments at two different experimental environments. First experiments, described in second section, were realized in a lab at Datavision s. r. o. company with an external localization system based on an AprilTag detection with camera. The external localization system was developed in this thesis for evaluation of the proposed localization system.
+The following two sections are dedicated to experiments at two different experimental environments. The first experiments, described in the second section, were realized in a lab at Datavision s. r. o. company with an external localization system based on an AprilTag detection with the camera. The external localization system was developed in this thesis for the evaluation of the proposed localization system.
 
-Additional experiments took place in a Intelligent and mobile robotics lab at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics, where Vicon reference system is used for evaluation. These experiments are summarized in third section of this chapter.
+Additional experiments took place in an Intelligent and mobile robotics lab at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for evaluation. These experiments are summarized in the third section of this chapter.
 
 
 \sec Used hardware description
-In this section, overview of used sensors for the proposed localization is given as well as a description of CART2 robotic platform used during experiments.
+This section presents an overview of used sensors for the proposed localization and a description of the CART2 robotic platform used during experiments.
 \secc Sensors specification
-The onboard sensors of interest are Inertial Measurement Unit, ultra-wideband localization tag, april tag and encoders on motors.
+The onboard sensors of interest are the Inertial Measurement Unit, ultra-wideband localization tag, April tag and encoders on motors.
 
-{\bf Inertial measurement unit} used during experiments is Epson M-G365PDF1 (loaner sample). Epson M-G365 is used in a number of various applications ranging from stabilization systems (as camera gimbal) or navigation systems.
+{\bf Inertial measurement unit} used during experiments is Epson M-G365PDF1 (loaner sample). Epson M-G365 is used in various applications ranging from stabilization systems (as camera gimbal) to navigation systems.
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -34,7 +34,7 @@ The onboard sensors of interest are Inertial Measurement Unit, ultra-wideband lo
    \par}}
 \endinsert
 
-The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \fnote{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
+The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axis. It is factory calibrated, and the calibration data are stored in the memory of the unit. Technical specifications of Epson M-G365 can be found at \fnote{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while summary is included in Table \ref[spec_epson]
 
 \midinsert \clabel[spec_epson]{Technical specifications of Epson M-G365PDF1}
 \ctable{lr}{
@@ -52,9 +52,9 @@ Velocity random walk & 0.033 (m/s)/√hr \cr
 \caption/t Technical specifications of Epson M-G365PDF1\cite[epson_g365].
 \endinsert
 
-As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specification. Experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponge and fixed with cartboard. The static data were recorded for 48 hours at frequency of 30.0 Hz. The experiment took place at a village without any subway, trams or trains to reduce external vibrations on measurement (to reduce potential outliers) and at standard room temperature (about 23 °C).
+As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specifications. The experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponges and fixed with cardboard. The static data were recorded for 48 hours at a frequency of 30.0 Hz. The experiment took place at a village without any subway, trams or trains to reduce external vibrations on measurement (to reduce potential outliers) and at standard room temperature (about 23 °C).
 
-For AVAR computation I used a python library named AllanTools, for purposes of this thesis the overlapping Allan deviation function is used.
+For AVAR computation, I used a python library named AllanTools. For purposes of this thesis, the overlapping Allan deviation function is used.
 
 \picw=.6\hsize
 \centerline {\inspic imgs/experiments/epson_accelerometers.pdf \hfil \inspic imgs/experiments/epson_gyroscopes.pdf }\nobreak
@@ -62,9 +62,9 @@ For AVAR computation I used a python library named AllanTools, for purposes of t
 \clabel[fig-epson-avar2]{Overlapping Allan variance plot for Epson M-G365PDF1.}
 \caption/f Overlapping Allan variance plot for Epson M-G365PDF1.
 
-As you can see in the Figure \ref[fig-epson-avar2], the external reset of integration of IMU measurement must be performed at 0.01 Hz at the latest. After that period, non gaussian noise of accelerometers comes into account. The UWB localization system works at 10 Hz, that should be enough for the reseting.
+As shown in Figure \ref[fig-epson-avar2], the external reset of integration of IMU measurement must be performed at 0.01 Hz at the latest. After that period, the non-gaussian noise of accelerometers comes into account. The UWB localization system works at 10 Hz, which should be enough for resetting.
 
-For the final experiments, the IMU is setup to publish delta angle and delta velocity at 100 Hz with moving average filter with tap 64. Because of that, higher frequencies than 10 Hz are filtered as can be seen in Figure \ref[fig-epson-filter].
+The IMU is set up for the final experiments to publish delta angle and delta velocity at 100 Hz with a moving average filter with tap 64. Because of that, higher frequencies than 10 Hz are filtered, as shown in Figure \ref[fig-epson-filter].
 
 \midinsert
     \picw=0.9\hsize \cinspic imgs/experiments/epson_filter.png
@@ -72,7 +72,7 @@ For the final experiments, the IMU is setup to publish delta angle and delta vel
     \caption/f Moving average filter characteristics for Epson M-G365PDF1\cite[epson_g365].
 \endinsert
 
-{\bf UWB localization system} is povided by Qorvo's MDEK1001 ultra-wideband development kit. This kit includes 12 DWM1001-DEV development boards in plastic enclosures (see Figure \ref[fig-uwb-dwm]).
+{\bf UWB localization system} is provided by Qorvo's MDEK1001 ultra-wideband development kit. This kit includes 12 DWM1001-DEV development boards in plastic enclosures (see Figure \ref[fig-uwb-dwm]).
 
 \midinsert
     \picw=0.4\hsize \cinspic imgs/experiments/mdek1001.jpg
@@ -80,7 +80,7 @@ For the final experiments, the IMU is setup to publish delta angle and delta vel
     \caption/f DWM1001-DEV development boards\cite[mdek_1001].
 \endinsert
 
-Each can be configured as an anchor, tag or bridge node. The system is installed with 6 anchors fixedly mounted and one tag which can be moved. The anchors are higher than tag. According to the initiator anchor, the tag’s position gives the coordinates frame’s origin. The set up of the system can be seen in Figure \ref[fig-uwb-anchors_tags].
+Each can be configured as an anchor, tag or bridge node. The system is installed with six anchors fixedly mounted and one tag which is moving. The anchors are higher than the tag. According to the initiator anchor, the tag's position gives the coordinates frame's origin. The setup of the system can be seen in Figure \ref[fig-uwb-anchors_tags].
 
 \midinsert
     \picw=0.8\hsize \cinspic imgs/experiments/uwb_anchors_tags.png
@@ -88,7 +88,7 @@ Each can be configured as an anchor, tag or bridge node. The system is installed
     \caption/f Positioning of anchors and tags\cite[mdek_1001].
 \endinsert
 
-The anchors should be mounted at the same hight and higher than the operating area of the moving tag. They also should not be mounted close to any metal to get the best accuracy. The configuration of the whole network is done via their mobile application and positions of the anchors are estimated manually.
+The anchors should be mounted at the same height and higher than the operating area of the moving tag. They also should not be mounted close to any metal to get the best accuracy. There is a mobile application for the configuration of the network. The positions of the anchors are estimated manually and set in the network configuration.
 
 Technical specification of MDEK1001 and DWM1001-DEV can be found in documents \cite[mdek_1001], the summary is listed in Table \ref[spec_mdek1001].
 
@@ -105,9 +105,9 @@ Scheme range & 25 - 30 m between anchors\cr
 \caption/t System performance of MDEK1001\cite[mdek_1001].
 \endinsert
 
-{\bf The odometry} is computed according to measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
+{\bf The odometry} is computed according to the measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
 
-{\bf AprilTag} serves as a global reference of pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera\cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits) and it can be detected more robustly.
+{\bf AprilTag} serves as a global reference of the pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera\cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits), and it can be detected more robustly.
 
 {\bf Camera} used for detection of AprilTag is Niceboy Stream Pro with Full HD (1920 x 1080) resolution, 30 FPS, 90 ° field of vision and f/1.8 lens aperture\cite[camera_niceboy].
 
@@ -124,7 +124,7 @@ Scheme range & 25 - 30 m between anchors\cr
 \endinsert
 
 \secc CART2 platform description and sensors placements
-An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_close]. The coordinate frame of CART2 called "baselink"  is illustrated in all Figures \ref[fig-cart2_close] and \ref[fig-cart2_sensors]. The CART2 used for a various robotic competitions is a differential drive and is equipped with the ADlink MXE-210 computer.
+An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_close]. The coordinate frame of CART2 called "baselink"  is illustrated in all Figures \ref[fig-cart2_close] and \ref[fig-cart2_sensors]. The CART2 used for various robotic competitions is a differential drive equipped with the ADlink MXE-210 computer.
 
 \midinsert
 \centerline {\picw=4cm \inspic imgs/experiments/cart2_up.pdf \hfil\hfil \picw=7cm \inspic imgs/experiments/cart2_side.pdf }\nobreak
@@ -133,7 +133,7 @@ An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_clo
 \caption/f A photo of the utilized CART2 platform.
 \endinsert
 
-The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]. The vehicle uses Maxon brushless DC motor (Maxon EC-imotor), which is controlled by Maxon EPOS4 control units.
+The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]. The vehicle uses Maxon brushless DC motor (Maxon EC-imotor) controlled by Maxon EPOS4 control units.
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -147,7 +147,7 @@ The onboard sensors placements are illustrated in Figure \ref[fig-cart2_sensors]
    \par}}
 \endinsert
 
-The UWB tag is mounted on a wooden stick aproximately one meter upon the CART2 platform to reduce reflections of UWB wave from surfaces and negative influence of any metal part. The AprilTag is mounted bellow the UWB tag to not become a barrier in UWB wave. When the AprilTag was mounted on top of the CART2 platform, the wooden stick obstructs the camera detection of AprilTag in some position of CART2 in a room, thus I decided to mount it as high as possible to reduce these situations.
+The UWB tag is mounted on a wooden stick approximately one meter upon the CART2 platform to reduce reflections of UWB waves from surfaces and the negative influence of any metal part. The AprilTag is mounted below the UWB tag not to become a barrier in the UWB wave. When the AprilTag was mounted on top of the CART2 platform, the wooden stick obstructs the camera detection of AprilTag. Thus I decided to mount it as high as possible to reduce these situations.
 
 {\bf Coordinate systems of CART2 and sensors placements} are illustrated in Figure \ref[fig-cart2_coordinates] and described in Table \ref[cart2_frames]. Note, that world, camera and uwb_base frames are fixed with environment and explained in Section \ref[sec-experiments_bu04].
 
@@ -158,13 +158,13 @@ uwb_tag to baselink & [0.0, 0.0, 1.192] & [0.0, 0.0, 0.0, 1.0] \cr
 april_tag to baselink & [0.0, -0.171, 1.071] & [0.707107, -0.707107, 0.0, 0.0] \cr
 imu to baselink & [0.0, 0.0, 0.05] & [0.0, 0.0, -0.7071068, 0.7071068] \cr
 }
-\caption/t Summary of transforms for experiments with CART2.
+\caption/t summary of transforms for experiments with CART2.
 \endinsert
 
 \label[sec-experiments_bu04]
 \sec Experiments in the lab at Datavision s. r. o.
 \secc Experimental lab description
-	For first experiments I created an experimental setup at Datavision s. r. o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m] and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
+	For the first experiments, I created an experimental setup at Datavision s. r. o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m], and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
 	
 \midinsert
     \picw=\hsize \cinspic imgs/experiments/bu04_coordinates.pdf
@@ -172,7 +172,7 @@ imu to baselink & [0.0, 0.0, 0.05] & [0.0, 0.0, -0.7071068, 0.7071068] \cr
     \caption/f Experimental setup at Datavision s. r. o..
 \endinsert
 
-Firstly, UWB anchors need to be mounted and measured their poses according to the world coordinate system. These poses need to be set in the mobile application, where all the uwb network can be set up. The world frame coincidents to uwb_base frame in rotation and only differs in z coordinate in translation.
+Firstly, UWB anchors need to be mounted and measured their poses according to the world coordinate system. These poses need to be set in the mobile application for the configuration of the UWB network. The world frame coincides with the uwb_base frame in rotation and only differs in z coordinate in translation.
 
 \midinsert \clabel[bu04_frames]{Summary of transforms for experiments setup at Datavision s. r. o.}
 \ctable{lrr}{
@@ -180,10 +180,10 @@ Firstly, UWB anchors need to be mounted and measured their poses according to th
 world to uwb_base & [0.0, 0.0, 2.58] & [0.0, 0.0, 0.0, 1.0] \cr
 world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 }
-\caption/t Summary of transforms for experiments setup at Datavision s. r. o..
+\caption/t Summary of transforms for experiments setup at Datavision s. r. o.
 \endinsert
 
-Secondly, the camera need to be mounted and measured its position according to the world coordinate system. The transform between world and camera is not trivial, because of that I decided to use transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and camera image plane. The camera homography is then applied to the AprilTag detection pose and this pose is considered as global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
+Secondly, the camera needs to be mounted and measured its position according to the world coordinate system. The transform between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
 	The area for experiments is not big, but I decided that these experiments serve as a proof of concept of the localization idea.
@@ -206,9 +206,9 @@ Experiments can be divided based on six simple trajectories of CART2 into
  	* moving in rectangle shape (rectangle test)
  	* and moving in infinity shape (infinity test).
  \enditems
- For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
+ I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, rotation, rectangle, and infinity tests ran several times in a row without start/stop of the system to see how it behaves in a "long" term.
  
- Trajectories of these tests as well as the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj]. CART2 platform was controlled via keyboard and joystick during experiments. The controlling via keyboard has a benefit of control velocity in each direction easily, thus I used it for constant velocity during simple moving in single axis and simple rotation around single axis. With that I controlled all tests, except infinity test, where the movement is more complicated. During rectangle test, CART2 drove forward (moving in single axis) then stopped and turned at one place above 90 degrees (rotating above single axis). In infinity movement I drove the CART2 platform with joystick and tried to move similar velocities as in constant movements. The summary of velocities during experiments is given in Table \ref[bu04_traj_vel].
+ Trajectories of these tests and the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj]. CART2 platform was controlled via keyboard and joystick during experiments. The controlling via keyboard has the benefit of control velocity in each direction easily. Thus I used it for constant speed during simple moving in single-axis and simple rotation around a single axis. With that, I controlled all tests, except the infinity test, where the movement is complex. During the rectangle test, CART2 drove forward (moving in single-axis) then stopped and turned at one place above 90 degrees (rotating above single axis). I controlled the CART2 platform with the joystick in infinity shape movement and tried to move similar velocities as in constant movements. The summary of velocities during experiments is given in Table \ref[bu04_traj_vel].
  
 \midinsert \clabel[bu04_traj_vel]{Velocities during experiments in Datavision s. r. o.}
 \ctable{lrrr}{
@@ -228,7 +228,7 @@ TODO
 
 \sec Experiments at CIIRC
 \secc Experiments at CIIRC description
-Next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the lab Intelligent and mobile robotics. Here, the localization system was evaluated using the the VICON external camera localization system \cite[vicon]. The world frame is defined by the VICON. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is size of the laboratory, the minimal distance between two anchors is bigger then 3,5 meters, thus the accuracy of UWB localization should be increased.
+The next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors, and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is bigger than 3,5 meters; thus, the accuracy of UWB localization should be increased.
 
 \midinsert
 \centerline {\picw=\hsize \inspic imgs/experiments/ciirc1.pdf }\nobreak
@@ -239,13 +239,14 @@ Next experimental environment was placed at Czech Technical University in Prague
 \caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC).
 \endinsert
 
-Experiments here are more complex, because they are longer both in terms of duration or in terms of travelled distance. These experiments promised to evaluate possible drift caused by the use two relative localization based on IMU and odometry. As I already mentioned in previous chapters, localization based on pure IMU drift with time and odometry drift with travelled distance. Performed experiments can be divided based on 3 simple trajectories of CART2 into
+Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localization based on IMU and odometry. As I already mentioned in previous chapters, localization is based on pure IMU drift with time and odometry drift with travelled distance. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
- 	* moving in rectangle shape (rectangle test),
- 	* moving in infinity shape (infinity test)
+ 	* moving in the rectangle shape (rectangle test),
+ 	* moving in the infinity shape (infinity test)
  	* and moving in bean shape (bean test).
  \enditems
- For each testing trajectories I picked specific initial pose to be possible to make these tests repeatively in very similar conditions. Also rotation, rectangle and infinity tests ran several times in a row without start/stop of the system to see, how it behaves in a "long" term.
+ I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, rotation, rectangle, and infinity tests ran several times in a row without start/stop of the system to see how it behaves in a "long" term.
 
 \secc Evaluation of experiments at CIIRC
+
 
