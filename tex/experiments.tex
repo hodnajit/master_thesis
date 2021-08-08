@@ -1,19 +1,38 @@
 \label[chap-experiments]
 \chap Experiments
-This chapter is dedicated to the experimental evaluation of the proposed localization system.
+This chapter is dedicated to the experimental evaluation of the proposed localization system. Firstly, the description of evaluation approaches is given. As the system is tested in real experiments, the second section is dedicated to implementing the localization system on a robotic platform CART2. This section contains a brief introduction to specific IMU, UWB network and wheel encoders, and the robotic platform itself.
 
-TODO dopsat pouzite metriky v experimentech a co nas vlastne zajima.
-- co nas zajima pro evaluaci lokalizace ve 2D prostoru
-- jake metriky budou pouzite
-(inspirace u Halodove)
+The following two sections are dedicated to experiments at two different experimental environments. The first experiments, described in the third section, were realized in a lab at Datavision s.r.o. company\fnote{To find out more about the company follow link: \url{https://datavision.software/}} with an external localization system based on an AprilTag detection with the camera. The external localization system was developed in this thesis for the evaluation of the proposed localization system.
 
+Additional experiments took place in an Intelligent and mobile robotics lab at Czech Technical University in Prague - Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for evaluation. These experiments are summarized in the fourth section of this chapter.
 
-The localization system was implemented on a robotic platform CART2, where an inertial measurement unit and ultra-wideband localization tag were mounted. Specific hardware and the robotic platform are introduced in the first section.
+\sec Description of evaluation
+First, it is necessary to determine which variables exhibit the performance of the system well. Then choose the appropriate test scenarios on which to evaluate the behaviour of individual variables. It is good to select a suitable reference system. And perform the entire evaluation on predefined metrics.
 
-The following two sections are dedicated to experiments at two different experimental environments. The first experiments, described in the second section, were realized in a lab at Datavision s. r. o. company with an external localization system based on an AprilTag detection with the camera. The external localization system was developed in this thesis for the evaluation of the proposed localization system.
+The evaluation is focused on four variables, which are
+\begitems
+* position x,
+* position y
+* point in 2D space (xy)
+* and angle of rotation.
+\enditems
 
-Additional experiments took place in an Intelligent and mobile robotics lab at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for evaluation. These experiments are summarized in the third section of this chapter.
+It is worth noting that the output of the proposed system is the position in 3D space. However, this work aimed to design a localization in 2D space, and therefore accent is put on these four states. For system evaluation, it is advisable to have an external reference system, which will provide us with reference data with which we can compare the results of the evaluated system. The data from the reference and evaluated systems must have unified timestamps to compare their outputs easily.
 
+Experimental scenarios are chosen so that their difficulty increases. The first tests are performed on a smaller area. Experiments start with a stationary test and simple movements at shorter distances (moving in one axis, rotating on the spot). Then more complex trajectories are approached, such as the following rectangular and infinity shape trajectories. Further experiments are performed in a larger space, where more complex trajectories are tested.
+
+Data from both reference and evaluated systems are then processed as follows. Each reference measurement's timestamp is taken, according to which the nearest measurement can be found in the evaluated data. This filtering is vital for reference systems that have a lower frequency than the proposed localization.
+
+The criteria that interest us are
+\begitems
+* the evolution of individual variables over time,
+* the visualization of the trajectories from both systems
+* and the errors of variables versus the reference.
+\enditems
+
+These metrics are used to analyze whether the proposed system converges or diverges from reality and whether the system is subject to drift. The analysis of errors according to the root mean square, average, median, minimum and maximum calculation defines the system's resulting accuracy and precision.
+
+All these testing scenarios and metrics are further applied in two test environments.
 
 \sec Used hardware description
 This section presents an overview of used sensors for the proposed localization and a description of the CART2 robotic platform used during experiments.
@@ -115,7 +134,7 @@ Scheme range & 25 - 30 m between anchors\cr
 \line{\hsize=.5\hsize \vtop{%
       \clabel[fig-apriltag]{AprilTag used for detection of CART2 position}
       \picw=4cm \cinspic imgs/experiments/apriltag.png
-      \caption/f AprilTag used for detection of CART2 position at Datavision s. r. o.
+      \caption/f AprilTag used for detection of CART2 position at Datavision s.r.o.
    \par}\vtop{%
       \clabel[fig-camera]{Camera used for AprilTag detection Niceboy Stream Pro}
       \picw=4cm \cinspic imgs/experiments/camera.jpg
@@ -158,29 +177,29 @@ uwb_tag to baselink & [0.0, 0.0, 1.192] & [0.0, 0.0, 0.0, 1.0] \cr
 april_tag to baselink & [0.0, -0.171, 1.071] & [0.707107, -0.707107, 0.0, 0.0] \cr
 imu to baselink & [0.0, 0.0, 0.05] & [0.0, 0.0, -0.7071068, 0.7071068] \cr
 }
-\caption/t summary of transforms for experiments with CART2.
+\caption/t Summary of transforms for experiments with CART2.
 \endinsert
 
 \label[sec-experiments_bu04]
-\sec Experiments in the lab at Datavision s. r. o.
+\sec Experiments in the lab at Datavision s.r.o.
 \secc Experimental lab description
-	For the first experiments, I created an experimental setup at Datavision s. r. o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m], and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
+	For the first experiments, I created an experimental setup at Datavision s.r.o. with global reference given by camera detection of AprilTag mounted at CART2 platform. The address of the building is Ukrajinská 1487/2a, 101 00 Prague 10 - Vršovice. Dimensions of the room for experiments are approximately 4 x 6 [m], and the camera view area is approximately 2.5 x 4.5 [m]. The setup can be seen in Figure \ref[fig-bu04].
 	
 \midinsert
     \picw=\hsize \cinspic imgs/experiments/bu04_coordinates.pdf
-    \clabel[fig-bu04]{Experimental setup at Datavision s. r. o.}
-    \caption/f Experimental setup at Datavision s. r. o..
+    \clabel[fig-bu04]{Experimental setup at Datavision s.r.o.}
+    \caption/f Experimental setup at Datavision s.r.o..
 \endinsert
 
 Firstly, UWB anchors need to be mounted and measured their poses according to the world coordinate system. These poses need to be set in the mobile application for the configuration of the UWB network. The world frame coincides with the uwb_base frame in rotation and only differs in z coordinate in translation.
 
-\midinsert \clabel[bu04_frames]{Summary of transforms for experiments setup at Datavision s. r. o.}
+\midinsert \clabel[bu04_frames]{Summary of transforms for experiments setup at Datavision s.r.o.}
 \ctable{lrr}{
 \hfil Transform & Translation [x, y, z] in [m] & Rotation in quaternion [x, y, z, w] \crl \tskip4pt
 world to uwb_base & [0.0, 0.0, 2.58] & [0.0, 0.0, 0.0, 1.0] \cr
 world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 }
-\caption/t Summary of transforms for experiments setup at Datavision s. r. o.
+\caption/t Summary of transforms for experiments setup at Datavision s.r.o.
 \endinsert
 
 Secondly, the camera needs to be mounted and measured its position according to the world coordinate system. The transform between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
@@ -193,8 +212,8 @@ Secondly, the camera needs to be mounted and measured its position according to 
 \centerline {a) Stationary and rotation tests \hfil\hfil b) X and Y tests}\nobreak\medskip
 \centerline {\picw=5cm \inspic imgs/experiments/trajectories/rectangle.pdf \hfil\hfil \picw=4.7cm \inspic imgs/experiments/trajectories/infinity.pdf }\nobreak
 \centerline {c) Rectangle test \hfil\hfil d) Infinity test}\nobreak\medskip
-\clabel[fig-bu04-traj]{Trajectories for experiments at Datavision s. r. o.}
-\caption/f Trajectories for experiments at Datavision s. r. o..
+\clabel[fig-bu04-traj]{Trajectories for experiments at Datavision s.r.o.}
+\caption/f Trajectories for experiments at Datavision s.r.o..
 \endinsert
 	
 Experiments can be divided based on six simple trajectories of CART2 into
@@ -210,7 +229,7 @@ Experiments can be divided based on six simple trajectories of CART2 into
  
  Trajectories of these tests and the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj]. CART2 platform was controlled via keyboard and joystick during experiments. The controlling via keyboard has the benefit of control velocity in each direction easily. Thus I used it for constant speed during simple moving in single-axis and simple rotation around a single axis. With that, I controlled all tests, except the infinity test, where the movement is complex. During the rectangle test, CART2 drove forward (moving in single-axis) then stopped and turned at one place above 90 degrees (rotating above single axis). I controlled the CART2 platform with the joystick in infinity shape movement and tried to move similar velocities as in constant movements. The summary of velocities during experiments is given in Table \ref[bu04_traj_vel].
  
-\midinsert \clabel[bu04_traj_vel]{Velocities during experiments in Datavision s. r. o.}
+\midinsert \clabel[bu04_traj_vel]{Velocities during experiments in Datavision s.r.o.}
 \ctable{lrrr}{
 \hfil Test & Description & Speed [m/s] & Turn [rad/s] \crl \tskip4pt
 stationary & Constant velocities & 0.0 & 0.0 \cr
@@ -220,7 +239,7 @@ y & Constant velocities & 0.0750 & 0.0 \cr
 rectangle & Constant velocities & 0.0750 or 0.0 & 0.0 or 0.1094 \cr
 infinity test & non constant (control via joystick) & approx. 0.0750 & approx. 0.1094 \cr
 }
-\caption/t Velocities during experiments in Datavision s. r. o..
+\caption/t Velocities during experiments in Datavision s.r.o..
 \endinsert
   
 \secc Evaluation of experiments
@@ -228,16 +247,15 @@ TODO
 
 \sec Experiments at CIIRC
 \secc Experiments at CIIRC description
-The next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors, and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is bigger than 3,5 meters; thus, the accuracy of UWB localization should be increased.
-
 \midinsert
-\centerline {\picw=\hsize \inspic imgs/experiments/ciirc1.pdf }\nobreak
+\centerline {\picw=0.85\hsize \inspic imgs/experiments/ciirc1.pdf }\nobreak
 \centerline {a) View from camera 1}\nobreak\medskip
-\centerline {\picw=\hsize \inspic imgs/experiments/ciirc2.pdf }\nobreak
+\centerline {\picw=0.85\hsize \inspic imgs/experiments/ciirc2.pdf }\nobreak
 \centerline {b) View from camera 2}\nobreak\medskip
 \clabel[fig-ciirc]{Experimental setup at Intelligent and mobile robotics lab (CIIRC)}
 \caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC).
 \endinsert
+The next experimental environment was placed at Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors, and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is bigger than 3,5 meters; thus, the accuracy of UWB localization should be increased.
 
 Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localization based on IMU and odometry. As I already mentioned in previous chapters, localization is based on pure IMU drift with time and odometry drift with travelled distance. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
@@ -248,5 +266,25 @@ Experiments here are more complex because they are longer both in terms of durat
  I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, rotation, rectangle, and infinity tests ran several times in a row without start/stop of the system to see how it behaves in a "long" term.
 
 \secc Evaluation of experiments at CIIRC
+TODO
+
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/orientation_yaw.png }\nobreak
+\centerline {a) Position xy \hfil\hfil b) Angle yaw in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_y.png }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-ciirc-rectangle]{Results of rectangle test at CIIRC with Vicon reference.}
+\caption/f Results of rectangle test at CIIRC with Vicon reference.
+\endinsert
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/infinity/orientation_yaw.png }\nobreak
+\centerline {a) Position xy \hfil\hfil b) Angle yaw in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_y.png }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-ciirc-infinity]{Results of infinity test at CIIRC with Vicon reference}
+\caption/f Results of infinity test at CIIRC with Vicon reference.
+\endinsert
 
 
