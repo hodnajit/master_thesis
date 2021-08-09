@@ -1,7 +1,5 @@
 \label[chap-conclusion]
 \chap Conclusion and future work
-Lorem ipsum sit amet
-
 \sec Usage of the system in the industry
 	As I already mentioned in Chapter \ref[chap-introduction], the key features for industrial usage of localization are
 	\begitems
@@ -11,52 +9,68 @@ Lorem ipsum sit amet
 	* precision and repeatability.
       \enditems
 	
-	The resulting system is designed as an Aided navigation system. The main component is the inertial navigation system, which provides short-term accurate relative location, but is affected by drift. The estimated INS error removes the drift based on the absolute localization from the UWB beacon and the linear velocity from the robot odometry.
+	The localization system proposed in this thesis is designed as an Aided navigation system. The main component is the inertial navigation system, which provides short-term accurate relative location, but is affected by drift. The estimated INS error removes the drift based on the absolute localization from the UWB beacon and the linear velocity from the AGV's odometry.
 	
-	The proposed implementation reduces the influence of the structure of the vehicle or the morphology of the ground. Also, the localization principle is not based on any external landmarks or environment contours, reducing the requirement for a static environment to make the localization reliable in the long term without many manual interventions. In this point of view, the system architecture looks like it satisfies the industrial requirements quite well.
+	The proposed implementation reduces the influence of the structure of the vehicle or the morphology of the ground. Also, the localization principle is not based on any external landmarks or environment contours, reducing the requirement for a static environment to make the localization reliable in the long term without any manual interventions. In this point of view, the system architecture satisfies the industrial requirements quite well.
 
-	The accuracy of UWB localization defines the accuracy of the whole system, and therefore, the discussion is directed mainly to this area. UWB localization is relatively accurate and well usable when the robot is moving. On the contrary, when standing, it is necessary to reduce the effect of UWB localization on the result. This effect can be very well ensured by the so-called virtual sensors when an artificially created signal enters the filtering at suitable moments. For example, if the vehicle is not moving, the virtual sensor produces zero velocities. This point is included in a possible future improvement of the system.
+	Discussion about accuracy is directed mainly to UWB performance because the accuracy of the UWB localization defines the accuracy of the whole system. UWB localization is relatively accurate and well usable when the robot is moving. On the contrary, when standing, it is necessary to reduce the effect of UWB localization on the result. This effect can be very well ensured by the so-called virtual sensors when an artificially created signal enters the filtering at suitable moments. For example, when the vehicle is not moving, the virtual sensor produces zero velocities. This approach is suggested in a possible future improvement of the system.
 	
 The accuracy of the UWB system is also reduced in No Line of Sight environments, and therefore, it is necessary to have a relatively dense beacon network so that such phenomena do not occur. The location of the beacon and the precise estimation of their positions are significant for the entire system's resulting accuracy.
 
-	Another important aspect is the actual mounting of sensors on the robotic platform. Especiallt, the placement of the UWB tag affects the resulting precision of UWB localization. Two positions of the UWB tag on CART2 platform were evaluated during experiments. The first position is near the metal parts of the robot and 0.2 m above the ground. The second is 1.m above the robotic platform without any metal part around. The (TODO: add graph) graph shows that possible signal reflections from the ground or metal parts on the robot distort the UWB localization.
+	Another important aspect is the actual mounting of sensors on the robotic platform. Especially, the placement of the UWB tag affects the resulting precision of UWB localization. Two positions of the UWB tag on the CART2 platform were evaluated during experiments. The first position is near the metal parts of the robot and 0.2 m above the ground. The second is 1.0 m above the robotic platform without any metal part around. The (TODO: add graph) graph shows that possible signal reflections from the ground or metal parts on the robot distort the UWB localization.
 
 	Experiments should be performed in a larger industrial environment to evaluate the precision and repeatability of the system properly. Unfortunately, it was impossible to provide such an environment because installing anchors themselves and providing an external localization system is costly. However, the accuracy and repeatability of the localization are illustrated in the Figure (TODO: add graph), where it can be seen that similar results are obtained with repeated passes from the same starting position and with the same control displays.
 	
-	As shown in this section, this system meets the latest requirements for use in industry, and therefore it would be appropriate to test it in more realistic scenarios directly in the industrial environment. The
+	As shown in this section, this system meets the latest requirements for use in industry, and therefore it would be appropriate to test it in more realistic scenarios directly in the industrial environment.
 
 \sec Conclusion
 This thesis aims to design an indoor real-time localization system for autonomous ground vehicles based on Ultra wide-band technology.
 
-The resulting system's architecture is based on an Inertial navigation system aided with a measurement from absolute localization given by the UWB localization system and odometry of the AGV. Results show a significant decrement of the positioning error compared to the UWB localization and reliable attitude estimation without significant drift. The system was evaluated following a standardized testing method, considering the horizontal position error and the yaw angle as the primary performance metrics.
+The proposed system's architecture is based on an Inertial navigation system aided with measurements from absolute localization given by the UWB localization system and odometry of the AGV. Results show a significant decrement of the positioning error compared to the UWB localization and reliable attitude and position estimation without significant drift. The system was evaluated following a standardized testing method, considering the horizontal position error and the yaw angle as the primary performance metrics. The experimental results reported in this thesis demonstrate the possibility to employ the proposed localization system in industrial indoor environments.
 
-\secc Jak byly splnene jednotlive zadani prace
+To properly understand the topic, it was necessary to study the properties of the sensors used to select individual components for implementation on the AGV platform CART2. Namely, Ultra wide-band technology, Inertial measurement units, very closely related inertial navigation systems and odometry.
 
-\secc Jak byl system otestovan a jake jsou shrnujici vysledky
+Furthermore, it was necessary to study the latest algorithms commonly used to estimate state based on the sensors mentioned above, such as Kalman and Particle filter algorithms. The whole state fusion is then based on the Error state Extended Kalman filter, which seems most suitable.
 
-\secc Shrnuti zaverem
+The whole system was implemented in ROS2 and C++ and deployed on a real robotic platform CART2. For successful deployment, it was necessary to focus on the specific sensors used, such as the UWB localization system MDEK1001 from Qorvo, the IMU in the M-G365PDF1 model from Epson the odometry read from the Maxon Epos4 wheen encoder.
 
+The system was then experimentally validated in two test environments using two different external references. The test scenarios were appropriately selected to verify the behaviour of the system in all possible situations.
+
+And the last part summarizes the possible use of the system in the industry, where it was shown that the system's design meets the latest requirements, and then presented several proposals for improving and expanding the existing system.
 
 \sec Future work
-Future work on the proposed localization system can be divided into two main categories.
+This thesis shows that the proposed localization system can be successfully used to estimate the pose of autonomous grounded vehicles. Future work is divided into two main categories.
 \begitems
-* Possible improvements of the algorithm itself and hardware specifics
+* Possible improvements of the algorithm and hardware specifics
 * and testing the system in more complex scenarios.
 \enditems
 
 \secc Possible improvements of the system
-	The first possible improvements are aimed at using {\bf UWB localization in RTDoA mode}. This mode offers a higher update rate and, at the same time, the ability to use the system on multiple AGVs at once, as mentioned in section \ref[UWB].	
+	Multiple possible improvements have been identified during work on this thesis, namely 
+	\begitems
+	* using Reverse Time Difference of Arrival localization mode,
+	* implementing virtual sensors
+	* and suggest a suitable calibration process.
+	\enditems
+	The first possible improvements are aimed at using {\bf UWB localization in RTDoA mode}. This mode offers a higher update rate and the ability to use the system on multiple AGVs at once, as mentioned in section \ref[UWB].	
 	
 	Another option is to use {\bf virtual sensors} that improve the precision of the entire system and are commonly used in similar applications (TODO: Add citation).
 	
-	For a long-term reliable localization system, it is also possible to design {\bf calibration processes}. The calibration enables obtaining the most precise data from sensors and is valid for sensors such as IMU or odometry. Today, calibrations are typically applied before the entire system is switched on and during the ride. Thus, the next step for improving the reliability of the system is to design calibration processes.
-	
-	The final product of the REX project, which also includes this thesis, is {\bf the localization of AMR in 2D and 3D}. So further improvements aim in this direction. It is necessary to experimentally verify whether the proposed system works for localization on flying drones and, if necessary, to suggest possible improvements to enable this localization.
+	For a long-term reliable localization system, it is also possible to design {\bf calibration processes}. The calibration enables obtaining the most precise data from sensors and is valid for sensors such as IMU or odometry. In present systems, calibrations are typically applied before the entire system is switched on and during the ride. A suitable calibration process shall be part of the final localization product.
 
-\secc Experimental verification in complex testing scenario
+\secc Experimental verification in the complex testing scenario
 The initial experiments evaluated in this work look promising. The next step is to verify the system in a more complex test environment. The test scenarios should include
 	\begitems
 	* testing the system on {\it multiple AGVs at once}, 
+	* experimentally verify whether the proposed system works for localization in 3D, especially on flying drones,
 	* verifying functionality {\it in an industrial environment} on the demand of industrial partners,
-	* finding out the possible influence of {\bf moving people in the environment} (the human body could be a significant obstacle for UWB signal).
+	* finding out the possible influence of {\it moving people in the environment} (the human body could be a significant obstacle for UWB signal).
 	\enditems
+Extensive testing is planned to evaluate localization system performance thoroughly. This will allow the final product to be robust and reliable for use in the target environment.
+
+
+
+
+
+
+
