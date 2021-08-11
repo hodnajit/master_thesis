@@ -26,11 +26,11 @@ The accuracy of the UWB system is also reduced in No Line of Sight environments,
 \sec Conclusion
 This thesis aims to design an indoor real-time localization system for autonomous ground vehicles based on Ultra wide-band technology.
 
-The proposed system's architecture is based on an Inertial navigation system aided with measurements from absolute localization given by the UWB localization system and odometry of the AGV. Results show a significant decrement of the positioning error compared to the UWB localization and reliable attitude and position estimation without significant drift. The system was evaluated following a standardized testing method, considering the horizontal position error and the yaw angle as the primary performance metrics. The experimental results reported in this thesis demonstrate the possibility to employ the proposed localization system in industrial indoor environments.
-
 To properly understand the topic, it was necessary to study the properties of the sensors used to select individual components for implementation on the AGV platform CART2. Namely, Ultra wide-band technology, Inertial measurement units, very closely related inertial navigation systems and odometry.
 
 Furthermore, it was necessary to study the latest algorithms commonly used to estimate state based on the sensors mentioned above, such as Kalman and Particle filter algorithms. The whole state fusion is then based on the Error state Extended Kalman filter, which seems most suitable.
+
+The proposed system's architecture is based on an Inertial navigation system aided with measurements from absolute localization given by the UWB localization system and odometry of the AGV. Results show a significant decrement of the positioning error compared to the UWB localization and reliable attitude and position estimation without significant drift. The system was evaluated following a standardized testing method, considering the horizontal position error and the yaw angle as the primary performance metrics. The experimental results reported in this thesis demonstrate the possibility to employ the proposed localization system in industrial indoor environments.
 
 The whole system was implemented in ROS2 and C++ and deployed on a real robotic platform CART2. For successful deployment, it was necessary to focus on the specific sensors used, such as the UWB localization system MDEK1001 from Qorvo, the IMU in the M-G365PDF1 model from Epson the odometry read from the Maxon Epos4 wheen encoder.
 

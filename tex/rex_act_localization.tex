@@ -49,7 +49,7 @@ To not go into much detail, each representation has its pros and cons and applic
 There are several reasons why to pick this representation\cite[orientation_representation, ros_rep103].
 Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do\cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103\cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++\cite[eigenweb], geometry messages library\cite[ros_geometry_msgs] or the transform library tf2 in ROS\cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
 
-\secc The kinematics equations in continuous time
+\secc The kinematic equations in continuous time
 The kinematics formulas in continuous time, that relates the inertial sensor measurements to the {\bf true navigation state}, is well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in \cite[quaternion_kinematics] equation 235.
 
 The only difference is that orientation is in the rotation matrix and not quaternion. Equations are
@@ -168,7 +168,7 @@ $$
 with covariance $R_1$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
 
 \label[chap-secc-kin-discr]
-\secc The kinematics equations in discrete time
+\secc The kinematic equations in discrete time
 As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
 $$
 R \leftarrow R + (R \Omega) \Delta t),
