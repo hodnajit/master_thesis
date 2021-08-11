@@ -1,19 +1,19 @@
 \label[chap-rloc]
 \chap Localization system design and implementation
-In this chapter, the design of the architecture is described along with the used tools for its solution.
+In this chapter, the design of the architecture is described along with the tools used in its solution.
 
-The first part proposes the system architecture design, the system kinematics equations follow in the second part. In the third part, the equations for the Error state extended Kalman filter are introduced. The fourth part is dedicated to injecting the estimated error into the estimated state and resetting the injected error. In the fifth and final part, the implementation tools are discussed.
+The first part proposes the system architecture design and the system kinematics equations follow in the second part. In the third part, the equations for the Error state extended Kalman filter are introduced. The fourth part is dedicated to injecting the estimated error into the estimated state and resetting the injected error. In the fifth and final part, the implementation tools are discussed.
 
-To sum up, this chapter gives the reader a detailed introduction to the proposed localization system with all equations and tools used in the final implementation.
+To sum up, this chapter gives the reader a detailed introduction to the proposed localization system with all of the equations and tools used in the final implementation.
 
 \sec System architecture design
-Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter(ES-EKF). According to ES-EKF, the states' error is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
+Various approaches for state estimation were introduced in Chapter \ref[chap-state-est]. The chosen approach is the Error state extended Kalman filter (ES-EKF). According to ES-EKF, the states' error is estimated using a Kalman filter rather than the state itself. The benefits of this approach are briefly summarized in Chapter \ref[chap-state-est].
 
 The system consists of three crucial steps. The first is the inertial navigation system (INS), where the state is estimated based on IMU measurements. This state estimation leads to a dead-reckoning system, where the drift grows with time and needs to be corrected.
 
-The second step is the ES-EKF itself. The error of the state is calculated and is then corrected using measurements from UWB localization and odometry. Measurements from UWB localization and odometry observe the error. The UWB localization gives us the absolute position, which can reduce the drift in step one.
+The second step is the ES-EKF itself. The error of the state is calculated and is then corrected using measurements from UWB localization and odometry. Measurements from UWB localization and odometry observe the error. The UWB localization gives the absolute position, which can reduce the drift in step one.
 
-The third part is injecting error into INS estimation and resetting the ES-EKF while the injection is done. Finally, the output of the whole system is given by the INS solution. The system requires initial states with covariances for INS and ES-EKF set up first. The simplified architecture is illustrated in Figure \ref[fig-architecture] and described in the following section in detail.
+The third part is injecting the error into INS estimation and resetting the ES-EKF while the injection is done. Finally, the output of the whole system is given by the INS solution. The system requires initial states with covariances for INS and ES-EKF set up first. The simplified architecture is illustrated in Figure \ref[fig-architecture] and described in the following section in detail.
 
 \midinsert
 \picw=\hsize \cinspic imgs/rex_act_localization/architecture.pdf
@@ -22,13 +22,13 @@ The third part is injecting error into INS estimation and resetting the ES-EKF w
 \endinsert
 
 For navigation purposes, the usual rate of pose estimation is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the IMU update rate, which usually satisfies this requirement.
-Furthermore, it gives us the state estimation independent of external factors, such as slippering wheels\cite[vehicle_state_estimation_farrel].
+Furthermore, it gives us the state estimation independent of external factors, such as wheel slippage\cite[vehicle_state_estimation_farrel].
 
 UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, and they are used only in the correction step.
 
-In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is fast and straightforward. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement than IMU comes in. The only requirement is that the correction must be applied before non-gaussian noise in IMU measurement is significant. That correction compensates the drift of the dead-reckoning system.
+In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is fast and straightforward. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore, the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement other than IMU comes in. The only requirement is that the correction must be applied before non-gaussian noise in IMU measurement is significant. That correction compensates for the drift of the dead-reckoning system.
 
-In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-gaussian noise becomes significant in state estimation. That brings us the best aspects of all types of sensors, which are used in the architecture.
+In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-gaussian noise becomes significant in state estimation. That brings the best aspects of all of the types of sensors, which are used in the architecture.
 
 In the following sections, the output of the system is called the navigation state (i.e., position, linear velocity, and attitude).
 
@@ -37,20 +37,20 @@ For a more detailed introduction to system architecture, the system kinematics e
 
 But before I enter that itself, let me describe an important topic, which represents attitude and rotation in 3D space.
 \secc Representation of 3D attitude and rotation in space
-There are many ways how to represent 3D attitude and rotation in space. The most commonly used representations in the field of robotics are
+There are many ways to represent 3D attitude and rotation in space. The most commonly used representations in the field of robotics are
 	\begitems
 		* rotation matrices,
 		* Euler angles,
 		* axis-angle
 		* and quaternions\cite[handbook_robotics].
 	\enditems
-To not go into much detail, each representation has its pros and cons and applications, where it has its purpose. The rotation matrix is chosen as the internal representation of orientation and the quaternion as an output.
+To not go into too much detail, each representation has its pros and cons and applications, where it has its purpose. The rotation matrix is chosen as the internal representation of orientation and the quaternion as an output.
 
-There are several reasons why to pick this representation\cite[orientation_representation, ros_rep103].
-Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do\cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103\cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++\cite[eigenweb], geometry messages library\cite[ros_geometry_msgs] or the transform library tf2 in ROS\cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
+There are several reasons to pick this representation\cite[orientation_representation, ros_rep103].
+Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do \cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103 \cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++\cite[eigenweb], geometry messages library\cite[ros_geometry_msgs] or the transform library tf2 in ROS\cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
 
 \secc The kinematic equations in continuous time
-The kinematics formulas in continuous time, that relates the inertial sensor measurements to the {\bf true navigation state}, is well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in \cite[quaternion_kinematics] equation 235.
+The kinematics formulas in continuous time, that relate the inertial sensor measurements to the {\bf true navigation state}, are well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in \cite[quaternion_kinematics] equation 235.
 
 The only difference is that orientation is in the rotation matrix and not quaternion. Equations are
 $$	\eqalign{\dot{p_t} &= v_t \cr
@@ -63,32 +63,32 @@ $$	\eqalign{\dot{p_t} &= v_t \cr
 $$
 where
 \begitems
-* $p_t$ is true position in 3D [$m$],
-* $v_t$ is true linear velocity in 3D [$m \cdot s^{-2}$],
-* $R_t$ is true rotation matrix of orientation,
-* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{bt}$ is true accelerometer bias [$m \cdot s^{-2}$],
-* $a_n$ is accelerometers white Gaussian noise [$m \cdot s^{-2}$],
-* $a_w$ is white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
-* $g_t$ is true gravity vector [$m \cdot s^{-2}$],
+* $p_t$ is the true position in 3D [$m$],
+* $v_t$ is the true linear velocity in 3D [$m \cdot s^{-2}$],
+* $R_t$ is the true rotation matrix of orientation,
+* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{bt}$ is the true accelerometer bias [$m \cdot s^{-2}$],
+* $a_n$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* $a_w$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* $g_t$ is the true gravity vector [$m \cdot s^{-2}$],
 * $\Omega_t=\left[ (\omega_m - \omega_{bt} - \omega_n)_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{bt_3} - \omega_{n_3}) & \omega_{m_2} - \omega_{bt_2} - \omega_{n_2} \cr
          \omega_{m_3} - \omega_{bt_3} - \omega_{n_3} & 0 & -(\omega_{m_1} - \omega_{bt_1} - \omega_{n_1}) \cr
          -(\omega_{m_2} - \omega_{bt_2} - \omega_{n_2}) & \omega_{m_1} - \omega_{bt_1} - \omega_{n_1} & 0
-}  \right]$ is true skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{bt}$ is true bias of gyroscopes [$rad \over s$],
-* $\omega_n$ is gyroscopes white Gaussian noise [$rad \over s$],
-* and $\omega_w$ is white Gaussian noise gyroscopes bias [$rad \over s$].
+}  \right]$ is the true skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
+* $\omega_{bt}$ is the true bias of gyroscopes [$rad \over s$],
+* $\omega_n$ is the gyroscope's white Gaussian noise [$rad \over s$],
+* and $\omega_w$ is the white Gaussian noise gyroscope's bias [$rad \over s$].
 \enditems
 
-The state $x_t$, is governed by IMU noisy reading $u_m$ and perturbed by white Gaussian noise $w$, defined by
+The state $x_t$, is governed by IMU noisy reading $u_m$ and perturbed by the white Gaussian noise $w$, defined by
 $$ \eqalign{x_t &= \left[ p_t, v_t, R_t, a_{bt}, \omega_{bt}, g_t\right]^T \cr
 			u_t &= \left[ a_m-a_n\right]^T \cr
 			w_t &= \left[ a_w, w_w\right]^T.}\eqmark$$
 			
 
-The output of the localization system is {\bf navigation state} (also called nominal), which correspons to the system kinematics, but does not take into account the noise terms $w_t$ and other possible model imperfections (see equation 237 in \cite[quaternion_kinematics], hence it is simplified to
+The output of the localization system is {\bf navigation state} (also called nominal), which corresponds to the system kinematics, but does not take into account the noise terms $w_t$ and other possible model imperfections (see equation 237 in \cite[quaternion_kinematics], hence it is simplified to
 	$$	\eqalign{
 		\dot{p} &= v \cr
 		\dot{v} &= R(a_m-a_{b}) + g \cr
@@ -101,19 +101,19 @@ The output of the localization system is {\bf navigation state} (also called nom
 	$$
 where
 \begitems
-* $p$ is position in 3D [$m$],
-* $v$ is linear velocity in 3D [$m \cdot s^{-2}$],
+* $p$ is the position in 3D [$m$],
+* $v$ is the linear velocity in 3D [$m \cdot s^{-2}$],
 * $R$ is the rotation matrix of orientation,
-* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{b}$ is accelerometer bias [$m \cdot s^{-2}$],
-* $g$ is gravity vector [$m \cdot s^{-2}$],
+* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{b}$ is the accelerometer bias [$m \cdot s^{-2}$],
+* $g$ is the gravity vector [$m \cdot s^{-2}$],
 * $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
-}  \right]$ is skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is bias of gyroscopes [$rad \over s$].
+}  \right]$ is the skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
+* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
 
 The linearized dynamics (see equation 238 in \cite[quaternion_kinematics]) of the {\bf error state} are
@@ -133,33 +133,33 @@ where
 * $\delta p$ is the position error in [$m$],
 * $\delta v$ is the linear velocity error in [$m \cdot s^{-2}$],
 * $\delta\Theta$ is the orientation error,
-* $\delta a_b$ is acceleration bias error [$m \cdot s^{-2}$],
-* $\delta \omega_b$ is gyroscope bias error [$rad \over s$],
-* $\delta g$ is gravity vector error [$m \cdot s^{-2}$],
-* $R$ is rotation matrix given by nominal state,
-* $a_m$ is specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{b}$ is accelerometer bias [$m \cdot s^{-2}$],
-* $a_n$ is accelerometers white Gaussian noise [$m \cdot s^{-2}$],
-* $a_w$ is white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
-* $\omega_m$ is angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is bias of gyroscopes [$rad \over s$],
-* $\omega_n$ is gyroscopes white Gaussian noise [$rad \over s$],
-* and $\omega_w$ is white Gaussian noise gyroscopes bias [$rad \over s$].
+* $\delta a_b$ is the acceleration bias error [$m \cdot s^{-2}$],
+* $\delta \omega_b$ is the gyroscope bias error [$rad \over s$],
+* $\delta g$ is the gravity vector error [$m \cdot s^{-2}$],
+* $R$ is the rotation matrix given by the nominal state,
+* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* $a_{b}$ is the accelerometer bias [$m \cdot s^{-2}$],
+* $a_n$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* $a_w$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
+* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$],
+* $\omega_n$ is the gyroscopes white Gaussian noise [$rad \over s$],
+* and $\omega_w$ is the white Gaussian noise gyroscopes bias [$rad \over s$].
 .
 \enditems
 Note that higher orders in linearization are neglected since the error state is small compared to the navigation state.
 
-During {\bf filter correction phase}, measurements from UWB localization and odometry comes into account. Usual, the sensor delivers measurements that depend on the state, such as
+During the {\bf filter correction phase}, measurements from UWB localization and odometry come into account. Usual, the sensor delivers measurements that depend on the state, such as
 $$
 y = h(x_t) + \rho ,
 \eqmark
 $$
-where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and $\rho$ is a white Gaussian noise with covariance.  For {\it UWB localization} the function is simple as it is
+where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and $\rho$ is a white Gaussian noise with covariance.  For {\it UWB localization}, the function is simple as it is
 $$
 y_1 = p_t + \rho_1,
 \eqmark
 $$
-with covariance $R_1$. But for {\it odometry} it is a little bit complicated
+with covariance $R_1$. But for {\it odometry}, it is a little bit complicated
 \label[eq-uwb_loc]
 $$
 y_2 = R_t^{-1}v_t + \rho_2
@@ -169,7 +169,7 @@ with covariance $R_1$. This difference is important in the computation of Jacobi
 
 \label[chap-secc-kin-discr]
 \secc The kinematic equations in discrete time
-As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only parts, which are different. For more detail see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using rotation matrix for orientation representation and not quaternion. This equation is changed to
+As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only the parts that are different. For more detail, see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using a rotation matrix for orientation representation and not quaternion. This equation is changed to
 $$
 R \leftarrow R + (R \Omega) \Delta t),
 \eqmark
@@ -181,15 +181,15 @@ where
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
-}  \right]$ is skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is bias of gyroscopes [$rad \over s$].
+}  \right]$ is the skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
+* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
 
 This integration is happening in the INS box in Figure \ref[fig-architecture].
 
 \sec Error state extended Kalman filter implementation
-Algorithm and equations for general extended Kalman filter are briefly described in Chapter \ref[chap-state-est]. In this section, these equations are concretized.
+The algorithm and equations for the general extended Kalman filter are briefly described in Chapter \ref[chap-state-est]. In this section, these equations are concretized.
 
 The { \bf error state system} is now
 $$
@@ -198,7 +198,7 @@ $$
 $$
 where
 \begitems
-* $i$ is a perturbation vector (usually modelled as white Gaussian noise).
+* $i$ is a perturbation vector (usually modeled as white Gaussian noise).
 \enditems
 
 The {\bf Es-EKF prediction part} is given by
@@ -212,12 +212,12 @@ $$
 where
 \begitems
 * $P$ is a process covariance matrix,
-* $F_x$ is transition matrix,
-* $F_i$ is Jacobian of error state system by impulses,
-* $Q$ is covariances of process noise,
+* $F_x$ is a transition matrix,
+* $F_i$ is the Jacobian of error state system by impulses,
+* $Q$ is the covariances of process noise,
 \enditems
 
-The {\bf transition matrix} (also called system matrix) $F_x$ is error state Jacobian and it is simple determined by error state kinematics equations $f(\delta x_t)$ in discrete time in Section \ref[chap-secc-kin-discr],
+The {\bf transition matrix}\fnote{Called system matrix in some literature} $F_x$ is error state Jacobian and it is simply determined by error state kinematics equations $f(\delta x_t)$ in discrete time in Section \ref[chap-secc-kin-discr],
 $$
 \eqalign{
 F_x &= {\partial f(\delta x, u_m) \over {\partial \delta x}}\cr
@@ -266,10 +266,10 @@ Q = \left[
 $$
 where 
 \begitems
-* $\sigma_{a_n}$ is standard deviation of accelerometers [$m \cdot s^{-2}$],
-* $\sigma_{\omega_n}$ is standard deviation of accelerometers [$rad \over s$]
-* $\sigma_{a_w}$ is velocity random walk [$rad \over s \sqrt{s}$],
-* $\sigma_{\omega_w}$ is angular random walk [$rad \over s \sqrt{s}$].
+* $\sigma_{a_n}$ is the standard deviation of accelerometers [$m \cdot s^{-2}$],
+* $\sigma_{\omega_n}$ is the standard deviation of accelerometers [$rad \over s$]
+* $\sigma_{a_w}$ is the velocity random walk [$rad \over s \sqrt{s}$],
+* $\sigma_{\omega_w}$ is the angular random walk [$rad \over s \sqrt{s}$].
 \enditems
 This information can be obtained from the datasheet or AVAR (see Section \ref[chap-sec-avar]).
 
@@ -287,16 +287,16 @@ $$
 
 where 
 \begitems
-* $K$ is Kalman gain,
-* $H$ is observation matrix,
+* $K$ is the Kalman gain,
+* $H$ is an observation matrix,
 * $R$ is covariances of observation noise,
 * $P$ is process covariance,
 * $y$ is an observation,
 * $h(\hat{x})$ is an observation model,
-* $\delta x$ is a error state.
+* $\delta x$ is an error state.
 \enditems
 
-The {\bf observation matrices} differs for {\it UWB localization} ($H_1$) and {\it odometry} ($H_2$)
+The {\bf observation matrices} differ for {\it UWB localization} ($H_1$) and {\it odometry} ($H_2$)
 $$
 \eqalign{
 H_1 &=  \left[
@@ -314,14 +314,14 @@ H_2 &=  \left[
 $$
 where
 \begitems
-* $R_t$ is orientation in navigation state,
-* $v_t$ is linear velocity in navigation state,
-* $\Theta$ is orientation $R_t$ in rotation vector form,
-* $J_r$ is right jacobian of rotation group $SO(3)$ (see equation 183 in \cite[quaternion_kinematics]).
+* $R_t$ is the orientation in navigation state,
+* $v_t$ is the linear velocity in navigation state,
+* $\Theta$ is the orientation $R_t$ in rotation vector form,
+* $J_r$ is the right Jacobian of rotation group $SO(3)$ (see equation 183 in \cite[quaternion_kinematics]).
 \enditems
 To obtain $H_2$ from Equation \ref[eq-uwb_loc], a reader should notice a Jacobian with respect to the rotation vector in section 4.3.4 and equation 188 in \cite[quaternion_kinematics]. 
 
-\sec Injection the error state into the navigation state
+\sec Injection of the error state into the navigation state
 While the correction phase is done, the estimated error state comes into account in the navigation state
 $$
 x \leftarrow x \bigoplus \delta x,
@@ -372,9 +372,9 @@ $$
 \sec Implementation tools
 This section briefly introduces tools used for implementation: the ROS2\cite[ros2] framework, C++ and Python languages.
 
-{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualization, simulation, communications overall processes. All applications created in ROS2 are easy to share and used in the community. It supports all most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distribution, such as 20.04 or 18.04.
+{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualization, simulation, communications overall processes. All applications created in ROS2 are easy to share and are used in the community. It supports the most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distribution, such as 20.04 or 18.04.
 
-The newest version of ROS is ROS2, introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localization system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
+The newest version of ROS is ROS2, which was introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localization system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
 
 ROS2 has defined code style and languages version which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localization needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualization of experiments results and supporting scripts.
 
