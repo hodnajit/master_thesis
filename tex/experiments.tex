@@ -2,24 +2,25 @@
 \chap Experiments
 This chapter is dedicated to the experimental evaluation of the proposed localization system. Firstly, the description of evaluation approaches is given. As the system is tested in real experiments, the second section is dedicated to implementing the localization system on the robotic platform CART2. This section contains a brief introduction to specific IMU, UWB network and wheel encoders, and the robotic platform itself.
 
-The following two sections are dedicated to experiments done in two different experimental environments. The first set of experiments, first described in the third section, were realized in a lab at Datavision s.r.o. company\fnote{To find out more about the company follow link: \url{https://datavision.software/}} with an external localization system based on an AprilTag detection with a camera. The external localization system was developed in this thesis for the evaluation of the proposed localization system.
-
-Additional experiments took place in an Intelligent and mobile robotics lab at the Czech Technical University in Prague - Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for the evaluation. These experiments are summarized in the fourth section of this chapter.
+The following two sections are dedicated to experiments done in two different experimental environments. The first set of experiments, described in the third section, were realized in a lab at Datavision s.r.o. company\fnote{To find out more about the company follow link: \url{https://datavision.software/}} with an external localization system based on an AprilTag detection with a camera. This AprilTag localization system was set up specifically for evaluation of localization system proposed in this thesis. Additional experiments took place in an Intelligent and mobile robotics lab at the Czech Technical University in Prague - Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for the evaluation. These experiments are summarized in the fourth section of this chapter.
 
 \sec Description of the evaluation
 First, it is necessary to determine which variables exhibit the performance of the system well. Then choose the appropriate test scenarios on which to evaluate the behaviour of the individual variables. It is good to select a suitable reference system and perform the entire evaluation on a set of predefined metrics.
 
-The evaluation is focused on four variables, which are
+The evaluation is focused on the following states
 \begitems
 * position x,
 * position y
-* point in 2D space (xy)
-* and angle of rotation.
+* position in 2D space (xy)
+* and angle of rotation (yaw angle).
 \enditems
 
-It is worth noting that the output of the proposed system is the position in a 3D space. However, this work aimed to design a localization in a 2D space, and therefore an accent is put on these four states. For system evaluations, it is advisable to have an external reference system, which will provide us with reference data with which we can compare the results of the evaluated system. The data from the reference and evaluated systems must have unified timestamps to compare their outputs easily.
+It is worth noting that the output of the proposed system is the position in a 3D space. However, this work aimed to design a localization in a 2D space, and therefore an accent is put on these four states.
 
-Experimental scenarios are chosen so that their difficulty increases. The first tests are performed in a smaller area. Experiments start with a stationary test and simple movements at shorter distances (moving in one axis, rotating an one spot). Then, more complex trajectories are approached, such as the following rectangular and infinity shape trajectories. Further experiments are performed in a larger space where more complex trajectories are tested.
+
+For system evaluations, it is advisable to have an external reference system, which will provide us with reference data with which we can compare the results of the evaluated system. The data from the reference and evaluated systems must have unified timestamps to compare their outputs easily.
+
+Experimental scenarios are chosen in the way that their difficulty increases. The first tests are performed in a smaller area. Experiments start with a stationary test and simple movements at shorter distances (moving in one axis, rotating an one spot). Then, more complex trajectories are approached, such as following rectangular and infinity shape trajectories. Further experiments are performed in a larger space where more complex trajectories are tested.
 
 Data from both reference and evaluated systems are then processed as follows. Each reference measurement's timestamp is taken according to which the nearest measurement can be found in the evaluated data. This filtering is vital for reference systems that have a lower frequency than the proposed localization.
 
@@ -30,7 +31,26 @@ The criteria that interest us are
 * and the errors of variables versus the reference.
 \enditems
 
-These metrics are used to analyze whether the proposed system converges or diverges from reality and whether the system is subject to drift. The analysis of errors according to the root mean square, average, median, minimum and maximum calculation defines the system's resulting accuracy and precision.
+These metrics are used to analyze whether the proposed system converges or diverges from reality and whether the system is subject to drift. The root mean square (RMSE), average, median, lower and upper quantile, minimum and maximum metrics define the system's resulting accuracy and precision.
+
+Error is usually defined as a difference between reference and reality measurement. It is pretty straightforward for one variable but can be a little bit tricky. The error in position in 2D space $[x, y]$ is defined as the Euclidian distance between reference $[x, y]_{REF}$ and the output of the proposed localization system $[x, y]$ written in the following equation
+
+$$	distance = \sqrt{(x_{REF}-x)^2 + (y_{REF}-y)^2}. \eqmark$$
+
+The root mean square error (RMSE) is defined as
+
+$$	rmse = \sqrt{{\sum_{t=1}^{t=n}(x_t^{REF} - x_t)^2} \over {n}}, \eqmark$$
+
+where
+\begitems
+* $t$ is the index of the current sample of measurement,
+* $n$ is the number of samples in the dataset,
+* $x_t^{REF}$ is the current reference measurement
+* and $x_t$ is the current measurement.
+\enditems
+
+The rmse for euclidian distances then
+$$	rmse = \sqrt{{\sum_{t=1}^{t=n}[(x_t^{REF} - x_t)^2 + (y_t^{REF} - y_t)^2]} \over {n}}. \eqmark$$
 
 All these testing scenarios and metrics are further applied in two test environments.
 
@@ -237,13 +257,99 @@ rotation & Constant velocities & 0.0 & 0.1094 \cr
 x & Constant velocities & 0.0750 & 0.0 \cr
 y & Constant velocities & 0.0750 & 0.0 \cr
 rectangle & Constant velocities & 0.0750 or 0.0 & 0.0 or 0.1094 \cr
-infinity test & non constant (control via joystick) & approx. 0.0750 & approx. 0.1094 \cr
+infinity & non constant (control via joystick) & approx. 0.0750 & approx. 0.1094 \cr
 }
 \caption/t Velocities during experiments in Datavision s.r.o..
 \endinsert
   
 \secc Evaluation of experiments
-TODO
+Most of the experiments were performed in this environment. However, I select only the most interesting ones for the evaluation in the thesis. The most attractive experiments are stationary, rectangle and infinity shape tests, which are presented bellow.
+
+
+{\bf Stationary test}
+
+
+During the stationary test, the CART2 is not moving, and the experiment lasts about 16 minutes. As shown in Figure \ref[fig-bu04-static], the precision of the position does not change significantly over time. The position in the proposed system is determined mainly by the absolute localization of the UWB, but it can be seen that our system can further refine the UWB localization. There is a significant drift in the orientation angle yaw caused by the INS.  The orientation error is corrected by the linear velocities given by odometry measurement, but because the CART2 is not moving, the error is not corrected, and the drift slowly grows.
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/position_y.pdf }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-bu04-static]{Stationary test, evaluation of trajectory at Datavision s.r.o.}
+\caption/f Stationary test, evaluation of trajectory at Datavision s.r.o.
+\endinsert
+
+In general, box plots show the five-number summary of a set of data: including the minimum, first (lower) quartile, median (interquantile), third (upper) quartile, and maximum. I added a visualisation of the RMSE, to keep these information together.
+
+In Figures \ref[fig-bu04-static-box_pos] and \ref[fig-bu04-static-box_ori] are all these metrics for the position in 2D error and the orientation error during the stationary test shown. Sufficient information from Figure \ref[fig-bu04-static-box_ori] is that maximum orientation error during 16 minutes long stationary test is not bigger than ten degrees. The position error is small and does not increase in Figure \ref[fig-bu04-static-box_pos]. It is worth noticing that the external reference frequency is not high (1-2 Hz). When filtering the corresponding measurement samples for external reference timestamp, closer values may be favoured if the localization fluctuates. Thus, there may be a slight deformity here.
+
+\midinsert
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-bu04-static-box_pos]{Stationary test: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/static/odometry_position_box_plot.pdf
+      \caption/f Stationary test: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
+   \par}\vtop{%
+      \clabel[fig-bu04-static-box_ori]{Stationary test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/static/orientation_box_plot.pdf
+      \caption/f Stationary test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
+   \par}}
+\endinsert
+
+
+{\bf Rectangle-shaped test}
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/position_y.pdf }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-bu04-rectangle]{Rectangle test, analysis of trajectory, Datavision s.r.o.}
+\caption/f Rectangle-shaped test, analysis of trajectory, Datavision s.r.o.
+\endinsert
+
+During the experiment, nine repetitions of the rectangle-shaped trajectory were performed to define the localization's accuracy, precision, and repeatability. The course of one such passage is shown in Figure \ref[fig-bu04-rectangle]. The waves in the left part of Figure \ref[fig-bu04-rectangle]a can be caused by reflections of the UWB signal as CART2 moves close to different furniture and boxes. This phenomenon can be seen in all reproductions of testing scenarios. However, despite this fact, the system manages to locate CART2 with sufficient precision. The static offset at the bottom of Graph \ref[fig-bu04-rectangle]a is possibly given by a short line of sight between the localization anchors or the transformation inaccuracies in the external reference.
+
+\midinsert
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-bu04-rectangle-box_pos]{Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/odometry_position_box_plot.pdf
+      \caption/f Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
+   \par}\vtop{%
+      \clabel[fig-bu04-rectangle-box_ori]{Rectangle-shaped test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/orientation_box_plot.pdf
+      \caption/f Rectangle-shaped test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
+   \par}}
+\endinsert
+
+Figures \ref[fig-bu04-rectangle-box_pos] and \ref[fig-bu04-rectangle-box_ori] show that the localization results are well repeatable. RMSE in position is held at 7 cm and in the orientation is not higher than 3 degrees. The maximum errors in the position are about 15 cm and in the orientation 8 degrees. More than 50 \% of the errors are kept below 10 cm in the position and 3 degrees in the orientation.
+
+{\bf Infinity-shape test}
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/position_y.pdf }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-bu04-infinity]{Infinity test, analysis of trajectory, Datavision s.r.o.}
+\caption/f Infinity-shaped test, analysis of trajectory, Datavision s.r.o.
+\endinsert
+
+Evaluating the infinity-shaped trajectory brings the most complex view because the CART2 here moves simultaneously in linear and angular velocity (Figure \ref[fig-bu04-infinity]). Ten repetitions of such a trajectory demonstrate how the system behaves in the most realistic scenario.
+
+\midinsert
+\line{\hsize=.5\hsize \vtop{%
+      \clabel[fig-bu04-infinity-box_pos]{Infinity-shaped: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/odometry_position_box_plot.pdf
+      \caption/f Infinity-shaped: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
+   \par}\vtop{%
+      \clabel[fig-bu04-infinity-box_ori]{Infinity-shaped: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
+      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/orientation_box_plot.pdf
+      \caption/f Infinity-shaped: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
+   \par}}
+\endinsert
+As can be seen in Figures \ref[fig-bu04-infinity-box_pos] and \ref[fig-bu04-infinity-box_ori], the errors are small. RMSE of position is lower than 10 cm, and RMSE of orientation is below 2 degrees. There are maximum errors of 16 cm in position and 7 degrees in orientation, but most do not exceed 10 cm and 1 degree, respectively. The results of the experiments are significantly great.
+
+
+Notice that the precision of the proposed localization system meets the limits of the precision of the external reference system.
 
 \sec Experiments at CIIRC
 \secc Experiments at CIIRC description
