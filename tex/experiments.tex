@@ -68,7 +68,7 @@ Accelerometers bias instability & 16 $\mu$G \cr
 Accelerometers initial bias error & 3 mG \cr
 Velocity random walk & 0.033 (m/s)/√hr \cr
 }
-\caption/t Technical specifications of Epson M-G365PDF1\cite[epson_g365].
+\caption/t Technical specifications of Epson M-G365PDF1 \cite[epson_g365].
 \endinsert
 
 As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specifications. The experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponges and fixed with cardboard. The static data were recorded for 48 hours at a frequency of 30.0 Hz. The experiment took place in a village without any subways, trams or trains to reduce the external vibrations (to reduce potential outliers) and at standard room temperature (about 23 °C).
@@ -81,14 +81,14 @@ For the AVAR computation, I used a python library named AllanTools. For the purp
 \clabel[fig-epson-avar2]{Overlapping Allan variance plot for Epson M-G365PDF1.}
 \caption/f Overlapping Allan variance plot for Epson M-G365PDF1.
 
-As shown in Figure \ref[fig-epson-avar2], the external reset of integration of IMU measurement must be performed at 0.01 Hz at the latest. After that period, the non-gaussian noise from the accelerometers must be taking into account. The UWB localization system works at 10 Hz, which should be enough to reset.
+As shown in Figure \ref[fig-epson-avar2], the external reset for the integration of IMU measurement should be performed at least every 100 seconds for the results not to be corrupted by the non-Gaussian noise. The UWB localization system works at 10 Hz, which should be frequent enough.
 
 The IMU is set up for the final experiments to publish the delta angle and the delta velocity at 100 Hz with a moving average filter with tap 64. Because of that, higher frequencies above 10 Hz are filtered, as shown in Figure \ref[fig-epson-filter].
 
 \midinsert
     \picw=0.9\hsize \cinspic imgs/experiments/epson_filter.png
     \clabel[fig-epson-filter]{Moving average filter characteristics for Epson M-G365PDF1.}
-    \caption/f Moving average filter characteristics for Epson M-G365PDF1\cite[epson_g365].
+    \caption/f Moving average filter characteristics for Epson M-G365PDF1 \cite[epson_g365].
 \endinsert
 
 The {\bf UWB localization system} is provided by Qorvo's MDEK1001 ultra-wideband development kit. This kit includes 12 DWM1001-DEV development boards completely enclosed in plastic, see Figure \ref[fig-uwb-dwm].
@@ -96,15 +96,15 @@ The {\bf UWB localization system} is provided by Qorvo's MDEK1001 ultra-wideband
 \midinsert
     \picw=0.4\hsize \cinspic imgs/experiments/mdek1001.jpg
     \clabel[fig-uwb-dwm]{DWM1001-DEV development boards.}
-    \caption/f DWM1001-DEV development boards\cite[mdek_1001].
+    \caption/f DWM1001-DEV development boards \cite[mdek_1001].
 \endinsert
 
-Each can be configured as an anchor, tag or bridge node. The system is installed with six fixed anchors that are mounted and one tag which can move. The anchors are higher than the tag. According to the initiator anchor, the tag's position gives the coordinates frame's origin. The setup of the system can be seen in Figure \ref[fig-uwb-anchors_tags].
+Each board can be configured as an anchor, tag or bridge node. The system is installed with six fixed anchors that are mounted and one tag which can move. The anchors are higher than the tag. In the network, the initiator anchor provides the synchronization of transmitted data. The example setup of the system can be seen in Figure \ref[fig-uwb-anchors_tags].
 
 \midinsert
     \picw=0.8\hsize \cinspic imgs/experiments/uwb_anchors_tags.png
     \clabel[fig-uwb-anchors_tags]{Positioning of anchors and tags.}
-    \caption/f Positioning of anchors and tags\cite[mdek_1001].
+    \caption/f Positioning of anchors and tags \cite[mdek_1001].
 \endinsert
 
 The anchors should all be mounted at the same height and higher than the operating area of the moving tag. They also should not be mounted close to any metal to get the best accuracy possible. There is a mobile application available to configure the network. The positions of the anchors are estimated manually and set in the network configuration.
@@ -121,14 +121,14 @@ X-Y location accuracy & < 10 cm \cr
 Point to point range & up to 60 m in line of sight conditions \cr
 Scheme range & 25 - 30 m between anchors\cr
 }
-\caption/t System performance of MDEK1001\cite[mdek_1001].
+\caption/t System performance of MDEK1001 \cite[mdek_1001].
 \endinsert
 
 {\bf The odometry} is computed according to the measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
 
-{\bf AprilTag} serves as a global reference for the pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera\cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits), and it can be detected more robustly.
+{\bf AprilTag} serves as a global reference for the pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera \cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits), and it can be detected more robustly.
 
-The {\bf camera} used to detect the AprilTag was the Niceboy Stream Pro with Full HD (1920 x 1080) resolution, 30 FPS, 90 ° field of vision and a f/1.8 lens aperture\cite[camera_niceboy].
+The {\bf camera} used to detect the AprilTag was the Niceboy Stream Pro with Full HD (1920 x 1080) resolution, 30 FPS, 90 ° field of vision and a f/1.8 lens aperture \cite[camera_niceboy].
 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
@@ -138,7 +138,7 @@ The {\bf camera} used to detect the AprilTag was the Niceboy Stream Pro with Ful
    \par}\vtop{%
       \clabel[fig-camera]{Camera used for AprilTag detection Niceboy Stream Pro}
       \picw=4cm \cinspic imgs/experiments/camera.jpg
-      \caption/f Camera used for AprilTag detection Niceboy Stream Pro\cite[camera_niceboy].
+      \caption/f Camera used for AprilTag detection Niceboy Stream Pro \cite[camera_niceboy].
    \par}}
 \endinsert
 
@@ -166,9 +166,9 @@ The onboard sensor placements are illustrated in Figure \ref[fig-cart2_sensors].
    \par}}
 \endinsert
 
-The UWB tag is mounted on a wooden stick approximately one meter above the CART2 platform to reduce any reflections of the UWB waves from surfaces and the negative influence of any metal parts. The AprilTag is mounted below the UWB tag not to become a barrier in the UWB wave. When the AprilTag is mounted on top of the CART2 platform, the wooden stick obstructs the camera detection of AprilTag. Thus, I decided to mount it as high as possible to reduce any of these situations from happening.
+The UWB tag is mounted on a wooden stick approximately one meter above the CART2 platform to reduce any reflections of the UWB waves from surfaces and the negative influence of any metal parts. The AprilTag is mounted below the UWB tag not to become a barrier in the UWB wave. When the AprilTag is mounted on top of the CART2 platform, the wooden stick obstructs the camera from detecting the AprilTag. Thus, I decided to mount it as high as possible to reduce any of these situations from happening.
 
-{\bf Coordinate systems of CART2 and sensors placements} are illustrated in Figure \ref[fig-cart2_coordinates] and are described in Table \ref[cart2_frames]. Note, that the world, the camera and the uwb_base frames are fixed with environment and explained in Section \ref[sec-experiments_bu04].
+{\bf Coordinate systems of CART2 and the placement of the sensors} are illustrated in Figure \ref[fig-cart2_coordinates] and are described in Table \ref[cart2_frames]. Note, that the world, the camera and the uwb_base frames are fixed within the environment and are explained in Section \ref[sec-experiments_bu04].
 
 \midinsert \clabel[cart2_frames]{Summary of transforms for experiments with CART2}
 \ctable{lrr}{
@@ -202,7 +202,7 @@ world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 \caption/t Summary of transforms for experiments setup at Datavision s.r.o.
 \endinsert
 
-Secondly, the camera needs to be mounted and measure its position according to the world coordinate system. The transform between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and also by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
+Secondly, the camera needs to be mounted and measure its position according to the world coordinate system. The transformation between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and also by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
 	The area for experiments is not big, but I decided that these experiments serve as a proof of concept of the localization idea.
@@ -257,7 +257,7 @@ TODO
 \endinsert
 The next experimental environment was placed at the Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is larger than 3,5 meters; thus, the accuracy of the UWB localization should be increased.
 
-Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, localization is based on pure IMU drift with time and odometry drift with traveled distance. Performed experiments can be divided based on three simple trajectories of CART2 into
+Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grows larger over distance traveled. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
  	* moving in the shape of a rectangle (rectangle test),
  	* moving in the shape of a infinity symbol (infinity test)

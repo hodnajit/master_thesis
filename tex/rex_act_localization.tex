@@ -21,14 +21,14 @@ The third part is injecting the error into INS estimation and resetting the ES-E
 \caption/f The proposed architecture of the localization system.
 \endinsert
 
-For navigation purposes, the usual rate of pose estimation is hundreds of Hertz\cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the IMU update rate, which usually satisfies this requirement.
-Furthermore, it gives us the state estimation independent of external factors, such as wheel slippage\cite[vehicle_state_estimation_farrel].
+For navigation purposes, the usual rate of pose estimation is hundreds of Hertz \cite[vehicle_state_estimation_farrel]. The INS provides a full state estimate with the IMU update rate, which usually satisfies this requirement.
+Furthermore, it gives us the state estimation independent of external factors, such as wheel slippage \cite[vehicle_state_estimation_farrel].
 
 UWB localization and odometry measurements cannot give us a much higher rate than tens Hertz, and they are used only in the correction step.
 
-In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is fast and straightforward. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore, the separation of state estimation and error estimation cause that the calculation of state is sufficiently fast. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement other than IMU comes in. The only requirement is that the correction must be applied before non-gaussian noise in IMU measurement is significant. That correction compensates for the drift of the dead-reckoning system.
+In other words, the most dynamic part of the estimation is somehow independent of Kalman filtering. On the one hand, the state estimation in INS is fast and straightforward. On the other hand, the error estimation can be more computationally demanding as the computation of Jacobians needs to be done. Therefore, the separation of the state estimation and the error estimation makes the calculation of the state sufficiently fast enough for our purposes. The error state is estimated separately in ES-EKF and is injected into the state only if another measurement other than IMU comes in. The only requirement is that the correction must be applied before non-Gaussian noise in IMU measurement is significant. That correction compensates for the drift of the dead-reckoning system.
 
-In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-gaussian noise becomes significant in state estimation. That brings the best aspects of all of the types of sensors, which are used in the architecture.
+In conclusion, the benefit of this architecture is state estimation at a high rate, independent of external events. The state is corrected at a lower rate but faster than the non-Gaussian noise becomes significant in state estimation. That brings the best aspects of all of the types of sensors, which are used in the architecture.
 
 In the following sections, the output of the system is called the navigation state (i.e., position, linear velocity, and attitude).
 
@@ -42,12 +42,12 @@ There are many ways to represent 3D attitude and rotation in space. The most com
 		* rotation matrices,
 		* Euler angles,
 		* axis-angle
-		* and quaternions\cite[handbook_robotics].
+		* and quaternions \cite[handbook_robotics].
 	\enditems
 To not go into too much detail, each representation has its pros and cons and applications, where it has its purpose. The rotation matrix is chosen as the internal representation of orientation and the quaternion as an output.
 
-There are several reasons to pick this representation\cite[orientation_representation, ros_rep103].
-Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do \cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103 \cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++\cite[eigenweb], geometry messages library\cite[ros_geometry_msgs] or the transform library tf2 in ROS\cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
+There are several reasons to pick this representation \cite[orientation_representation, ros_rep103].
+Firstly, quaternions and rotation matrices do not suffer from singularities as Euler and fixed angles do \cite[orientation_representation]. Secondly, quaternion gives us a compact representation. And finally, these two are the most recommended representation in ROS standard rep-103 \cite[ros_rep103]. As quaternions have many internal models in different libraries (Eigen library in C++ \cite[eigenweb], geometry messages library \cite[ros_geometry_msgs] or the transform library tf2 in ROS \cite[ros_tf2]) and the representation is not easy to imagine, I decided to use the quaternions only as an output and rotation matrix as the internal representation.
 
 \secc The kinematic equations in continuous time
 The kinematics formulas in continuous time, that relate the inertial sensor measurements to the {\bf true navigation state}, are well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in \cite[quaternion_kinematics] equation 235.
@@ -75,7 +75,7 @@ where
  \matrix{0 & -(\omega_{m_3} - \omega_{bt_3} - \omega_{n_3}) & \omega_{m_2} - \omega_{bt_2} - \omega_{n_2} \cr
          \omega_{m_3} - \omega_{bt_3} - \omega_{n_3} & 0 & -(\omega_{m_1} - \omega_{bt_1} - \omega_{n_1}) \cr
          -(\omega_{m_2} - \omega_{bt_2} - \omega_{n_2}) & \omega_{m_1} - \omega_{bt_1} - \omega_{n_1} & 0
-}  \right]$ is the true skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+}  \right]$ is the true skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
 * $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
 * $\omega_{bt}$ is the true bias of gyroscopes [$rad \over s$],
 * $\omega_n$ is the gyroscope's white Gaussian noise [$rad \over s$],
@@ -111,7 +111,7 @@ where
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
-}  \right]$ is the skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+}  \right]$ is the skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
 * $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
 * $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
@@ -181,7 +181,7 @@ where
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
-}  \right]$ is the skew-symetric matrix (a tensor of angular velocity) [$rad \over s$],
+}  \right]$ is the skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
 * $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
 * $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
@@ -370,13 +370,13 @@ I_6 & 0 & 0 \cr
 $$
 
 \sec Implementation tools
-This section briefly introduces tools used for implementation: the ROS2\cite[ros2] framework, C++ and Python languages.
+This section briefly introduces tools used for implementation: the ROS2 \cite[ros2] framework, C++ and Python languages.
 
-{\bf ROS2\cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualization, simulation, communications overall processes. All applications created in ROS2 are easy to share and are used in the community. It supports the most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distribution, such as 20.04 or 18.04.
+{\bf ROS2 \cite[ros2]} is a set of software libraries and tools for building robot applications. It is open-source, and it consists of drivers for hardware, state-of-the-art algorithms, tools for debugging, visualization, simulation and communications over all of the processes. All applications created in ROS2 are easy to share and are used in the community. It supports the most known and most used programming languages like C++, Python, Java, Lua or Lisp. ROS2 distributions are released to work on operating systems like Ubuntu, MacOs or Windows. Nevertheless, as it is open-source, users usually use it with one Ubuntu distribution, such as 20.04 or 18.04.
 
-The newest version of ROS is ROS2, which was introduced in 2014 at the conference ROSCon 2014 in Chicago\cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localization system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
+The newest version of ROS is ROS2, which was introduced in 2014 at the conference ROSCon 2014 in Chicago \cite[ros2], but the first distribution was released in May 2019. There are several distributions of ROS2 yet, the localization system and experiments are implemented using Foxy Fitzroy\fnote{The documentation to ROS2 Foxy Fitzroy \url{https://docs.ros.org/en/foxy/index.html}} which was released in June 2020\fnote{The list of all distributions of ROS2 \url{https://docs.ros.org/en/galactic/Releases.html}}.
 
-ROS2 has defined code style and languages version which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localization needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualization of experiments results and supporting scripts.
+ROS2 has a defined code style and a set of language versions which are recommended to use. The implementation sticks to these rules and uses C++17 and Python3. As the localization needs to be implemented as a real-time application, it is implemented in C++17. Python3 is used for the visualization of experiments results and supporting scripts.
 
 
 
