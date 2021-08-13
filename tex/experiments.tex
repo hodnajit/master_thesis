@@ -93,7 +93,7 @@ Velocity random walk & 0.033 (m/s)/√hr \cr
 
 As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU sensors can give us a brief overview of IMU's specifications. The experimental setup for static data acquisition can be seen in Figure \ref[fig-epson-avar]. The sensor is mounted on two sponges and fixed with cardboard. The static data were recorded for 48 hours at a frequency of 30.0 Hz. The experiment took place in a village without any subways, trams or trains to reduce the external vibrations (to reduce potential outliers) and at standard room temperature (about 23 °C).
 
-For the AVAR computation, I used a python library named AllanTools. For the purposes of this thesis, the overlapping Allan deviation function is used.
+For the AVAR computation, I used a python library named AllanTools \cite[allan_tools_library]. For the purposes of this thesis, the overlapping Allan deviation function is used.
 
 \picw=.6\hsize
 \centerline {\inspic imgs/experiments/epson_accelerometers.pdf \hfil \inspic imgs/experiments/epson_gyroscopes.pdf }\nobreak
@@ -222,7 +222,7 @@ world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 \caption/t Summary of transforms for experiments setup at Datavision s.r.o.
 \endinsert
 
-Secondly, the camera needs to be mounted and measure its position according to the world coordinate system. The transformation between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and also by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
+Secondly, the camera needs to be mounted and measure its position according to the world coordinate system. It was not possible to estimate transformation between the world and the camera precisely enough to use to evaluate the experiments. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a homography transformation according to a few positions measured by camera detection and also by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the detected AprilTag pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
 	The area for experiments is not big. The distance between anchors is 2.5 or 5.0 m, and such setup with nearby anchors significantly downgrades the performance of the UWB localization system. However, I decided that these experiments serve as a proof of concept of the localization idea.
@@ -363,7 +363,7 @@ Notice that the precision of the proposed localization system meets the limits o
 \endinsert
 The next experimental environment was placed at the Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and Mobile Robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is larger than 3,5 meters; thus, the accuracy of the UWB localization should be increased.
 
-Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grow larger over distance travelled. Performed experiments can be divided based on three simple trajectories of CART2 into
+Experiments here are more complex because they are longer both in terms of duration and distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grow larger over distance travelled. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
  	* moving in the shape of a rectangle (rectangle test),
  	* moving in the shape of an infinity symbol (infinity test)

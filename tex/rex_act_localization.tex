@@ -145,7 +145,6 @@ where
 * ${\bf \omega_{b}}$ is the bias of gyroscopes [$rad \over s$],
 * ${\bf \omega_n}$ is the gyroscopes white Gaussian noise [$rad \over s$],
 * and ${\bf \omega_w}$ is the white Gaussian noise gyroscopes bias [$rad \over s$].
-.
 \enditems
 Note that higher orders in linearization are neglected since the error state is small compared to the navigation state.
 
@@ -154,18 +153,23 @@ $$
 {\bf y} = h({\bf x_t}) + {\bf \rho} ,
 \eqmark
 $$
-where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and ${\bf \rho}$ is a white Gaussian noise with covariance.  For {\it UWB localization}, the function is simple as it is
+where
+\begitems
+*$h(t)$ is a general nonlinear function of the system state (the true navigation state)
+* and ${\bf \rho}$ is a white Gaussian noise with covariance.
+For {\it UWB localization}, the function is simple as it is
 $$
 {\bf y_1} = {\bf p_t} + {\bf \rho_1},
 \eqmark
 $$
-with covariance ${\bf R_1}$. But for {\it odometry}, it is a little bit complicated
+with covariance ${\bf R_1}$.
+But for {\it odometry}, it is a little bit complicated
 \label[eq-uwb_loc]
 $$
 {\bf y_2} = {\bf R_t^{-1}}{\bf v_t} + {\bf \rho_2}
 \eqmark
 $$
-with covariance ${\bf R_1}$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
+with covariance ${\bf R_2}$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
 
 \label[chap-secc-kin-discr]
 \secc The kinematic equations in discrete time
@@ -196,10 +200,7 @@ $$
 {\bf \delta x} \leftarrow f({\bf x}, {\bf \delta x}, {\bf u_m}, {\bf i}) = F_x({\bf x}, {\bf u_m}) \cdot {\bf \delta x} + {\bf F_i} \cdot {\bf i},
 \eqmark
 $$
-where
-\begitems
-* ${\bf i}$ is a perturbation vector (usually modeled as white Gaussian noise).
-\enditems
+where ${\bf i}$ is a perturbation vector (usually modeled as white Gaussian noise).
 
 The {\bf Es-EKF prediction part} is given by
 $$
@@ -327,10 +328,8 @@ $$
 {\bf x} \leftarrow {\bf x} \bigoplus {\bf \delta x},
 \eqmark
 $$
-where 
-\begitems
-$\bigotimes$ appropriate composition of sums or rotation product.
-\enditems
+where $\bigotimes$ appropriate composition of sums or rotation product.
+
 
 The equations are
 $$
@@ -344,10 +343,7 @@ $$
 }
 \eqmark
 $$
-where 
-\begitems
-${\bf R\{\delta \Theta\}}$ orientation error in rotation matrix.
-\enditems
+where ${\bf R\{\delta \Theta\}}$ orientation error in rotation matrix.
 
 The injection of the error state is essential, but the resetting of the error state must also be done. The ES-EKF error reset operation is
 $$
