@@ -73,7 +73,7 @@ The {\bf inertial measurement unit} used during the experiments is the Epson M-G
    \par}}
 \endinsert
 
-The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axes. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of the Epson M-G365 can be found at \fnote{Datasheet of Epson M-G365 \url{https://global.epson.com/products_and_drivers/sensing_system/download_hidden/pdf/m-g365pd_datasheet_e_rev20201007.pdf}}, while the summary is included in Table \ref[spec_epson]
+The IMU has six degrees of freedom and measures angular rates and linear accelerations in three axes. It is factory calibrated and the calibration data are stored in the memory of the unit. Technical specifications of the Epson M-G365 can be found at \cite[datasheet_epson], while the summary is included in Table \ref[spec_epson]
 
 \midinsert \clabel[spec_epson]{Technical specifications of Epson M-G365PDF1}
 \ctable{lr}{
@@ -97,7 +97,7 @@ For the AVAR computation, I used a python library named AllanTools. For the purp
 
 \picw=.6\hsize
 \centerline {\inspic imgs/experiments/epson_accelerometers.pdf \hfil \inspic imgs/experiments/epson_gyroscopes.pdf }\nobreak
-\centerline {a)\hfil b)}\nobreak\medskip
+\centerline {a) AVAR for accelerometers\hfil\hfil b)AVAR for gyroscopes}\nobreak\medskip
 \clabel[fig-epson-avar2]{Overlapping Allan variance plot for Epson M-G365PDF1.}
 \caption/f Overlapping Allan variance plot for Epson M-G365PDF1.
 
@@ -144,7 +144,7 @@ Scheme range & 25 - 30 m between anchors\cr
 \caption/t System performance of MDEK1001 \cite[mdek_1001].
 \endinsert
 
-{\bf The odometry} is computed according to the measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
+The {\bf odometry} is computed according to the measurement of encoders in Maxon EPOS4 positioning controllers for Maxon brushless DC motors.
 
 {\bf AprilTag} serves as a global reference for the pose of the CART2 platform. The AprilTag detection software computes the precise 3D position, orientation, and identity of the tags relative to the camera \cite[april_tag]. This tag is similar to QR codes (a type of two-dimensional bar code), but it encodes smaller data payloads (between 4-12 bits), and it can be detected more robustly.
 
@@ -163,7 +163,7 @@ The {\bf camera} used to detect the AprilTag was the Niceboy Stream Pro with Ful
 \endinsert
 
 \secc CART2 platform description and sensors placements
-An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_close]. The coordinate frame of CART2, called "baselink",  is illustrated in all Figures \ref[fig-cart2_close] and \ref[fig-cart2_sensors]. The CART2 used for various robotic competitions is a differential drive equipped with the ADlink MXE-210 computer.
+An image of the utilized CART2 platform can be seen in Figure \ref[fig-cart2_close]. The coordinate frame of CART2, called baselink,  is illustrated in all Figures \ref[fig-cart2_close] and \ref[fig-cart2_sensors]. The CART2 used for various robotic competitions is a differential drive equipped with the ADlink MXE-210 computer.
 
 \midinsert
 \centerline {\picw=4cm \inspic imgs/experiments/cart2_up.pdf \hfil\hfil \picw=7cm \inspic imgs/experiments/cart2_side.pdf }\nobreak
@@ -245,7 +245,7 @@ Experiments can be divided based on six simple trajectories of CART2 into
  	* moving in rectangle shape (rectangle test)
  	* and moving in infinity shape (infinity test).
  \enditems
- I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, rotation, rectangle, and infinity tests ran several times in a row without start/stop of the system to see how it behaves in a "long" term.
+ I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, rotation, rectangle, and infinity tests ran several times in a row without start/stop of the system to see how it behaves in a long term.
  
  Trajectories of these tests and the starting and ending positions of CART2 performing the movement are illustrated in Figure \ref[fig-bu04-traj]. CART2 platform was controlled via keyboard and joystick during experiments. The controlling via keyboard has the benefit of control velocity in each direction easily. Thus I used it for constant speed during simple moving in single-axis and simple rotation around a single axis. With that, I controlled all tests, except the infinity test, where the movement is complex. During the rectangle test, CART2 drove forward (moving in single-axis) then stopped and turned at one place above 90 degrees (rotating above single axis). I controlled the CART2 platform with the joystick in infinity shape movement and tried to move similar velocities as in constant movements. The summary of velocities during experiments is given in Table \ref[bu04_traj_vel].
  
