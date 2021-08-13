@@ -42,7 +42,9 @@ A few {\bf localization techniques exist based on UWB} signals which are exchang
 
 In {\bf Time Difference of Arrival} (TDoA) technology, the tag only transmits information and the anchors only receive data. The tag sends a message to all available anchors. They estimate the time difference of the delivered messages, and the tag’s position is calculated accordingly. With this technology, a higher update rate can be achieved even with more tags than TWR \cite[uwb_positioning_system_book].
 
-In {\bf Reverse Time Difference of Arrival} (RTDoA), the tag listens and anchors transmit into the environment. The position is directly computed in the tag. This technology has no upper limit for tags and also promises the highest update rates. Thus, it is well suited for flying drones or for similar applications where this high update rate and low latency are needed \cite[uwb_positioning_system_book]. This mode is comparable to the localization algorithm used in GNSS. Unfortunately, this technology is not yet commonly available on the market. 
+In {\bf Reverse Time Difference of Arrival} (RTDoA), the tag listens and anchors transmit into the environment. The position is directly computed in the tag. This technology has no upper limit for tags and also promises the highest update rates. Thus, it is well suited for flying drones or for similar applications where this high update rate and low latency are needed \cite[uwb_positioning_system_book]. This mode is comparable to the localization algorithm used in GNSS. Unfortunately, this technology is not yet commonly available on the market.
+
+This article \cite[ins_gnss_uwb] proves the similarity of the use of GNSS and UWB.  The authors demonstrate the possibility of switching from GNSS to UWB while a pedestrian user moves from an outdoor space to an indoor environment.
 
 Despite all of the mentioned benefits, in practice, UWB localization faces errors caused by surrounding factors, leading to coordinate jitters or outlying results \cite[performance_enhancement].
 
@@ -161,14 +163,14 @@ The samples in a cluster can be both non-overlapping and overlapping. The differ
 	IMUS can be used in various applications, which differs by IMUs performance. Figure \ref[imu_perform] summarises the overview of each sensor's precision for a given application is summarized in Figure \ref[imu_perform].
 	
 	\midinsert
-	\picw=0.8\hsize \cinspic imgs/sensors/imu_performance.png
+	\picw=0.6\hsize \cinspic imgs/sensors/imu_performance.png
 	\clabel[imu_perform]{A performance of IMU per application.}
 	\caption/f A performance of IMU per application \cite[imu_performance].
 	\endinsert
 	
 \label[INS]
 \sec Inertial navigation systems
-The fundamental idea behind Inertial navigation systems (INS) is integrating a linear acceleration into a position. Because of that, this topic is closely connected with the IMU, as it measures current linear acceleration. The integration of IMU measurement is given by {\bf navigation equations}.
+The fundamental idea behind Inertial navigation systems (INS) is integrating a linear acceleration into a position. Because of that, this topic is closely connected with the IMU, as it measures current linear acceleration \cite[ins_95]. The integration of IMU measurement is given by {\bf navigation equations}.
 
 Since INS is typically used for navigating aircraft, the principle of INS is introduced in this example. The plane is moving in a navigation coordinate frame. This frame can be specified as
 \begitems

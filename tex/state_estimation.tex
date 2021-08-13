@@ -17,7 +17,7 @@ There are a few limitations for both algorithms. For the Kalman filter, the stat
 I decided to use an algorithm based on the Kalman filter for several reasons.
 First, the localization system will be used for the navigation of vehicles. For these kinds of tasks, the update rate has to be relatively high.
 Second, the state transition and measurements are approximately linear.
-And third, these algorithms are typically used in the fusion of IMU and GNSS.
+And third, these algorithms are typically used in the fusion of IMU and GNSS \cite[sipos_rohac, Petovello2003RealtimeIO, gnss_ins1, gnss_ins2].
 
 \sec Algorithms based on the Kalman filter
 There have been many modifications and extensions of the standard Kalman filter since the 1950s, when the filter was first invented. The linear system and sensor model assumptions with added Gaussian noise are rarely fulfilled in practice \cite[probabilistic_robotics]. In these cases, the state transition or sensor model are described by nonlinear functions.
@@ -122,7 +122,10 @@ The inertial navigation system(INS) meets these requirements and gives us the st
 * even if the error estimation has a temporary computer failure, the INS is not affected, and some emergency procedures can come into account \cite[error_state_kalman].
 \enditems
 
-To summarize, the state estimation is given by INS, and the ES-EKF estimates the errors in the state using the difference between the INS and external sources of data, which are odometry and the UWB positioning system. The INS can estimate high-frequency motions of the vehicle accurately, so these dynamics are not in the filter explicitly modeled. The ES-EKF uses a model of error propagation in INS, which is at low frequency and very well modeled by linear functions \cite[error_state_kalman, ekf_vs_es_ekf, farrell_aided]. This approach is also known as Aided Navigation systems and is briefly described in Aided Navigation: GPS with high rate sensors \cite[farrell_aided]. The following Chapter \ref[chap-rloc] introduces the localization system design and its implementation in detail.
+To summarize, the state estimation is given by INS, and the ES-EKF estimates the errors in the state using the difference between the INS and external sources of data, which are odometry and the UWB positioning system. The INS can estimate high-frequency motions of the vehicle accurately, so these dynamics are not in the filter explicitly modeled. The ES-EKF uses a model of error propagation in INS, which is at low frequency and very well modeled by linear functions \cite[error_state_kalman, ekf_vs_es_ekf, farrell_aided]. This approach is also known as Aided Navigation systems and is briefly described in Aided Navigation: GPS with high rate sensors \cite[farrell_aided].
+
+
+The following Chapter \ref[chap-rloc] introduces the localization system design and its implementation in detail.
 
 
 
