@@ -2,7 +2,7 @@
 \chap Experiments
 This chapter is dedicated to the experimental evaluation of the proposed localization system. Firstly, the description of evaluation approaches is given. As the system is tested in real experiments, the second section is dedicated to implementing the localization system on the robotic platform CART2. This section contains a brief introduction to specific IMU, UWB network and wheel encoders, and the robotic platform itself.
 
-The following two sections are dedicated to experiments done in two different experimental environments. The first set of experiments, described in the third section, were realized in a lab at Datavision s.r.o. company\fnote{To find out more about the company follow link: \url{https://datavision.software/}} with an external localization system based on an AprilTag detection with a camera. This AprilTag localization system was set up specifically for evaluation of localization system proposed in this thesis. Additional experiments took place in an Intelligent and mobile robotics lab at the Czech Technical University in Prague - Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for the evaluation. These experiments are summarized in the fourth section of this chapter.
+The following two sections are dedicated to experiments done in two different experimental environments. The first set of experiments, described in the third section, were realized in a lab at Datavision s.r.o. company\fnote{To find out more about the company follow link: \url{https://datavision.software/}} with an external localization system based on an AprilTag detection with a camera. This AprilTag localization system was set up specifically for evaluation of localization system proposed in this thesis. Additional experiments took place at the Intelligent and Mobile Robotics lab at the Czech Technical University in Prague - Czech Institute of Informatics, Robotics, and Cybernetics, where the Vicon reference system is used for the evaluation. These experiments are summarized in the fourth section of this chapter.
 
 \sec Description of the evaluation
 First, it is necessary to determine which variables exhibit the performance of the system well. Then choose the appropriate test scenarios on which to evaluate the behaviour of the individual variables. It is good to select a suitable reference system and perform the entire evaluation on a set of predefined metrics.
@@ -35,7 +35,7 @@ These metrics are used to analyze whether the proposed system converges or diver
 
 Error is usually defined as a difference between reference and reality measurement. It is pretty straightforward for one variable but can be a little bit tricky. The error in position in 2D space $[x, y]$ is defined as the Euclidian distance between reference $[x, y]_{REF}$ and the output of the proposed localization system $[x, y]$ written in the following equation
 
-$$	distance = \sqrt{(x_{REF}-x)^2 + (y_{REF}-y)^2}. \eqmark$$
+$$	distance = \sqrt{(x^{REF}-x)^2 + (y^{REF}-y)^2}. \eqmark$$
 
 The root mean square error (RMSE) is defined as
 
@@ -124,7 +124,7 @@ Each board can be configured as an anchor, tag or bridge node. The system is ins
 \midinsert
     \picw=0.8\hsize \cinspic imgs/experiments/uwb_anchors_tags.png
     \clabel[fig-uwb-anchors_tags]{Positioning of anchors and tags.}
-    \caption/f Positioning of anchors and tags \cite[mdek_1001].
+    \caption/f Positioning of UWB anchors and tags \cite[mdek_1001].
 \endinsert
 
 The anchors should all be mounted at the same height and higher than the operating area of the moving tag. They also should not be mounted close to any metal to get the best accuracy possible. There is a mobile application available to configure the network. The positions of the anchors are estimated manually and set in the network configuration.
@@ -346,7 +346,7 @@ Evaluating the infinity-shaped trajectory brings the most complex view because t
       \caption/f Infinity-shaped: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
    \par}}
 \endinsert
-As can be seen in Figures \ref[fig-bu04-infinity-box_pos] and \ref[fig-bu04-infinity-box_ori], the errors are small. RMSE of position is lower than 10 cm, and RMSE of orientation is below 2 degrees. There are maximum errors of 16 cm in position and 7 degrees in orientation, but most do not exceed 10 cm and 1 degree, respectively. The results of the experiments are significantly great.
+As can be seen in Figures \ref[fig-bu04-infinity-box_pos] and \ref[fig-bu04-infinity-box_ori], the errors are small. RMSE of position is lower than 10 cm, and RMSE of orientation is below 2 degrees. There are maximum errors of 16 cm in position and 7 degrees in orientation, but most do not exceed 10 cm and 1 degree, respectively.
 
 
 Notice that the precision of the proposed localization system meets the limits of the precision of the external reference system.
@@ -358,10 +358,10 @@ Notice that the precision of the proposed localization system meets the limits o
 \centerline {a) View from camera 1}\nobreak\medskip
 \centerline {\picw=0.85\hsize \inspic imgs/experiments/ciirc2.pdf }\nobreak
 \centerline {b) View from camera 2}\nobreak\medskip
-\clabel[fig-ciirc]{Experimental setup at Intelligent and mobile robotics lab (CIIRC)}
-\caption/f Experimental setup at Intelligent and mobile robotics lab (CIIRC).
+\clabel[fig-ciirc]{Experimental setup at the Intelligent and Mobile Robotics lab (CIIRC)}
+\caption/f Experimental setup at the Intelligent and Mobile Robotics lab (CIIRC).
 \endinsert
-The next experimental environment was placed at the Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is larger than 3,5 meters; thus, the accuracy of the UWB localization should be increased.
+The next experimental environment was placed at the Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and Mobile Robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is larger than 3,5 meters; thus, the accuracy of the UWB localization should be increased.
 
 Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grow larger over distance travelled. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
@@ -446,7 +446,7 @@ Comparison of position errors in individual experiments in Figure \ref[fig-ciirc
 \centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/odometry_position_box_plot.pdf }\nobreak
 \centerline {a) Single rectangle-shape test \hfil\hfil b) Multiple rectangle-shape test}\nobreak\medskip
 \centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/odometry_position_box_plot.pdf }\nobreak
-\centerline {c) Infinity-shape \hfil\hfil d)Joy ride test}\nobreak\medskip
+\centerline {c) Infinity-shape \hfil\hfil d) Joy ride test}\nobreak\medskip
 \clabel[fig-ciirc-sum]{Summary of errors in the position during experiments at IMR CIIRC}
 \caption/f Summary of errors in the position during experiments at IMR CIIRC
 \endinsert
