@@ -188,7 +188,7 @@ The onboard sensor placements are illustrated in Figure \ref[fig-cart2_sensors].
 
 The UWB tag is mounted on a wooden stick approximately one meter above the CART2 platform to reduce any reflections of the UWB waves from surfaces and the negative influence of any metal parts. The AprilTag is mounted below the UWB tag not to become a barrier in the UWB wave. When the AprilTag is mounted on top of the CART2 platform, the wooden stick obstructs the camera from detecting the AprilTag. Thus, I decided to mount it as high as possible to reduce any of these situations from happening.
 
-{\bf Coordinate systems of CART2 and the placement of the sensors} are illustrated in Figure \ref[fig-cart2_coordinates] and are described in Table \ref[cart2_frames]. Note, that the world, the camera and the uwb_base frames are fixed within the environment and are explained in Section \ref[sec-experiments_bu04].
+{\bf Coordinate systems of CART2 and the placement of the sensors} are illustrated in Figure \ref[fig-cart2_coordinates] and are described in Table \ref[cart2_frames]. Note that the world, the camera and the uwb_base frames are fixed within the environment and are explained in Section \ref[sec-experiments_bu04]. This work aims to localize the position and orientation of the baselink, i.e., to estimate the position of the baselink expressed in the world frame and the orientation of the baselink with respect to the world frame.
 
 \midinsert \clabel[cart2_frames]{Summary of transforms for experiments with CART2}
 \ctable{lrr}{
@@ -225,7 +225,7 @@ world to camera & [1.089, 2.024, 2.625] & [0.707107, -0.707107, 0.0, 0.0] \cr
 Secondly, the camera needs to be mounted and measure its position according to the world coordinate system. The transformation between the world and the camera is not trivial. Because of that, I decided to use the transformation mentioned in Table \ref[bu04_frames] and then computed a camera homography according to a few positions measured by camera detection and also by hand. The homography defines the transformation between a planar surface (ground) and a camera image plane. The camera homography is then applied to the AprilTag detection pose, which is considered a global reference. These frames are illustrated in \ref[fig-cart2_coordinates].
 	
 \secc Description of experiments
-	The area for experiments is not big, but I decided that these experiments serve as a proof of concept of the localization idea.
+	The area for experiments is not big. The distance between anchors is 2.5 or 5.0 m, and such setup with nearby anchors significantly downgrades the performance of the UWB localization system. However, I decided that these experiments serve as a proof of concept of the localization idea.
 	
 \midinsert
 \centerline {\picw=4.75cm \inspic imgs/experiments/trajectories/stat_and_rot_move.pdf \hfil\hfil \picw=5cm \inspic imgs/experiments/trajectories/xy_move.pdf }\nobreak
