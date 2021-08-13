@@ -363,34 +363,92 @@ Notice that the precision of the proposed localization system meets the limits o
 \endinsert
 The next experimental environment was placed at the Czech Technical University in Prague – Czech Institute of Informatics, Robotics, and Cybernetics (CIIRC) in the Intelligent and mobile robotics lab. The localization system was evaluated using the VICON external camera localization system \cite[vicon]. The VICON defines the world frame. UWB localization is installed with six anchors and their positions are defined in a world frame. The setup is illustrated in Figure \ref[fig-ciirc]. The benefit of this environment is the size of the laboratory. The minimal distance between two anchors is larger than 3,5 meters; thus, the accuracy of the UWB localization should be increased.
 
-Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grows larger over distance traveled. Performed experiments can be divided based on three simple trajectories of CART2 into
+Experiments here are more complex because they are longer both in terms of duration or distance. These experiments promised to evaluate possible drift caused by using two relative localizations based on IMU and odometry. As I already mentioned in previous chapters, IMU’s drift increases over time and odometry’s drift grow larger over distance travelled. Performed experiments can be divided based on three simple trajectories of CART2 into
  \begitems
  	* moving in the shape of a rectangle (rectangle test),
- 	* moving in the shape of a infinity symbol (infinity test)
- 	* and moving in the shape of a bean (bean test).
+ 	* moving in the shape of an infinity symbol (infinity test)
+ 	* and so-called joy ride, where CART2 tries to move as long-distance as possible without crossing its trajectory (joy ride test).
  \enditems
  I picked a specific initial pose for each testing trajectory to repeatedly make these tests in very similar conditions. Also, the rotation, the rectangle and the infinity tests ran several times in a row without starting or stopping the system to see how it behaves under longer time durations.
 
 \secc Evaluation of experiments at CIIRC
-TODO
 
+{\bf Rectangle-shaped test}
+
+
+In Figure \ref[fig-ciirc-rectangle], there is no major problem with estimating the position, which is close to the external reference even at greater distances travelled. There is no drift in the position on a longer trajectory, and the filter continuously converges to the correct solution. It can be seen that the position estimation accuracy is closely related to the positioning accuracy from the UWB localization, and thus when CART2 passes very close to the initiator anchor, the position estimation get worse. Unfortunately, in all experiments, there was a problem with determining the orientation. The results do not very much correspond to the results of the experiments in the Datavision s.r.o. Laboratory, I propose that the problem may have occurred during the actual measurement in the IMR CIIRC during the setup of the CART2 platform. But unfortunately, I was not able to analyze it properly by the deadline for submitting this thesis.
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/orientation_yaw.png }\nobreak
-\centerline {a) Position xy \hfil\hfil b) Angle yaw in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/rectangle/position_y.png }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_y.pdf }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
-\clabel[fig-ciirc-rectangle]{Results of rectangle test at CIIRC with Vicon reference.}
-\caption/f Results of rectangle test at CIIRC with Vicon reference.
+\clabel[fig-ciirc-rectangle]{Rectangle-shaped test, analysis of trajectory, at IMR CIIRC}
+\caption/f Rectangle-shaped test, analysis of trajectory, at IMR CIIRC
 \endinsert
 
+The experiment was repeated a total of three times. Analysis of error is given in Figure \ref[fig-ciirc-rec-box]. At the beginning of each iteration, the system rebooted. The system's errors turn out to be
+\begitems
+*repeatable, as the error values do not differ significantly from each other,
+*and accurate, as the RMSE was less than 10 cm for all three passes.
+\enditems
+The maximum values here could exceed 40 cm. However, these extremes are caused by outliers in the external reference.
+
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/infinity/orientation_yaw.png }\nobreak
-\centerline {a) Position xy \hfil\hfil b) Angle yaw in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/results/ciirc/infinity/position_y.png }\nobreak
+    \picw=0.6\hsize \cinspic imgs/experiments/ciirc/rectangle/multi_odometry_position_box_plot.pdf
+    \clabel[fig-ciirc-rec-box]{Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position error, at IMR CIIRC}
+    \caption/f Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position error, at IMR CIIRC
+\endinsert
+
+Another interesting experiment was to go through several iterations of the same rectangle-shaped trajectory without shutting down the system. As can be seen in the Figure \ref[fig-ciirc-rep_rec], the individual iteration does not differ from each other. It can therefore be seen that there is no significant drift in the position estimation.
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_y.pdf }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
-\clabel[fig-ciirc-infinity]{Results of infinity test at CIIRC with Vicon reference}
-\caption/f Results of infinity test at CIIRC with Vicon reference.
+\clabel[fig-ciirc-rep_rec]{Multiple rectangle-shaped test without shut down, analysis of trajectory, at IMR CIIRC}
+\caption/f Multiple rectangle-shaped test without shut down, analysis of trajectory, at IMR CIIRC
+\endinsert
+
+
+{\bf Infinity-shaped test}
+
+
+During the infinity-shaped test in Figure \ref[fig-ciirc-infinity], the position estimation is also sufficient. However, the detection from the global reference sometimes failed and created a few outliers. Thus, the results are a bit skewed.
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/position_y.pdf }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-ciirc-infinity]{Infinity-shaped test, analysis of trajectory, at IMR CIIRC}
+\caption/f Infinity-shaped test, analysis of trajectory, at IMR CIIRC
+\endinsert
+
+{\bf Joy ride test}
+
+
+As shown in Figure \ref[fig-ciirc-joy], the position estimation worsens if the CART2 manipulates close to the initiator anchor. Also, it is worth to mention, that there is a wide column at [1.8, 1.0] m, which can cause signal reflections.
+
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/orientation_yaw.pdf }\nobreak
+\centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/position_y.pdf }\nobreak
+\centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
+\clabel[fig-ciirc-joy]{Joy ride test, analysis of trajectory, at IMR CIIRC}
+\caption/f Joy ride test, analysis of trajectory, at IMR CIIRC
+\endinsert
+
+{\bf Sumarize of experiments errors}
+Comparison of position errors in individual experiments in Figure \ref[fig-ciirc-sum] shows interesting conclusions. Errors are similar for different test scenarios, not bigger than 30 cm, but usually, RMSE is close to 10 cm. Based on the result of the experiments, the proposed localization system seems viable for indoor localization with high accuracy and precision demands.
+\midinsert
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/odometry_position_box_plot.pdf }\nobreak
+\centerline {a) Single rectangle-shape test \hfil\hfil b) Multiple rectangle-shape test}\nobreak\medskip
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/odometry_position_box_plot.pdf }\nobreak
+\centerline {c) Infinity-shape \hfil\hfil d)Joy ride test}\nobreak\medskip
+\clabel[fig-ciirc-sum]{Summary of errors in the position during experiments at IMR CIIRC}
+\caption/f Summary of errors in the position during experiments at IMR CIIRC
 \endinsert
 
 

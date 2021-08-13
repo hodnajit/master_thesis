@@ -33,15 +33,15 @@ Error state Extended Kalman filter belongs to a group of Indirect Kalman filters
 
 The main idea is that the true state, which should be the output of the system, is computed as a suitable composition of nominal state and the error state
 $$
-	x_t = x_n \bigoplus \delta x
+	{\bf x_t} = {\bf x_n} \bigoplus {\bf \delta x}
 	\eqmark
 $$
 where
 \begitems
 * $\bigoplus$ is a suitable composition as linear sum or matrix product,
-* $x_t$ is the true state,
-* $x_n$ is the nominal state
-* and $\delta x$ is the error state.
+* ${\bf x_t}$ is the true state,
+* ${\bf x_n}$ is the nominal state
+* and ${\bf \delta x}$ is the error state.
 \enditems
 
 The nominal state is considered a large signal that can be integrated in its nonlinear form and the error state as a small signal that is a nearly linear function, ideal for Extended Kalman filtering \cite[quaternion_kinematics].
@@ -50,61 +50,61 @@ The algorithm can be illustrated in the following equations in prediction, corre
 In {\bf the prediction step}, the nominal state and its covariance is estimated by following the equation \cite[error_state_kalman, quaternion_kinematics]
 $$
 \eqalign{
-	x_{t} &= f(x_{t-1}, u_t) \cr
-	P_{t} &= F P_{t-1} F^T + B Q B^T \cr
+	{\bf x_{t}} &= f({\bf x_{t-1}}, {\bf u_t}) \cr
+	{\bf P_{t}} &= {\bf F} {\bf P_{t-1}} {\bf F^T} + {\bf B} {\bf Q} {\bf B^T} \cr
 }
 	\eqmark
 $$
 where
 \begitems
-* $f(x_{t-1}, u_t)$ is the nonlinear function that describes the current state of the system based on the previous state and current input,
-* $x_{t}$ is the nominal state in time $t$,
-* $x_{t-1}$ is the true state in time $t-1$,
-* $u_t$ is the input of the system,
-* $P_{t}$ is the state covariance matrix (also called system covariance),
-* $F$ is the state transition matrix given by $F = {\delta f(x_{t-1}, u_t) \over \delta x_{t-1}}$,
-* $B$ is the input matrix,
-* and $Q$ is the input noise covariance matrix.
+* $f({\bf x_{t-1}}, {\bf u_t})$ is the nonlinear function that describes the current state of the system based on the previous state and current input,
+* ${\bf x_{t}}$ is the nominal state in time $t$,
+* ${\bf x_{t-1}}$ is the true state in time $t-1$,
+* ${\bf u_t}$ is the input of the system,
+* ${\bf P_{t}}$ is the state covariance matrix (also called system covariance),
+* ${\bf F}$ is the state transition matrix given by $F = {\delta f(x_{t-1}, u_t) \over \delta x_{t-1}}$,
+* ${\bf B}$ is the input matrix,
+* and ${\bf Q}$ is the input noise covariance matrix.
 \enditems
 
 In {\bf the correction step}, the state is corrected based on measurements according to equations \cite[error_state_kalman, quaternion_kinematics]
 $$
 \eqalign{
-	K &= P_{t-1}H^T(HPH^T + R)^{-1} \cr
-	e_t &= K(y_{t}-h(x_{t-1})) \cr
-	P_{t} &= (I-KH)P_{t-1}(I-KH)^T + KRK^T
+	{\bf K} &= {\bf P_{t-1}} {\bf H^T} ({\bf HPH^T}  + {\bf R})^{-1} \cr
+	{\bf e_t} &= {\bf K}({\bf y_{t}}-h({\bf x_{t-1}})) \cr
+	{\bf P_{t}} &= ({\bf I}-{\bf KH}){\bf P_{t-1}}({\bf I}-{\bf KH})^T + {\bf KRK}^T
 }
 	\eqmark
 $$
 where
 \begitems
-* $K$ is the Kalman gain,
-* $H$ is the measurement transition matrix given by $H = {\delta h(x_{t}) \over \delta x_{t}}$,
-* $R$ is the covariance of the measurement,
-* $e_t$ current estimated error of the state,
-* $y_{t}$ is the measurement in time $t$,
-* and $h(x_{t-1}$ is the measurement model based on the previous state $x_{t-1}$.
+* ${\bf K}$ is the Kalman gain,
+* ${\bf H}$ is the measurement transition matrix given by ${\bf H} = {{\bf \delta h(x_{t}}) \over {\bf \delta x_{t}}}$,
+* ${\bf R}$ is the covariance of the measurement,
+* ${\bf e_t}$ current estimated error of the state,
+* ${\bf y_{t}}$ is the measurement in time $t$,
+* and $h({\bf x_{t-1}}$ is the measurement model based on the previous state ${\bf x_{t-1}}$.
 \enditems
 
 In {\bf the injection and resetting step}, the state is compensated by error, and the error state and state covariance matrix need to be reset \cite[error_state_kalman, quaternion_kinematics]. The injection of the error is given by
 $$
 \eqalign{
-	x_t &= x_{t-1} + e_t
+	{\bf x_t} &= {\bf x_{t-1}} + {\bf e_t}
 }
 	\eqmark
 $$
 and the resetting can be illustrated
 $$
 \eqalign{
-	e_t &= g(e_t) \cr
-	P_t &= G P_t G^T
+	{\bf e_t} &= g({\bf e_t}) \cr
+	{\bf P_t} &= {\bf G} {\bf P_t} {\bf G^T}
 }
 	\eqmark
 $$
 where
 \begitems
-* $g(e_t)$ is the resetting function of the error state
-* and $G$ is the Jacobian matrix defined as $G = {\delta g(e_{t}) \over \delta e_{t}}$.
+* $g({\bf e_t})$ is the resetting function of the error state
+* and ${\bf G}$ is the Jacobian matrix defined as ${\bf G} = {\delta g({\bf e_{t}}) \over \delta {\bf e_{t}}}$.
 \enditems
 
 \sec Chosen approach for the state estimation

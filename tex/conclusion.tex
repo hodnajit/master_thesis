@@ -17,9 +17,15 @@
 	
 The accuracy of the UWB system is also reduced in No-Line-of-Sight environments, and therefore, it is necessary to have a relatively dense beacon network so that such phenomenas do not occur. The location of the beacon and the precise estimation of their positions are significant for the entire system's resulting accuracy.
 
-	Another important aspect is the actual mounting of sensors on the robotic platform. The placement of the UWB tag especially affects the resulting precision of UWB localization. Two positions of the UWB tag on the CART2 platform were evaluated during the experiments. The first position is near the metal parts of the robot and 0.2 m above the ground. The second is 1.0 m above the robotic platform without any metal part around. The (TODO: add graph) graph shows that possible signal reflections from the ground or metal parts on the robot distort the UWB localization.
+	Another important aspect is the actual mounting of sensors on the robotic platform. The placement of the UWB tag especially affects the resulting precision of UWB localization. Two positions of the UWB tag on the CART2 platform were evaluated during the experiments. The first position is near the metal parts of the robot and 0.2 m above the ground. The second is 1.0 m above the robotic platform without any metal part around. The \ref[fig-uwb-comparison] graph shows that possible signal reflections from the ground or metal parts on the robot distort the UWB localization.
+	
+	\midinsert
+    \picw=0.6\hsize \cinspic imgs/conclusion/uwb_comparison.pdf
+    \clabel[fig-uwb-comparison]{Comparison of the influence of two different mounted UWB tags on UWB localization.}
+    \caption/f Comparison of the influence of two different mounted UWB tags on UWB localization.
+	\endinsert
 
-	Experiments should be performed in a larger industrial environment to evaluate the precision and repeatability of the system properly. Unfortunately, it was not possible to provide such an environment because installing anchors themselves and providing an external localization system is costly. However, the accuracy and repeatability of the localization are illustrated in Figures \ref[fig-bu04-rectangle-box_pos], \ref[fig-bu04-rectangle-box_ori], where it can be seen that similar results are obtained with repeated passes from the same starting position and with the same control displays.
+	Experiments should be performed in a larger industrial environment to evaluate the precision and repeatability of the system properly. Unfortunately, it was not possible to provide such an environment because installing anchors themselves and providing an external localization system is costly. However, the accuracy and repeatability of the localization are illustrated in Figures \ref[fig-bu04-rectangle-box_pos], \ref[fig-bu04-rectangle-box_ori], \ref[fig-ciirc-rec-box] and \ref[fig-ciirc-sum], where it can be seen that similar results are obtained with repeated passes from the same starting position and with the same control displays.
 	
 	As shown in this section, this system meets the latest requirements for use in industry, and therefore, it would be appropriate to test it in more realistic scenarios directly in an industrial environment.
 

@@ -53,137 +53,137 @@ Firstly, quaternions and rotation matrices do not suffer from singularities as E
 The kinematics formulas in continuous time, that relate the inertial sensor measurements to the {\bf true navigation state}, are well-known \cite[quaternion_kinematics, farrell_aided, mems_navigation, handbook_gnss_ins]. Therefore, I did not have to derive equations myself and used the one derived in \cite[quaternion_kinematics] equation 235.
 
 The only difference is that orientation is in the rotation matrix and not quaternion. Equations are
-$$	\eqalign{\dot{p_t} &= v_t \cr
-			 \dot{v_t} &= R_t(a_m-a_{bt}-a_n) + g_t \cr
-			 \dot{R_t} &= R_t(\Omega_t) \cr
-			 \dot{a_{bt}} &= a_w \cr
-			 \dot{\omega_{bt}} &= \omega_w \cr
-			 \dot{g_t} &= 0,
+$$	\eqalign{\dot{{\bf p_t}} &= {\bf v_t} \cr
+			 \dot{{\bf v_t}} &= {\bf R_t}({\bf a_m}-{\bf a_{bt}}-{\bf a_n}) + {\bf g_t} \cr
+			 \dot{{\bf R_t}} &= {\bf R_t}({\bf \Omega_t}) \cr
+			 \dot{{\bf a_{bt}}} &= {\bf a_w} \cr
+			 \dot{{\bf \omega_{bt}}} &= {\bf \omega_w} \cr
+			 \dot{{\bf g_t}} &= {\bf 0},
 			 } \eqmark
 $$
 where
 \begitems
-* $p_t$ is the true position in 3D [$m$],
-* $v_t$ is the true linear velocity in 3D [$m \cdot s^{-2}$],
-* $R_t$ is the true rotation matrix of orientation,
-* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{bt}$ is the true accelerometer bias [$m \cdot s^{-2}$],
-* $a_n$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
-* $a_w$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
-* $g_t$ is the true gravity vector [$m \cdot s^{-2}$],
-* $\Omega_t=\left[ (\omega_m - \omega_{bt} - \omega_n)_{\times} \right] = \left[
+* ${\bf p_t}$ is the true position in 3D [$m$],
+* ${\bf v_t}$ is the true linear velocity in 3D [$m \cdot s^{-2}$],
+* ${\bf R_t}$ is the true rotation matrix of orientation,
+* ${\bf a_m}$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* ${\bf a_{bt}}$ is the true accelerometer bias [$m \cdot s^{-2}$],
+* ${\bf a_n}$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* ${\bf a_w}$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* ${\bf g_t}$ is the true gravity vector [$m \cdot s^{-2}$],
+* ${\bf \Omega_t }=\left[ ({\bf \omega_m} - {\bf \omega_{bt}} - {\bf \omega_n})_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{bt_3} - \omega_{n_3}) & \omega_{m_2} - \omega_{bt_2} - \omega_{n_2} \cr
          \omega_{m_3} - \omega_{bt_3} - \omega_{n_3} & 0 & -(\omega_{m_1} - \omega_{bt_1} - \omega_{n_1}) \cr
          -(\omega_{m_2} - \omega_{bt_2} - \omega_{n_2}) & \omega_{m_1} - \omega_{bt_1} - \omega_{n_1} & 0
 }  \right]$ is the true skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{bt}$ is the true bias of gyroscopes [$rad \over s$],
-* $\omega_n$ is the gyroscope's white Gaussian noise [$rad \over s$],
-* and $\omega_w$ is the white Gaussian noise gyroscope's bias [$rad \over s$].
+* ${\bf \omega_m}$ is the angular rate given by gyroscopes [$rad \over s$],
+* ${\bf \omega_{bt}}$ is the true bias of gyroscopes [$rad \over s$],
+* ${\bf \omega_n}$ is the gyroscope's white Gaussian noise [$rad \over s$],
+* and ${\bf \omega_w}$ is the white Gaussian noise gyroscope's bias [$rad \over s$].
 \enditems
 
-The state $x_t$, is governed by IMU noisy reading $u_m$ and perturbed by the white Gaussian noise $w$, defined by
-$$ \eqalign{x_t &= \left[ p_t, v_t, R_t, a_{bt}, \omega_{bt}, g_t\right]^T \cr
-			u_t &= \left[ a_m-a_n\right]^T \cr
-			w_t &= \left[ a_w, w_w\right]^T.}\eqmark$$
+The state ${\bf x_t}$, is governed by IMU noisy reading ${\bf u_m}$ and perturbed by the white Gaussian noise ${\bf w}$, defined by
+$$ \eqalign{{\bf x_t} &= \left[ {\bf p_t}, {\bf v_t}, {\bf R_t}, {\bf a_{bt}}, {\bf \omega_{bt}}, {\bf g_t}\right]^T \cr
+			{\bf u_t} &= \left[ {\bf a_m}-{\bf a_n}\right]^T \cr
+			{\bf w_t} &= \left[ {\bf a_w}, {\bf w_w}\right]^T.}\eqmark$$
 			
 
 The output of the localization system is {\bf navigation state} (also called nominal), which corresponds to the system kinematics, but does not take into account the noise terms $w_t$ and other possible model imperfections (see equation 237 in \cite[quaternion_kinematics], hence it is simplified to
 	$$	\eqalign{
-		\dot{p} &= v \cr
-		\dot{v} &= R(a_m-a_{b}) + g \cr
-		\dot{R} &= R(\Omega) \cr
-		\dot{a_{b}} &= 0 \cr
-		\dot{\omega_{b}} &= 0,	\cr
-		\dot{g} &= 0,	 
+		{\bf \dot{p}} &= {\bf v} \cr
+		{\bf \dot{v}} &= {\bf R(a_m-a_{b})} + {\bf g} \cr
+		{\bf \dot{R}} &= {\bf R(\Omega)} \cr
+		{\bf \dot{a_{b}}} &= {\bf 0} \cr
+		{\bf \dot{\omega_{b}}} &= {\bf 0},	\cr
+		{\bf \dot{g}} &= {\bf 0},	 
 	}
 	\eqmark
 	$$
 where
 \begitems
-* $p$ is the position in 3D [$m$],
-* $v$ is the linear velocity in 3D [$m \cdot s^{-2}$],
-* $R$ is the rotation matrix of orientation,
-* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{b}$ is the accelerometer bias [$m \cdot s^{-2}$],
-* $g$ is the gravity vector [$m \cdot s^{-2}$],
-* $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
+* ${\bf p}$ is the position in 3D [$m$],
+* ${\bf v}$ is the linear velocity in 3D [$m \cdot s^{-2}$],
+* ${\bf R}$ is the rotation matrix of orientation,
+* ${\bf a_m}$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* ${\bf a_{b}}$ is the accelerometer bias [$m \cdot s^{-2}$],
+* ${\bf g}$ is the gravity vector [$m \cdot s^{-2}$],
+* ${\bf \Omega}=\left[ ({\bf \omega_m} - {\bf \omega_{b}})_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
 }  \right]$ is the skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
+* ${\bf \omega_m}$ is the angular rate given by gyroscopes [$rad \over s$],
+* ${\bf \omega_{b}}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
 
 The linearized dynamics (see equation 238 in \cite[quaternion_kinematics]) of the {\bf error state} are
 $$
 \eqalign{
-	\dot{\delta p} &= \delta v \cr
-	\dot{\delta v} &= -R[a_m-a_b]_{\times} \delta \Theta - R \delta a_b + \delta g - R a_n \cr
-	\dot{\delta \Theta} &= -[\omega_m - \omega_b]_{\times} \delta \Theta - \delta \omega_b - \omega_n \cr
-	\dot{\delta a_b} &= a_w \cr
-	\dot{\delta \omega_b} &= \omega_w \cr
-	\dot{\delta g} &= 0 
+	{\bf \dot{\delta p}} &= {\bf \delta v} \cr
+	{\bf \dot{\delta v}} &= -{\bf R}[{\bf a_m}-{\bf a_b}]_{\times} {\bf \delta \Theta} - {\bf R} {\bf \delta a_b} + {\bf \delta g} - {\bf R a_n} \cr
+	{\bf \dot{\delta \Theta}} &= -[{\bf \omega_m} - {\bf \omega_b}]_{\times} {\bf \delta \Theta} - {\bf \delta \omega_b} - {\bf \omega_n} \cr
+	{\bf \dot{\delta a_b}} &= {\bf a_w} \cr
+	{\bf \dot{\delta \omega_b}} &= {\bf \omega_w} \cr
+	{\bf \dot{\delta g}} &= {\bf 0} 
 ,}
 \eqmark
 $$
 where
 \begitems
-* $\delta p$ is the position error in [$m$],
-* $\delta v$ is the linear velocity error in [$m \cdot s^{-2}$],
-* $\delta\Theta$ is the orientation error,
-* $\delta a_b$ is the acceleration bias error [$m \cdot s^{-2}$],
-* $\delta \omega_b$ is the gyroscope bias error [$rad \over s$],
-* $\delta g$ is the gravity vector error [$m \cdot s^{-2}$],
-* $R$ is the rotation matrix given by the nominal state,
-* $a_m$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
-* $a_{b}$ is the accelerometer bias [$m \cdot s^{-2}$],
-* $a_n$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
-* $a_w$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
-* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$],
-* $\omega_n$ is the gyroscopes white Gaussian noise [$rad \over s$],
-* and $\omega_w$ is the white Gaussian noise gyroscopes bias [$rad \over s$].
+* ${\bf \delta p}$ is the position error in [$m$],
+* ${\bf \delta v}$ is the linear velocity error in [$m \cdot s^{-2}$],
+* ${\bf \delta\Theta}$ is the orientation error,
+* ${\bf \delta a_b}$ is the acceleration bias error [$m \cdot s^{-2}$],
+* ${\bf \delta \omega_b}$ is the gyroscope bias error [$rad \over s$],
+* ${\bf \delta g}$ is the gravity vector error [$m \cdot s^{-2}$],
+* ${\bf R}$ is the rotation matrix given by the nominal state,
+* ${\bf a_m}$ is the specific force given by accelerometers [$m \cdot s^{-2}$],
+* ${\bf a_{b}}$ is the accelerometer bias [$m \cdot s^{-2}$],
+* ${\bf a_n}$ is the accelerometers white Gaussian noise [$m \cdot s^{-2}$],
+* ${\bf a_w}$ is the white Gaussian noise accelerometers bias [$m \cdot s^{-2}$],
+* ${\bf \omega_m}$ is the angular rate given by gyroscopes [$rad \over s$],
+* ${\bf \omega_{b}}$ is the bias of gyroscopes [$rad \over s$],
+* ${\bf \omega_n}$ is the gyroscopes white Gaussian noise [$rad \over s$],
+* and ${\bf \omega_w}$ is the white Gaussian noise gyroscopes bias [$rad \over s$].
 .
 \enditems
 Note that higher orders in linearization are neglected since the error state is small compared to the navigation state.
 
 During the {\bf filter correction phase}, measurements from UWB localization and odometry come into account. Usual, the sensor delivers measurements that depend on the state, such as
 $$
-y = h(x_t) + \rho ,
+{\bf y} = h({\bf x_t}) + {\bf \rho} ,
 \eqmark
 $$
-where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and $\rho$ is a white Gaussian noise with covariance.  For {\it UWB localization}, the function is simple as it is
+where $h(t)$ is a general nonlinear function of the system state (the true navigation state), and ${\bf \rho}$ is a white Gaussian noise with covariance.  For {\it UWB localization}, the function is simple as it is
 $$
-y_1 = p_t + \rho_1,
+{\bf y_1} = {\bf p_t} + {\bf \rho_1},
 \eqmark
 $$
-with covariance $R_1$. But for {\it odometry}, it is a little bit complicated
+with covariance ${\bf R_1}$. But for {\it odometry}, it is a little bit complicated
 \label[eq-uwb_loc]
 $$
-y_2 = R_t^{-1}v_t + \rho_2
+{\bf y_2} = {\bf R_t^{-1}}{\bf v_t} + {\bf \rho_2}
 \eqmark
 $$
-with covariance $R_1$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
+with covariance ${\bf R_1}$. This difference is important in the computation of Jacobian for the ES-EKF algorithm.
 
 \label[chap-secc-kin-discr]
 \secc The kinematic equations in discrete time
 As the equations in continuous time are derived from book \cite[quaternion_kinematics], where their representation in discrete time is also presented, I decided to write down only the parts that are different. For more detail, see equations 260 in \cite[quaternion_kinematics]. The equation 260c is slightly different since I am using a rotation matrix for orientation representation and not quaternion. This equation is changed to
 $$
-R \leftarrow R + (R \Omega) \Delta t),
+{\bf R} \leftarrow {\bf R} + ({\bf R \Omega}) {\bf \Delta t}),
 \eqmark
 $$
 where
 \begitems
-* $R$ is the rotation matrix of orientation,
-* $\Omega=\left[ (\omega_m - \omega_{b})_{\times} \right] = \left[
+* ${\bf R}$ is the rotation matrix of orientation,
+* ${\bf \Omega}=\left[ ({\bf \omega_m} - {\bf \omega_{b}})_{\times} \right] = \left[
  \matrix{0 & -(\omega_{m_3} - \omega_{b_3}) & \omega_{m_2} - \omega_{b_2}  \cr
          \omega_{m_3} - \omega_{b_3} & 0 & -(\omega_{m_1} - \omega_{b_1}) \cr
          -(\omega_{m_2} - \omega_{b_2}) & \omega_{m_1} - \omega_{b_1} & 0
 }  \right]$ is the skew-symmetric matrix (a tensor of angular velocity) [$rad \over s$],
-* $\omega_m$ is the angular rate given by gyroscopes [$rad \over s$],
-* $\omega_{b}$ is the bias of gyroscopes [$rad \over s$].
+* ${\bf \omega_m}$ is the angular rate given by gyroscopes [$rad \over s$],
+* ${\bf \omega_{b}}$ is the bias of gyroscopes [$rad \over s$].
 \enditems
 
 This integration is happening in the INS box in Figure \ref[fig-architecture].
@@ -193,40 +193,40 @@ The algorithm and equations for the general extended Kalman filter are briefly d
 
 The { \bf error state system} is now
 $$
-\delta x \leftarrow f(x, \delta x, u_m, i) = F_x(x, u_m) \cdot \delta x + F_i \cdot i,
+{\bf \delta x} \leftarrow f({\bf x}, {\bf \delta x}, {\bf u_m}, {\bf i}) = F_x({\bf x}, {\bf u_m}) \cdot {\bf \delta x} + {\bf F_i} \cdot {\bf i},
 \eqmark
 $$
 where
 \begitems
-* $i$ is a perturbation vector (usually modeled as white Gaussian noise).
+* ${\bf i}$ is a perturbation vector (usually modeled as white Gaussian noise).
 \enditems
 
 The {\bf Es-EKF prediction part} is given by
 $$
 \eqalign{
-\hat{\delta x} &\leftarrow F_x(x, u_m) \cdot \hat{\delta x} \cr
-\hat{P} &\leftarrow F_x P F_x^T + F_i Q F_i^T
+{\bf \hat{\delta x}} &\leftarrow {\bf F_x}({\bf x}, {\bf u_m}) \cdot {\bf \hat{\delta x}} \cr
+{\bf \hat{P}} &\leftarrow {\bf F_x} {\bf P} {\bf F_x^T} + {\bf F_i} {\bf Q} {\bf F_i^T}
 },
 \eqmark
 $$
 where
 \begitems
-* $P$ is a process covariance matrix,
-* $F_x$ is a transition matrix,
-* $F_i$ is the Jacobian of error state system by impulses,
-* $Q$ is the covariances of process noise,
+* ${\bf P}$ is a process covariance matrix,
+* ${\bf F_x}$ is a transition matrix,
+* ${\bf F_i}$ is the Jacobian of error state system by impulses,
+* ${\bf Q}$ is the covariances of process noise,
 \enditems
 
-The {\bf transition matrix}\fnote{Called system matrix in some literature} $F_x$ is error state Jacobian and it is simply determined by error state kinematics equations $f(\delta x_t)$ in discrete time in Section \ref[chap-secc-kin-discr],
+The {\bf transition matrix}\fnote{Called system matrix in some literature} ${\bf F_x}$ is error state Jacobian and it is simply determined by error state kinematics equations $f({\bf \delta x_t})$ in discrete time in Section \ref[chap-secc-kin-discr],
 $$
 \eqalign{
-F_x &= {\partial f(\delta x, u_m) \over {\partial \delta x}}\cr
-F_x &= 
+{\bf F_x} &= {\partial f({\bf \delta x}, {\bf u_m}) \over {\partial {\bf \delta x}}}\cr
+{\bf F_x} &= 
 \left[
 \matrix{
-I & I \Delta t & 0 & 0 & 0 & 0 \cr
-0 & I & -R[a_m-a_b]_{\times} \Delta t & -R \Delta t & 0 & I \Delta t \cr
-0 & 0 & R\{\omega_m-\omega_b\}^T \Delta t & 0 & -I \Delta t & 0 \cr
+{\bf I} & {\bf I} \Delta t & 0 & 0 & 0 & 0 \cr
+0 & {\bf I} & -{\bf R}[{\bf a_m}-{\bf a_b}]_{\times} \Delta t & -{\bf R} \Delta t & 0 & {\bf I} \Delta t \cr
+0 & 0 & {\bf R\{\omega_m-\omega_b\}^T} \Delta t & 0 & -{\bf I} \Delta t & 0 \cr
 0 & 0 & 0 & I & 0 & 0 \cr
 0 & 0 & 0 & 0 & I & 0 \cr
 0 & 0 & 0 & 0 & 0 & I}
@@ -235,9 +235,9 @@ I & I \Delta t & 0 & 0 & 0 & 0 \cr
 \eqmark
 $$
 
-$F_i$ is given by
+${\bf F_i}$ is given by
 $$
-F_i = {\partial f \over {\partial i}} \Bigr|_{x, u_m} 
+{\bf F_i} = {\partial f \over {\partial i}} \Bigr|_{{\bf x}, {\bf u_m}} 
 =
 \left[
 \matrix{
@@ -254,59 +254,59 @@ $$
 
 The covariances matrix is given by random impulses applied to the velocity, orientation and bias estimates, modelled by white Gaussian noise \cite[quaternion_kinematics]
 $$
-Q = \left[
+{\bf Q} = \left[
 \matrix{
-\sigma_{a_n}^2\Delta t^2 I & 0 & 0 & 0\cr
-0 & \sigma_{\omega_n}^2\Delta t^2 I & 0 & 0 \cr
-0 & 0 & \sigma_{a_w}^2\Delta t^2 I & 0 \cr
-0 & 0 & 0 & \sigma_{\omega_w}^2\Delta t^2 I
+{\bf \sigma_{a_n}^2}\Delta t^2 {\bf I} & 0 & 0 & 0\cr
+0 & {\bf \sigma_{\omega_n}^2}\Delta t^2{\bf I} & 0 & 0 \cr
+0 & 0 & {\bf \sigma_{a_w}^2}\Delta t^2 {\bf I} & 0 \cr
+0 & 0 & 0 & {\bf \sigma_{\omega_w}^2}\Delta t^2 {\bf I}
 }
 \right],
 \eqmark
 $$
 where 
 \begitems
-* $\sigma_{a_n}$ is the standard deviation of accelerometers [$m \cdot s^{-2}$],
-* $\sigma_{\omega_n}$ is the standard deviation of accelerometers [$rad \over s$]
-* $\sigma_{a_w}$ is the velocity random walk [$rad \over s \sqrt{s}$],
-* $\sigma_{\omega_w}$ is the angular random walk [$rad \over s \sqrt{s}$].
+* ${\bf \sigma_{a_n}}$ is the standard deviation of accelerometers [$m \cdot s^{-2}$],
+* ${\bf \sigma_{\omega_n}}$ is the standard deviation of accelerometers [$rad \over s$]
+* ${\bf \sigma_{a_w}}$ is the velocity random walk [$rad \over s \sqrt{s}$],
+* ${\bf \sigma_{\omega_w}}$ is the angular random walk [$rad \over s \sqrt{s}$].
 \enditems
 This information can be obtained from the datasheet or AVAR (see Section \ref[chap-sec-avar]).
 
 The {\bf ES-EKF correction part} is given by
 $$
 \eqalign{
-K &\leftarrow P H^T (HPH^T + R)^{-1} \cr
+{\bf K} &\leftarrow {\bf P} {\bf H^T} ({\bf HPH^T} + {\bf R)^{-1}} \cr
 
-\delta x &\leftarrow K(y-h(\hat{x})) \cr
+{\bf \delta x} &\leftarrow {\bf K}({\bf y}-h({\bf \hat{x}})) \cr
 
-P &\leftarrow (I-KH) \hat{P} (I-KH)^T + KRK^T
+{\bf P} &\leftarrow ({\bf I}-{\bf KH}) {\bf \hat{P}} ({\bf I}-{\bf KH})^T + {\bf KRK^T}
 },
 \eqmark
 $$
 
 where 
 \begitems
-* $K$ is the Kalman gain,
-* $H$ is an observation matrix,
-* $R$ is covariances of observation noise,
-* $P$ is process covariance,
-* $y$ is an observation,
-* $h(\hat{x})$ is an observation model,
-* $\delta x$ is an error state.
+* ${\bf K}$ is the Kalman gain,
+* ${\bf H}$ is an observation matrix,
+* ${\bf R}$ is covariances of observation noise,
+* ${\bf P}$ is process covariance,
+* ${\bf y}$ is an observation,
+* $h({\bf \hat{x}})$ is an observation model,
+* ${\bf \delta x}$ is an error state.
 \enditems
 
-The {\bf observation matrices} differ for {\it UWB localization} ($H_1$) and {\it odometry} ($H_2$)
+The {\bf observation matrices} differ for {\it UWB localization} (${\bf H_1}$) and {\it odometry} (${\bf H_2}$)
 $$
 \eqalign{
-H_1 &=  \left[
+{\bf H_1} &=  \left[
 \matrix{
-I & 0 & 0 & 0 & 0 & 0
+{\bf I} & 0 & 0 & 0 & 0 & 0
 }
 \right] \cr
-H_2 &=  \left[
+{\bf H_2} &=  \left[
 \matrix{
-0 & R_t^{T} & -R_t^T [v_t]_{\times}J_r(\Theta) & 0 & 0 & 0 
+0 & {\bf R_t^{T}} & -{\bf R_t^T} [{\bf v_t}]_{\times}{\bf J_r(\Theta)} & 0 & 0 & 0 
 }
 \right],
 }
@@ -314,17 +314,17 @@ H_2 &=  \left[
 $$
 where
 \begitems
-* $R_t$ is the orientation in navigation state,
-* $v_t$ is the linear velocity in navigation state,
-* $\Theta$ is the orientation $R_t$ in rotation vector form,
-* $J_r$ is the right Jacobian of rotation group $SO(3)$ (see equation 183 in \cite[quaternion_kinematics]).
+* ${\bf R_t}$ is the orientation in navigation state,
+* ${\bf v_t}$ is the linear velocity in navigation state,
+* ${\bf \Theta}$ is the orientation ${\bf R_t}$ in rotation vector form,
+* ${\bf J_r}$ is the right Jacobian of rotation group ${\bf SO(3)}$ (see equation 183 in \cite[quaternion_kinematics]).
 \enditems
-To obtain $H_2$ from Equation \ref[eq-uwb_loc], a reader should notice a Jacobian with respect to the rotation vector in section 4.3.4 and equation 188 in \cite[quaternion_kinematics]. 
+To obtain ${\bf H_2}$ from Equation \ref[eq-uwb_loc], a reader should notice a Jacobian with respect to the rotation vector in section 4.3.4 and equation 188 in \cite[quaternion_kinematics]. 
 
 \sec Injection of the error state into the navigation state
 While the correction phase is done, the estimated error state comes into account in the navigation state
 $$
-x \leftarrow x \bigoplus \delta x,
+{\bf x} \leftarrow {\bf x} \bigoplus {\bf \delta x},
 \eqmark
 $$
 where 
@@ -335,35 +335,35 @@ $\bigotimes$ appropriate composition of sums or rotation product.
 The equations are
 $$
 \eqalign{
-p &\leftarrow p + \delta p \cr
-v &\leftarrow v + \delta v \cr
-R &\leftarrow R * R\{\delta \Theta\}  \cr
-a_b &\leftarrow a_b + \delta a_b \cr
-\omega_b &\leftarrow \omega_b + \delta \omega_b \cr
-g &\leftarrow g + \delta g
+{\bf p} &\leftarrow {\bf p} + {\bf \delta p} \cr
+{\bf v} &\leftarrow {\bf v} + {\bf \delta v} \cr
+{\bf R} &\leftarrow {\bf R} * {\bf R\{\delta \Theta\}}  \cr
+{\bf a_b} &\leftarrow {\bf a_b} + {\bf \delta a_b} \cr
+{\bf \omega_b} &\leftarrow {\bf \omega_b} + {\bf \delta \omega_b} \cr
+{\bf g} &\leftarrow {\bf g} + {\bf \delta g}
 }
 \eqmark
 $$
 where 
 \begitems
-$R\{\delta \Theta\}$ orientation error in rotation matrix.
+${\bf R\{\delta \Theta\}}$ orientation error in rotation matrix.
 \enditems
 
 The injection of the error state is essential, but the resetting of the error state must also be done. The ES-EKF error reset operation is
 $$
 \eqalign{
-\delta x &\leftarrow 0 \cr
-P &\leftarrow G P G^T 
+{\bf \delta x} &\leftarrow {\bf 0} \cr
+{\bf P} &\leftarrow {\bf G} {\bf P} {\bf G^T} 
 }
 \eqmark
 $$
-where $G$ is the Jacobian matrix defined as
+where ${\bf G}$ is the Jacobian matrix defined as
 $$
-G = \left[
+{\bf G} = \left[
 \matrix{
-I_6 & 0 & 0 \cr
-0 & I - [{ 1 \over 2 } \delta \Theta]_x & 0 \cr
-0 & 0 & I_9
+{\bf I_6} & 0 & 0 \cr
+0 & {\bf I} - [{ 1 \over 2 } {\bf \delta \Theta]_x} & 0 \cr
+0 & 0 & {\bf I_9}
 }
 \right].
 \eqmark
