@@ -96,7 +96,7 @@ As I already mentioned in Chapter \ref[chap-sec-avar], the AVAR analysis of IMU 
 For the AVAR computation, I used a python library named AllanTools \cite[allan_tools_library]. For the purposes of this thesis, the overlapping Allan deviation function is used.
 
 \picw=.6\hsize
-\centerline {\inspic imgs/experiments/epson_accelerometers.pdf \hfil \inspic imgs/experiments/epson_gyroscopes.pdf }\nobreak
+\centerline {\inspic imgs/experiments/epson_accelerometers.png \hfil \inspic imgs/experiments/epson_gyroscopes.png }\nobreak
 \centerline {a) AVAR for accelerometers\hfil\hfil b)AVAR for gyroscopes}\nobreak\medskip
 \clabel[fig-epson-avar2]{Overlapping Allan variance plot for Epson M-G365PDF1.}
 \caption/f Overlapping Allan variance plot for Epson M-G365PDF1.
@@ -271,9 +271,9 @@ Most of the experiments were performed in this environment. However, I select on
 
 During the stationary test, the CART2 is not moving, and the experiment lasts about 16 minutes. As shown in Figure \ref[fig-bu04-static], the precision of the position does not change significantly over time. The position in the proposed system is determined mainly by the absolute localization of the UWB, but it can be seen that our system can further refine the UWB localization. There is a significant drift in the orientation angle yaw caused by the INS.  The orientation error is corrected by the linear velocities given by odometry measurement, but because the CART2 is not moving, the error is not corrected, and the drift slowly grows.
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/static/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/static/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-bu04-static]{Stationary test, evaluation of trajectory at Datavision s.r.o.}
 \caption/f Stationary test, evaluation of trajectory at Datavision s.r.o.
@@ -286,11 +286,11 @@ In Figures \ref[fig-bu04-static-box_pos] and \ref[fig-bu04-static-box_ori] are a
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
       \clabel[fig-bu04-static-box_pos]{Stationary test: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/static/odometry_position_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/static/odometry_position_box_plot.png
       \caption/f Stationary test: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
    \par}\vtop{%
       \clabel[fig-bu04-static-box_ori]{Stationary test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/static/orientation_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/static/orientation_box_plot.png
       \caption/f Stationary test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
    \par}}
 \endinsert
@@ -299,9 +299,9 @@ In Figures \ref[fig-bu04-static-box_pos] and \ref[fig-bu04-static-box_ori] are a
 {\bf Rectangle-shaped test}
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/rectangle/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/rectangle/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-bu04-rectangle]{Rectangle test, analysis of trajectory, Datavision s.r.o.}
 \caption/f Rectangle-shaped test, analysis of trajectory, Datavision s.r.o.
@@ -312,11 +312,11 @@ During the experiment, nine repetitions of the rectangle-shaped trajectory were 
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
       \clabel[fig-bu04-rectangle-box_pos]{Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/odometry_position_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/odometry_position_box_plot.png
       \caption/f Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
    \par}\vtop{%
       \clabel[fig-bu04-rectangle-box_ori]{Rectangle-shaped test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/orientation_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/rectangle/orientation_box_plot.png
       \caption/f Rectangle-shaped test: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
    \par}}
 \endinsert
@@ -325,9 +325,9 @@ Figures \ref[fig-bu04-rectangle-box_pos] and \ref[fig-bu04-rectangle-box_ori] sh
 
 {\bf Infinity-shape test}
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/bu04/infinity/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/bu04/infinity/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-bu04-infinity]{Infinity test, analysis of trajectory, Datavision s.r.o.}
 \caption/f Infinity-shaped test, analysis of trajectory, Datavision s.r.o.
@@ -338,11 +338,11 @@ Evaluating the infinity-shaped trajectory brings the most complex view because t
 \midinsert
 \line{\hsize=.5\hsize \vtop{%
       \clabel[fig-bu04-infinity-box_pos]{Infinity-shaped: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/odometry_position_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/odometry_position_box_plot.png
       \caption/f Infinity-shaped: boxplot, rmse, min and max analysis of the position 2D error, at Datavision s.r.o.
    \par}\vtop{%
       \clabel[fig-bu04-infinity-box_ori]{Infinity-shaped: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.}
-      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/orientation_box_plot.pdf
+      \picw=\hsize \cinspic imgs/experiments/bu04/infinity/orientation_box_plot.png
       \caption/f Infinity-shaped: boxplot, rmse, min and max analysis of the orientation error, at Datavision s.r.o.
    \par}}
 \endinsert
@@ -379,9 +379,9 @@ Experiments here are more complex because they are longer both in terms of durat
 In Figure \ref[fig-ciirc-rectangle], there is no major problem with estimating the position, which is close to the external reference even at greater distances travelled. There is no drift in the position on a longer trajectory, and the filter continuously converges to the correct solution. It can be seen that the position estimation accuracy is closely related to the positioning accuracy from the UWB localization, and thus when CART2 passes very close to the initiator anchor, the position estimation get worse. Unfortunately, in all experiments, there was a problem with determining the orientation. The results do not very much correspond to the results of the experiments in the Datavision s.r.o. Laboratory, I propose that the problem may have occurred during the actual measurement in the IMR CIIRC during the setup of the CART2 platform. But unfortunately, I was not able to analyze it properly by the deadline for submitting this thesis.
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rectangle/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-ciirc-rectangle]{Rectangle-shaped test, analysis of trajectory, at IMR CIIRC}
 \caption/f Rectangle-shaped test, analysis of trajectory, at IMR CIIRC
@@ -395,7 +395,7 @@ The experiment was repeated a total of three times. Analysis of error is given i
 The maximum values here could exceed 40 cm. However, these extremes are caused by outliers in the external reference.
 
 \midinsert
-    \picw=0.6\hsize \cinspic imgs/experiments/ciirc/rectangle/multi_odometry_position_box_plot.pdf
+    \picw=0.6\hsize \cinspic imgs/experiments/ciirc/rectangle/multi_odometry_position_box_plot.png
     \clabel[fig-ciirc-rec-box]{Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position error, at IMR CIIRC}
     \caption/f Rectangle-shaped tests: boxplot, rmse, min and max analysis of the position error, at IMR CIIRC
 \endinsert
@@ -403,9 +403,9 @@ The maximum values here could exceed 40 cm. However, these extremes are caused b
 Another interesting experiment was to go through several iterations of the same rectangle-shaped trajectory without shutting down the system. As can be seen in the Figure \ref[fig-ciirc-rep_rec], the individual iteration does not differ from each other. It can therefore be seen that there is no significant drift in the position estimation.
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-ciirc-rep_rec]{Multiple rectangle-shaped test without shut down, analysis of trajectory, at IMR CIIRC}
 \caption/f Multiple rectangle-shaped test without shut down, analysis of trajectory, at IMR CIIRC
@@ -418,9 +418,9 @@ Another interesting experiment was to go through several iterations of the same 
 During the infinity-shaped test in Figure \ref[fig-ciirc-infinity], the position estimation is also sufficient. However, the detection from the global reference sometimes failed and created a few outliers. Thus, the results are a bit skewed.
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/infinity/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-ciirc-infinity]{Infinity-shaped test, analysis of trajectory, at IMR CIIRC}
 \caption/f Infinity-shaped test, analysis of trajectory, at IMR CIIRC
@@ -432,9 +432,9 @@ During the infinity-shaped test in Figure \ref[fig-ciirc-infinity], the position
 As shown in Figure \ref[fig-ciirc-joy], the position estimation worsens if the CART2 manipulates close to the initiator anchor. Also, it is worth to mention, that there is a wide column at [1.8, 1.0] m, which can cause signal reflections.
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_xy.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/orientation_yaw.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_xy.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/orientation_yaw.png }\nobreak
 \centerline {a) Position in 2D space \hfil\hfil b) Yaw angle in time}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_x.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/position_y.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/joy/position_x.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/position_y.png }\nobreak
 \centerline {c) Position x in time \hfil\hfil d) Position y in time}\nobreak\medskip
 \clabel[fig-ciirc-joy]{Joy ride test, analysis of trajectory, at IMR CIIRC}
 \caption/f Joy ride test, analysis of trajectory, at IMR CIIRC
@@ -443,9 +443,9 @@ As shown in Figure \ref[fig-ciirc-joy], the position estimation worsens if the C
 {\bf Sumarize of experiments errors}
 
 \midinsert
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/odometry_position_box_plot.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/rectangle/odometry_position_box_plot.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/rep_rect/odometry_position_box_plot.png }\nobreak
 \centerline {a) Single rectangle-shape test \hfil\hfil b) Multiple rectangle-shape test}\nobreak\medskip
-\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/odometry_position_box_plot.pdf \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/odometry_position_box_plot.pdf }\nobreak
+\centerline {\picw=8cm \inspic imgs/experiments/ciirc/infinity/odometry_position_box_plot.png \hfil\hfil \picw=8cm \inspic imgs/experiments/ciirc/joy/odometry_position_box_plot.png }\nobreak
 \centerline {c) Infinity-shape \hfil\hfil d) Joy ride test}\nobreak\medskip
 \clabel[fig-ciirc-sum]{Summary of errors in the position during experiments at IMR CIIRC}
 \caption/f Summary of errors in the position during experiments at IMR CIIRC
